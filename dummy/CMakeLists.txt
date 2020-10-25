@@ -5,6 +5,8 @@ project("game_test_valoustau" C)
 
 enable_testing()
 
-add_test(test_valoustau_dummy ./game_test_valoustau dummy d)
+add_test(test_valoustau_dummy ./game_test_valoustau dummy)
+
+add_test(test_gduboureau_dummy ./game_test_gduboureau dummy)
 
 #* ********** ... ********** *#
