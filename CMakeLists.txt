@@ -24,3 +24,7 @@ add_test(test_gduboureau_dummy ./game_test_gduboureau dummy)
 #* ********** valoustau ********** *#
 add_executable(game_test_valoustau game_test_valoustau.c)
 add_test(test_valoustau_dummy ./game_test_valoustau dummy)
+
+#* ********** jephrem ********** *#
+add_executable(game_test_jephrem game_test_jephrem.c)
+add_test(test_jephrem_dummy ./game_test_jephrem dummy)
