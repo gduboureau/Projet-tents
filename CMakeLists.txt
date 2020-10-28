@@ -1,7 +1,5 @@
 cmake_minimum_required(VERSION 2.6)
 
-enable_testing()
-
 project("Game_Text" C)
 
 set(CMAKE_VERBOSE_MAKEFILE ON)
@@ -15,6 +13,7 @@ add_executable(game_text game_text.c)
 target_link_libraries(game_text game)
 
 #-----------------------------------------------------#
+enable_testing()
 
 project("game_test_dummy" C)
 
