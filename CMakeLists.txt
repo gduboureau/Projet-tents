@@ -1,3 +1,5 @@
+cmake_minimum_required(VERSION 2.6)
+
 enable_testing()
 
 project(Game_Text C)
@@ -12,4 +14,8 @@ add_executable(game_text game_text.c)
 
 target_link_libraries(game_text game)
 
+#* ********** gduboureau ********** *#
 add_test(test_gduboureau_dummy ./game_test_gduboureau dummy)
+
+#* ********** valoustau ********** *#
+add_test(test_valoustau_dummy ./game_test_valoustau dummy)
