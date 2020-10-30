@@ -28,3 +28,7 @@ add_test(test_valoustau_dummy ./game_test_valoustau dummy)
 #* ********** jephrem ********** *#
 add_executable(game_test_jephrem game_test_jephrem.c)
 add_test(test_jephrem_dummy ./game_test_jephrem dummy)
+
+#* ********** halmansa ********** *#
+add_executable(game_test_halmansa game_test_halmansa.c)
+add_test(test_halmansa_dummy ./game_test_halmansa dummy)
