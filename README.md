@@ -1,0 +1,44 @@
+Projet réalisé par le groupe A31B, composé de :
+
+- Jennifer Ephrem
+- Hugo Almansa
+- Guillaume Duboureau
+- Valentin Loustau
+
+## Test :
+
+Jennifer :
+
+- game_new
+- game_new_empty
+- game_copy
+- game_equal
+- game_delete
+- game_set_square
+
+Hugo :
+
+- game_get_square
+- game_set_expected_nb_tents_row
+- game_set_expected_nb_tents_col
+- game_get_expected_nb_tents_row
+- game_get_expected_nb_tents_col
+- game_get_expected_nb_tents_all
+
+Valentin :
+
+- game_get_current_nb_tents_row
+- game_get_current_nb_tents_col
+- game_get_current_nb_tents_all
+- game_play_move
+- game_check_move
+- game_is_over
+
+Guillaume :
+
+- game_fill_grass_row
+- game_fill_grass_col
+- game_restart
+- game_print
+- game_default
+- game_default_solution
