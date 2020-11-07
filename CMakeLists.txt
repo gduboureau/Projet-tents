@@ -13,7 +13,6 @@ add_executable(game_text game_text.c)
 target_link_libraries(game_text game)
 
 #-----------------------------------------------------#
-include(CTest)
 enable_testing()
 
 project("game_test_dummy" C)
