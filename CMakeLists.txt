@@ -13,13 +13,14 @@ add_executable(game_text game_text.c)
 target_link_libraries(game_text game)
 
 #-----------------------------------------------------#
+include(CTest)
 enable_testing()
 
 project("game_test_dummy" C)
 
 #* ********** gduboureau ********** *#
 add_executable(game_test_gduboureau game_test_gduboureau.c)
-add_test(test_gduboureau_dummy ./game_test_gduboureau dummy)
+add_test(test_gduboureau_game_fill_grass_row ./game_test_gduboureau test_game_fill_grass_row 3)
 
 #* ********** valoustau ********** *#
 add_executable(game_test_valoustau game_test_valoustau.c)
