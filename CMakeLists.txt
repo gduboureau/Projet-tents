@@ -20,7 +20,7 @@ project("game_test_dummy" C)
 
 #* ********** gduboureau ********** *#
 add_executable(game_test_gduboureau game_test_gduboureau.c)
-add_test(test_gduboureau_game_fill_grass_row ./game_test_gduboureau test_game_fill_grass_row 3)
+add_test(test_gduboureau_game_fill_grass_row ./game_test_gduboureau test_game_fill_grass_row 7)
 
 #* ********** valoustau ********** *#
 add_executable(game_test_valoustau game_test_valoustau.c)
