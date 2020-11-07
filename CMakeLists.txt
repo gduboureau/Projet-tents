@@ -13,9 +13,10 @@ add_executable(game_text game_text.c)
 target_link_libraries(game_text game)
 
 #-----------------------------------------------------#
+include(CTest)
 enable_testing()
 
-project("game_test_dummy" C)
+project("game_test" C)
 
 #* ********** gduboureau ********** *#
 add_executable(game_test_gduboureau game_test_gduboureau.c)
@@ -27,7 +28,13 @@ add_test(test_valoustau_dummy ./game_test_valoustau dummy)
 
 #* ********** jephrem ********** *#
 add_executable(game_test_jephrem game_test_jephrem.c)
-add_test(test_jephrem_dummy ./game_test_jephrem dummy)
+
+target_link_libraries(game_test_jephrem game)
+
+add_test(test_jephrem_game_delete ./game_test_jephrem game_delete)
+add_test(test_jephrem_game_copy ./game_test_jephrem game_copy)
+add_test(test_jephrem_game_equal ./game_test_jephrem game_equal)
+add_test(test_jephrem_game_new_empty ./game_test_jephrem game_new_empty)
 
 #* ********** halmansa ********** *#
 add_executable(game_test_halmansa game_test_halmansa.c)
