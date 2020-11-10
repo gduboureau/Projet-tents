@@ -26,10 +26,19 @@ bool test_game_delete(void){
 bool test_game_copy(void){
   game g = game_default();
   game g1 = game_copy(g);
+  if(g==NULL){
+    fprintf(stderr,"Error : g is not a valid pointer!\n");
+    return false;
+  }
+  if(g1 == NULL){
+    fprintf(stderr,"Error : g1 is not a valid pointer!\n");
+    return false;
+  }
   if(game_equal(g,g1)==false){
     fprintf(stderr,"Error : g is different from the copied game!\n");
     return false;
   }
+
   return true;
 }
 
@@ -49,6 +58,10 @@ bool test_game_equal(void){
 
 bool test_game_new_empty(void){
   game g = game_new_empty();
+  if(g==NULL){
+    fprintf(stderr,"Error : ...!\n");
+    return false;
+  }
   for(uint i=0;i<DEFAULT_SIZE;i++){
       if(game_get_expected_nb_tents_row(g,i)!=0){
         fprintf(stderr,"Error : the game is not empty!\n");
@@ -66,11 +79,34 @@ bool test_game_new_empty(void){
    
 /* *********************************************************** */
 
-//bool test_game_new(){}
+bool test_game_new(){
+  uint tentes_lig[] = {3, 0, 4, 0, 4, 0, 1, 0};
+  uint tentes_col[] = {4, 0, 1, 2, 1, 1, 2, 1};
+
+  square squares[] = {EMPTY, EMPTY, EMPTY,EMPTY,TREE,TREE,EMPTY,EMPTY,
+    TREE, EMPTY, EMPTY,EMPTY,EMPTY,EMPTY,EMPTY,TREE,
+    EMPTY, EMPTY, EMPTY,EMPTY,TREE,EMPTY,EMPTY,EMPTY,
+    TREE, EMPTY, EMPTY,EMPTY,EMPTY,TREE,EMPTY,EMPTY,
+    EMPTY, TREE, EMPTY,EMPTY,EMPTY,EMPTY,EMPTY,EMPTY,
+    TREE, EMPTY, EMPTY,EMPTY,TREE,EMPTY,TREE,EMPTY,
+    EMPTY, EMPTY, EMPTY,EMPTY,EMPTY,EMPTY,EMPTY,EMPTY,
+    TREE,EMPTY, EMPTY,EMPTY,EMPTY,EMPTY,EMPTY,EMPTY} ;
+
+  game g = game_new(squares,tentes_lig,tentes_col);
+  if(g==NULL){
+    fprintf(stderr,"Error : g is not a valid pointer!\n");
+    return false;
+  }
+  return true;
+}
 
 /* *********************************************************** */
 
-//bool test_game_set_square(){}
+bool test_game_set_square(){
+  game g = game_default();
+  game_set_square(g, 0, 1, TENT);
+  return true;
+}
 
 /* *********************************************************** */
 
@@ -94,12 +130,12 @@ int main(int argc, char *argv[]) {
   else if(strcmp("game_new_empty", argv[1]) == 0){
     ok = test_game_new_empty();
   }
-  //  else if(strcmp("game_new", argv[1]) == 0){
-    //ok = test_game_new();
-  //}
-    //else if(strcmp("game_set_square", argv[1]) == 0){
-    //ok = test_game_set_square();
-  //}
+  else if(strcmp("game_new", argv[1]) == 0){
+    ok = test_game_new();
+  }
+  else if(strcmp("game_set_square", argv[1]) == 0){
+    ok = test_game_set_square();
+  }
   else {
     fprintf(stderr, "Error: test \"%s\" not found!\n", argv[1]);
     exit(EXIT_FAILURE);
