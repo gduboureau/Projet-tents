@@ -32,13 +32,27 @@ bool test_game_get_square(void){
 
 /* *********************************************************** */
 
-//bool test_game_set_expected_nb_tents_row(void){
-//}
+bool test_game_set_expected_nb_tents_row(void){
+  game g = game_default();
+  unsigned int i;
+  unsigned int nb_tents;
+   for(i=0; i<DEFAULT_SIZE; i++){
+    game_set_expected_nb_tents_row(g, i, game_get_expected_nb_tents_row(g, i));
+   }
+   return true;
+  }
 
 /* *********************************************************** */
 
-//bool test_game_set_expected_nb_tents_col(void){
-//}
+bool test_game_set_expected_nb_tents_col(void){
+  game g = game_default();
+  unsigned int j;
+  unsigned int nb_tents;
+   for(j=0; j<DEFAULT_SIZE; j++){
+    game_set_expected_nb_tents_col(g, j, game_get_expected_nb_tents_col(g, j));
+   }
+   return true;
+  }
 
 /* *********************************************************** */
 
@@ -46,7 +60,7 @@ bool test_game_get_expected_nb_tents_row(void){
     game g = game_default();
     unsigned int i = 0;
     for(i; i<DEFAULT_SIZE; i++){
-        if(game_get_expected_nb_tents_row(g, i)<0){
+        if(game_get_expected_nb_tents_row(g, i)<0 || game_get_expected_nb_tents_row(g, i)>4){
             fprintf(stderr, "Error : number of tents isn't valid!\n");
             return false;
         }
@@ -60,7 +74,7 @@ bool test_game_get_expected_nb_tents_col(void){
     game g = game_default();
     unsigned int j = 0;
     for(j; j<DEFAULT_SIZE; j++){
-        if(game_get_expected_nb_tents_row(g, j)<0){
+        if(game_get_expected_nb_tents_col(g, j)<0 || game_get_expected_nb_tents_col(g, j)>4){
             fprintf(stderr, "Error : number of tents isn't valid!\n");
             return false;
         }
@@ -70,8 +84,14 @@ bool test_game_get_expected_nb_tents_col(void){
 
 /* *********************************************************** */
 
-//bool test_game_get_expected_nb_tents_all(void){
-//}
+bool test_game_get_expected_nb_tents_all(void){
+  game g = game_default();
+  if(game_get_expected_nb_tents_all(g)<0 || game_get_expected_nb_tents_all(g)>12){
+    fprintf(stderr, "Error : number of tents isn't valid!\n");
+    return false;
+  }
+  return true;
+}
 
 /* *********************************************************** */
 
@@ -88,25 +108,25 @@ int main(int argc, char *argv[]) {
   if(strcmp("game_get_square", argv[1]) == 0){
     ok = test_game_get_square();
   }
-  /*
+  
   else if(strcmp("game_set_expected_nb_tents_row", argv[1]) == 0){
     ok = test_game_set_expected_nb_tents_row();
   }
   else if(strcmp("game_set_expected_nb_tents_col", argv[1]) == 0){
     ok = test_game_set_expected_nb_tents_col();
   }
-  */
+  
   else if(strcmp("game_get_expected_nb_tents_row", argv[1]) == 0){
     ok = test_game_get_expected_nb_tents_row();
   }
   else if(strcmp("game_get_expected_nb_tents_col", argv[1]) == 0){
     ok = test_game_get_expected_nb_tents_col();
   }
-  /*
+
   else if(strcmp("game_get_expected_nb_tents_all", argv[1]) == 0){
     ok = test_game_get_expected_nb_tents_all();
   }
-  */
+  
   else {
     fprintf(stderr, "Error: test \"%s\" not found!\n", argv[1]);
     exit(EXIT_FAILURE);
