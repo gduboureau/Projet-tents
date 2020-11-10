@@ -49,10 +49,10 @@ add_test(test_jephrem_game_new ./game_test_jephrem game_new)
 add_test(test_jephrem_game_set_square ./game_test_jephrem game_set_square)
 
 #* ********** halmansa ********** *#
-add_executable(game_test_halmansa game_test_halmansa.c)
+add_executable(game_test_halmansa game_test_halmansa.c)
 
-target_link_libraries(game_test_halmansa game)
+target_link_libraries(game_test_halmansa game)
 
-add_test(test_halmansa_game_get_square ./game_test_halmansa game_get_square)
-add_test(test_halmansa_game_get_expected_nb_tents_row ./game_test_halmansa game_get_expected_nb_tents_row)
-add_test(test_halmansa_game_get_expected_nb_tents_col ./game_test_halmansa game_get_expected_nb_tents_col)
+add_test(test_halmansa_game_delete ./game_test_halmansa game_get_square)
+add_test(test_halmansa_game_get_expected_nb_tents_row ./game_test_halmansa game_get_expected_nb_tents_row)
+add_test(test_halmansa_game_get_expected_nb_tents_col ./game_test_halmansa game_get_expected_nb_tents_col)
