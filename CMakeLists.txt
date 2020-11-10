@@ -20,7 +20,10 @@ project("game_test" C)
 
 #* ********** gduboureau ********** *#
 add_executable(game_test_gduboureau game_test_gduboureau.c)
-add_test(test_gduboureau_game_fill_grass_row ./game_test_gduboureau test_game_fill_grass_row 7)
+
+target_link_libraries(game_test_gduboureau game)
+
+add_test(test_gduboureau_game_restart ./game_test_gduboureau game_restart)
 
 #* ********** valoustau ********** *#
 add_executable(game_test_valoustau game_test_valoustau.c)
