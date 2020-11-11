@@ -95,6 +95,35 @@ bool test_game_print(){
 
 /* *********************************************************** */
 
+bool test_game_default(){
+    game g = game_default();
+    uint tentes_lig[] = {3, 0, 4, 0, 4, 0, 1, 0};
+    uint tentes_col[] = {4, 0, 1, 2, 1, 1, 2, 1};
+
+    square squares[] = {EMPTY, EMPTY, EMPTY,EMPTY,TREE,TREE,EMPTY,EMPTY,
+    TREE, EMPTY, EMPTY,EMPTY,EMPTY,EMPTY,EMPTY,TREE,
+    EMPTY, EMPTY, EMPTY,EMPTY,TREE,EMPTY,EMPTY,EMPTY,
+    TREE, EMPTY, EMPTY,EMPTY,EMPTY,TREE,EMPTY,EMPTY,
+    EMPTY, TREE, EMPTY,EMPTY,EMPTY,EMPTY,EMPTY,EMPTY,
+    TREE, EMPTY, EMPTY,EMPTY,TREE,EMPTY,TREE,EMPTY,
+    EMPTY, EMPTY, EMPTY,EMPTY,EMPTY,EMPTY,EMPTY,EMPTY,
+    TREE,EMPTY, EMPTY,EMPTY,EMPTY,EMPTY,EMPTY,EMPTY} ;
+
+    game g1 = game_new(squares, tentes_lig, tentes_col);
+    if (game_equal(g,g1) == false){
+        game_delete(g);
+        game_delete(g1);
+        return false;
+    }
+    game_delete(g);
+    game_delete(g1);
+    return true;
+}
+
+/* *********************************************************** */
+
+/* *********************************************************** */
+
 int main (int argc, char* argv[]){
     if (argc == 1){
         usage(argc, argv);
@@ -109,6 +138,12 @@ int main (int argc, char* argv[]){
     }
     else if(strcmp("game_fill_grass_col", argv[1]) == 0){
         ok = test_game_fill_grass_col();
+    }
+    else if(strcmp("game_print", argv[1]) == 0){
+        ok = test_game_print();
+    }
+    else if(strcmp("game_default", argv[1]) == 0){
+        ok = test_game_default();
     }
     else{
         fprintf(stderr, "Error: test \"%s\" not found!\n", argv[1]);
