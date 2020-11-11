@@ -28,7 +28,7 @@ bool test_game_fill_grass_row(){
 /* *********************************************************** */
 
 bool test_game_restart(){
-    game g = game_default();
+    game g = game_new_empty();
     for (unsigned int i = 0; i<DEFAULT_SIZE; i++){
         for (unsigned int j = 0; j<DEFAULT_SIZE; j++){
             if (game_get_square(g,i,j) == TENT || game_get_square(g,i,j) == GRASS){
@@ -39,6 +39,19 @@ bool test_game_restart(){
     if (game_is_over(g) == true){
         return false;
     }
+    for(uint i=0;i<DEFAULT_SIZE;i++){
+      if(game_get_expected_nb_tents_row(g,i)!=0){
+        fprintf(stderr,"Error : the game is not empty!\n");
+        return false;
+      }
+    }
+    for(uint j=0;j<DEFAULT_SIZE;j++){
+        if(game_get_expected_nb_tents_row(g,j)!=0){
+            fprintf(stderr,"Error : the game is not empty!\n");
+            return false;
+        }
+    }
+    game_delete(g);
     return true;
 }
 
@@ -59,7 +72,7 @@ int main (int argc, char* argv[]){
     fprintf(stderr, "=> Start test \"%s\"\n", argv[1]);
     bool ok = false;
     if (strcmp("game_restart",argv[1]) == 0){
-        ok =test_game_restart();
+        ok = test_game_restart();
     }else{
         fprintf(stderr, "Error: test \"%s\" not found!\n", argv[1]);
         exit(EXIT_FAILURE);
