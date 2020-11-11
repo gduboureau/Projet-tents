@@ -24,6 +24,8 @@ add_executable(game_test_gduboureau game_test_gduboureau.c)
 target_link_libraries(game_test_gduboureau game)
 
 add_test(test_gduboureau_game_restart ./game_test_gduboureau game_restart)
+add_test(test_gduboureau_game_fill_grass_row ./game_test_gduboureau game_fill_grass_row)
+add_test(test_gduboureau_game_fill_grass_col ./game_test_gduboureau game_fill_grass_col)
 
 #* ********** valoustau ********** *#
 add_executable(game_test_valoustau game_test_valoustau.c)
