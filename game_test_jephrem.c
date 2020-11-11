@@ -58,6 +58,13 @@ bool test_game_equal(void){
         game_delete(g3);
         return false;
       }
+      if(game_equal(g1,g3)==true){
+        game_delete(g1);
+        game_delete(g2);
+        game_delete(g3);
+        return false;
+      }
+      
     }
   }
   
