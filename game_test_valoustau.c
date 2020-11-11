@@ -110,20 +110,47 @@ bool test_game_check_move(void){
                 game_delete(g);
                 return false;
             }
+            //----------------------------------------------------------//
+
+            /*if (j!=0&& && (game_get_square(g,i,j-1)!=TREE && game_check_move(g,i,j,TENT)!=LOSING)){  //tent au dessus d'une autre
+                fprintf(stderr,"Error: the game move at position (%d,%d) must be LOSING!\n", i, j);
+                game_delete(g);
+                return false;
+            }
+            if (j!=DEFAULT_SIZE-1 && (game_get_square(g,i,j+1)!=TREE && game_check_move(g,i,j,TENT)!=LOSING)){ //tent en dessous d'une autre
+                fprintf(stderr,"Error: the game move at position (%d,%d) must be LOSING!\n", i, j);
+                game_delete(g);
+                return false;
+            }
+            if (i!=0 && (game_get_square(g,i-1,j)!=TREE && game_check_move(g,i,j,TENT)!=LOSING)){ //tent a gauche d'une autre
+                fprintf(stderr,"Error: the game move at position (%d,%d) must be LOSING!\n", i, j);
+                game_delete(g);
+                return false;
+            }
+            if (i!=DEFAULT_SIZE-1 && (game_get_square(g,i+1,j)!=TREE && game_check_move(g,i,j,TENT)!=LOSING)){ // tent a droite d'une autre
+                fprintf(stderr,"Error: the game move at position (%d,%d) must be LOSING!\n", i, j);
+                game_delete(g);
+                return false;
+            }*/
+
+            if(game_get_square(g, i, 0)==EMPTY && game_check_move(g, i, 0, GRASS) != LOSING){
+                fprintf(stderr,"Error: the game move at position (%d,%d) must be LOSING!\n", i, j);
+                game_delete(g);
+                return false;
+            }
             
-            /*
-            if(game_get_expected_nb_tents_row(g, i)==0 && game_check_move(g, i, j, TENT) != LOSING){
+            if(game_get_expected_nb_tents_row(g, i)==0 && game_check_move(g, i, j, TENT) != LOSING && game_get_square(g,i,j)==EMPTY){
                 fprintf(stderr,"Error: the game move at position (%d,%d) must be LOSING!\n", i, j);
                 game_delete(g);
                 return false;
             }
 
-            if(game_get_expected_nb_tents_col(g, j)==0 && game_check_move(g, i, j, TENT) != LOSING){
+            if(game_get_expected_nb_tents_col(g, j)==0 && game_check_move(g, i, j, TENT) != LOSING && game_get_square(g,i,j)==EMPTY){
                 fprintf(stderr,"Error: the game move at position (%d,%d) must be LOSING!\n", i, j);
                 game_delete(g);
                 return false;
             }
-            */
+            
             
             if(game_get_expected_nb_tents_row(g, i)>0 && (game_get_current_nb_tents_row(g, i) >= game_get_expected_nb_tents_row(g, i)) && game_check_move(g, i, j, TENT) != LOSING && game_get_square(g,i,j)!=TREE){
                 fprintf(stderr,"Error: the game move at position (%d,%d) must be LOSING!\n", i, j);
