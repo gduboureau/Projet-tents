@@ -83,12 +83,6 @@ bool test_game_check_move(void){
                 game_delete(g);
                 return false;
             }
-            //REGULAR MOVE
-            /*if ((game_get_square(g,i,j)==EMPTY && game_check_move(g,i,j,GRASS)!=REGULAR) || (game_get_square(g,i,j)==TENT && game_check_move(g,i,j,GRASS)!=REGULAR) || (game_get_square(g,i,j)!=TREE && game_check_move(g,i,j,EMPTY)!=REGULAR) || ){
-                fprintf(stderr,"Error: the game move at position (%d,%d) must be REGULAR!\n", i, j);
-                game_delete(g);
-                return false;
-            }*/
             //LOSING MOVE
             if (j!=0 && (game_get_square(g,i,j-1)==TENT && game_check_move(g,i,j,TENT)!=LOSING)){  //tent au dessus d'une autre
                 fprintf(stderr,"Error: the game move at position (%d,%d) must be LOSING!\n", i, j);
@@ -110,28 +104,6 @@ bool test_game_check_move(void){
                 game_delete(g);
                 return false;
             }
-            //----------------------------------------------------------//
-
-            /*if (j!=0&& && (game_get_square(g,i,j-1)!=TREE && game_check_move(g,i,j,TENT)!=LOSING)){  //tent au dessus d'une autre
-                fprintf(stderr,"Error: the game move at position (%d,%d) must be LOSING!\n", i, j);
-                game_delete(g);
-                return false;
-            }
-            if (j!=DEFAULT_SIZE-1 && (game_get_square(g,i,j+1)!=TREE && game_check_move(g,i,j,TENT)!=LOSING)){ //tent en dessous d'une autre
-                fprintf(stderr,"Error: the game move at position (%d,%d) must be LOSING!\n", i, j);
-                game_delete(g);
-                return false;
-            }
-            if (i!=0 && (game_get_square(g,i-1,j)!=TREE && game_check_move(g,i,j,TENT)!=LOSING)){ //tent a gauche d'une autre
-                fprintf(stderr,"Error: the game move at position (%d,%d) must be LOSING!\n", i, j);
-                game_delete(g);
-                return false;
-            }
-            if (i!=DEFAULT_SIZE-1 && (game_get_square(g,i+1,j)!=TREE && game_check_move(g,i,j,TENT)!=LOSING)){ // tent a droite d'une autre
-                fprintf(stderr,"Error: the game move at position (%d,%d) must be LOSING!\n", i, j);
-                game_delete(g);
-                return false;
-            }*/
 
             if(game_get_square(g, i, 0)==EMPTY && game_check_move(g, i, 0, GRASS) != LOSING){
                 fprintf(stderr,"Error: the game move at position (%d,%d) must be LOSING!\n", i, j);
