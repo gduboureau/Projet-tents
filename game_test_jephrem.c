@@ -59,7 +59,7 @@ bool test_game_equal(void){
 bool test_game_new_empty(void){
   game g = game_new_empty();
   if(g==NULL){
-    fprintf(stderr,"Error : ...!\n");
+    fprintf(stderr,"Error : g is not a valid pointer!\n");
     return false;
   }
   for(uint i=0;i<DEFAULT_SIZE;i++){
@@ -73,6 +73,15 @@ bool test_game_new_empty(void){
         fprintf(stderr,"Error : the game is not empty!\n");
         return false;
       }
+  }
+
+  for(uint x=0;x<DEFAULT_SIZE;x++){
+    for(uint y=0;y<DEFAULT_SIZE;y++){
+      if(game_get_square(g,x,y)!=EMPTY){
+        fprintf(stderr,"Error : the game is not empty!\n");
+        return false;        
+      };
+    }
   }
   return true;
 }
