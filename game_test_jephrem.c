@@ -74,7 +74,7 @@ bool test_game_equal(void){
         game_delete(g4);
         return false;
       }
-      if(game_equal(g1,g4)==false){
+      if(game_equal(g1,g4)==true){
         game_delete(g1);
         game_delete(g2);
         game_delete(g3);
@@ -88,6 +88,7 @@ bool test_game_equal(void){
   game_delete(g1);
   game_delete(g2);
   game_delete(g3);
+  game_delete(g4);
   return true;
 }
 
