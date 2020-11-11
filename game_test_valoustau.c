@@ -77,13 +77,55 @@ bool test_game_check_move(void){
     game g = game_default();
     for (uint i=0; i<DEFAULT_SIZE; i++){
         for(uint j=0; j<DEFAULT_SIZE; j++){
-            if (game_check_move(g, i, j, game_get_square (g,i,j))!=REGULAR){
+            //ILLEGAL MOVE
+            if ((game_get_square(g,i,j)==TREE && (game_check_move(g,i,j,EMPTY)!=ILLEGAL || game_check_move(g,i,j,GRASS)!=ILLEGAL || game_check_move(g,i,j,TENT)!=ILLEGAL)) || game_check_move(g,i,j,TREE)!=ILLEGAL){
+                fprintf(stderr,"Error: the game move at position (%d,%d) must be ILLEGAL!\n", i, j);
+                game_delete(g);
+                return false;
+            }
+            //REGULAR MOVE
+            /*if ((game_get_square(g,i,j)==EMPTY && game_check_move(g,i,j,GRASS)!=REGULAR) || (game_get_square(g,i,j)==TENT && game_check_move(g,i,j,GRASS)!=REGULAR) || (game_get_square(g,i,j)!=TREE && game_check_move(g,i,j,EMPTY)!=REGULAR) || ){
                 fprintf(stderr,"Error: the game move at position (%d,%d) must be REGULAR!\n", i, j);
                 game_delete(g);
                 return false;
-            } 
+            }*/
+            //LOSING MOVE
+            if (j!=0 && (game_get_square(g,i,j-1)==TENT && game_check_move(g,i,j,TENT)!=LOSING)){  //tent au dessus d'une autre
+                fprintf(stderr,"Error: the game move at position (%d,%d) must be LOOSING!\n", i, j);
+                game_delete(g);
+                return false;
+                }
+            if (j!=DEFAULT_SIZE-1 && (game_get_square(g,i,j+1)==TENT && game_check_move(g,i,j,TENT)!=LOSING)){ //tent en dessous d'une autre
+                fprintf(stderr,"Error: the game move at position (%d,%d) must be LOOSING!\n", i, j);
+                game_delete(g);
+                return false;
+                }
+            if (i!=0 && (game_get_square(g,i-1,j)==TENT && game_check_move(g,i,j,TENT)!=LOSING)){ //tent a gauche d'une autre
+                fprintf(stderr,"Error: the game move at position (%d,%d) must be LOOSING!\n", i, j);
+                game_delete(g);
+                return false;
+                }
+            if (i!=DEFAULT_SIZE-1 && (game_get_square(g,i+1,j)==TENT && game_check_move(g,i,j,TENT)!=LOSING)){ // tent a droite d'une autre
+                fprintf(stderr,"Error: the game move at position (%d,%d) must be LOOSING!\n", i, j);
+                game_delete(g);
+                return false;
+                }
+                /*game g1 = game_default_solution();
+            if((game_get_current_nb_tents_row(g, i) >= game_get_current_nb_tents_row(g1, i)) && game_check_move(g, i, j, TENT) != LOSING && game_get_square(g,i,j)!=TREE){
+                fprintf(stderr,"Error: the game move at position (%d,%d) must be LOOSING!\n", i, j);
+                game_delete(g);
+                game_delete(g1);
+                return false;
+                }
+
+            if((game_get_current_nb_tents_col(g, j) >= game_get_current_nb_tents_col(g1, j)) && game_check_move(g, i, j, TENT) != LOSING){
+                fprintf(stderr,"Error: the game move at position (%d,%d) must be LOOSING!\n", i, j);
+                game_delete(g);
+                game_delete(g1);
+                return false;
+                }*/
+            }
         }
-    }
     game_delete(g);
     return true;
 }
@@ -94,12 +136,6 @@ bool test_game_is_over(void){
     game g = game_default();
     game g1 = game_default_solution();
     if (game_is_over(g)==true && game_equal(g,g1)==false){
-        fprintf(stderr,"Error: the game over is different of game solution!\n");
-        game_delete(g);
-        game_delete(g1);
-        return false;
-    }
-    if (game_is_over(g)==false){
         fprintf(stderr,"Error: the game over is different of game solution!\n");
         game_delete(g);
         game_delete(g1);
