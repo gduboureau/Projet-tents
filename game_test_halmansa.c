@@ -19,7 +19,11 @@ bool test_game_get_square(void){
     game g = game_default_solution();
     unsigned int i = 0;
     unsigned int j = 0;
-    
+    if(game_get_expected_nb_tents_row(g, i) != 3){
+      game_delete(g);
+      return false;
+    }
+
     if(game_get_square(g, 0, 1) == TREE){
       game_delete(g);
       return false;
