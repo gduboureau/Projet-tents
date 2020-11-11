@@ -17,7 +17,7 @@ void usage(int argc, char *argv[]) {
 
 bool test_game_get_square(void){
     game g = game_default_solution();
-    if(game_get_expected_nb_tents_row(g, i) != 3){
+    if(game_get_expected_nb_tents_row(g, 0) != 3){
       game_delete(g);
       return false;
     }
@@ -52,9 +52,7 @@ bool test_game_get_square(void){
 
 bool test_game_set_expected_nb_tents_row(void){
   game g = game_default();
-  unsigned int i;
-  unsigned int nb_tents;
-   for(i=0; i<DEFAULT_SIZE; i++){
+   for(uint i=0; i<DEFAULT_SIZE; i++){
     game_set_expected_nb_tents_row(g, i, game_get_expected_nb_tents_row(g, i));
    }
    game_delete(g);
@@ -65,9 +63,7 @@ bool test_game_set_expected_nb_tents_row(void){
 
 bool test_game_set_expected_nb_tents_col(void){
   game g = game_default();
-  unsigned int j;
-  unsigned int nb_tents;
-   for(j=0; j<DEFAULT_SIZE; j++){
+   for(uint j=0; j<DEFAULT_SIZE; j++){
     game_set_expected_nb_tents_col(g, j, game_get_expected_nb_tents_col(g, j));
    }
    game_delete(g);
@@ -78,8 +74,7 @@ bool test_game_set_expected_nb_tents_col(void){
 
 bool test_game_get_expected_nb_tents_row(void){
     game g = game_default();
-    unsigned int i = 0;
-    for(i; i<DEFAULT_SIZE; i++){
+    for(uint i=0; i<DEFAULT_SIZE; i++){
         if(game_get_expected_nb_tents_row(g, i)<0 || game_get_expected_nb_tents_row(g, i)>4){
             fprintf(stderr, "Error : number of tents isn't valid!\n");
             game_delete(g);
@@ -94,8 +89,7 @@ bool test_game_get_expected_nb_tents_row(void){
 
 bool test_game_get_expected_nb_tents_col(void){
     game g = game_default();
-    unsigned int j = 0;
-    for(j; j<DEFAULT_SIZE; j++){
+    for(uint j=0; j<DEFAULT_SIZE; j++){
         if(game_get_expected_nb_tents_col(g, j)<0 || game_get_expected_nb_tents_col(g, j)>4){
             fprintf(stderr, "Error : number of tents isn't valid!\n");
             game_delete(g);
