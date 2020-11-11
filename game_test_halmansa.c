@@ -16,17 +16,25 @@ void usage(int argc, char *argv[]) {
 /* *********************************************************** */
 
 bool test_game_get_square(void){
-    game g = game_default();
+    game g = game_default_solution();
     unsigned int i = 0;
     unsigned int j = 0;
-    for(i; i<DEFAULT_SIZE; i++){
-        for(j; j<DEFAULT_SIZE; j++){
-            if(game_get_square(g, i, j) != TENT && game_get_square(g, i, j) != EMPTY && game_get_square(g, i, j) != GRASS && game_get_square(g, i, j) != TREE){
-                fprintf(stderr, "Error : the square isn't valid!\n");
-                game_delete(g);
-                return false;
-            }
-        }    
+    if(game_get_expected_nb_tents_row(g, i) != 3){
+      game_delete(g);
+      return false;
+    }
+    
+    for (i; i < DEFAULT_SIZE; i++)
+    {
+      for (j; j < DEFAULT_SIZE; j++)
+      {
+        if (game_get_square(g, i, j) != TENT && game_get_square(g, i, j) != EMPTY && game_get_square(g, i, j) != GRASS && game_get_square(g, i, j) != TREE)
+        {
+          fprintf(stderr, "Error : the square isn't valid!\n");
+          game_delete(g);
+          return false;
+        }
+      }
     }
     game_delete(g);
     return true;
