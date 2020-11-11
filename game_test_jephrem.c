@@ -23,17 +23,11 @@ bool test_game_delete(void){
 
 /* *********************************************************** */
 
-bool test_game_copy(void){
+  bool test_game_copy(void){
   game g = game_default();
   game g1 = game_copy(g);
-  if(g==NULL){
-    fprintf(stderr,"Error : g is not a valid pointer!\n");
-    game_delete(g);
-    game_delete(g1);
-    return false;
-  }
-  if(g1 == NULL){
-    fprintf(stderr,"Error : g1 is not a valid pointer!\n");
+  if(g==NULL || g1 == NULL){
+    fprintf(stderr,"Error : at least one of the two pointers is invalid!\n");
     game_delete(g);
     game_delete(g1);
     return false;
