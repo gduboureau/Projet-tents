@@ -28,17 +28,24 @@ bool test_game_copy(void){
   game g1 = game_copy(g);
   if(g==NULL){
     fprintf(stderr,"Error : g is not a valid pointer!\n");
+    game_delete(g);
+    game_delete(g1);
     return false;
   }
   if(g1 == NULL){
     fprintf(stderr,"Error : g1 is not a valid pointer!\n");
+    game_delete(g);
+    game_delete(g1);
     return false;
   }
   if(game_equal(g,g1)==false){
     fprintf(stderr,"Error : g is different from the copied game!\n");
+    game_delete(g);
+    game_delete(g1);
     return false;
   }
-
+  game_delete(g);
+  game_delete(g1);
   return true;
 }
 
@@ -49,8 +56,12 @@ bool test_game_equal(void){
   game g2 = game_default();
   if(game_equal(g1,g2)==false){
     fprintf(stderr,"Error : the games are not equal!\n");
+    game_delete(g1);
+    game_delete(g2);
     return false;
   }
+  game_delete(g1);
+  game_delete(g2);
   return true;
 }
 
@@ -60,17 +71,20 @@ bool test_game_new_empty(void){
   game g = game_new_empty();
   if(g==NULL){
     fprintf(stderr,"Error : g is not a valid pointer!\n");
+    game_delete(g);
     return false;
   }
   for(uint i=0;i<DEFAULT_SIZE;i++){
       if(game_get_expected_nb_tents_row(g,i)!=0){
         fprintf(stderr,"Error : the game is not empty!\n");
+        game_delete(g);
         return false;
       }
   }
   for(uint j=0;j<DEFAULT_SIZE;j++){
     if(game_get_expected_nb_tents_row(g,j)!=0){
         fprintf(stderr,"Error : the game is not empty!\n");
+        game_delete(g);
         return false;
       }
   }
@@ -79,10 +93,12 @@ bool test_game_new_empty(void){
     for(uint y=0;y<DEFAULT_SIZE;y++){
       if(game_get_square(g,x,y)!=EMPTY){
         fprintf(stderr,"Error : the game is not empty!\n");
+        game_delete(g);
         return false;        
       };
     }
   }
+  game_delete(g);
   return true;
 }
    
@@ -104,8 +120,10 @@ bool test_game_new(){
   game g = game_new(squares,tentes_lig,tentes_col);
   if(g==NULL){
     fprintf(stderr,"Error : g is not a valid pointer!\n");
+    game_delete(g);
     return false;
   }
+  game_delete(g);
   return true;
 }
 
@@ -114,6 +132,7 @@ bool test_game_new(){
 bool test_game_set_square(){
   game g = game_default();
   game_set_square(g, 0, 1, TENT);
+  game_delete(g);
   return true;
 }
 
