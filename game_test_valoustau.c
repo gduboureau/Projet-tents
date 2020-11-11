@@ -9,7 +9,7 @@ typedef unsigned int uint;
 
 /* ********** TEST GAME GET CURRENT NB TENTS ROW ********** */
 
-bool test__game_get_current_nb_tents_row(void){
+bool test_game_get_current_nb_tents_row(void){
     game g = game_default();
     for (uint i=0; i<DEFAULT_SIZE; i++){
         if (game_get_current_nb_tents_row(g, i) > game_get_expected_nb_tents_row(g,i)){
@@ -24,7 +24,7 @@ bool test__game_get_current_nb_tents_row(void){
 
 /* ********** TEST GAME GET CURRENT NB TENTS COL ********** */
 
-bool test__game_get_current_nb_tents_col(void){
+bool test_game_get_current_nb_tents_col(void){
     game g = game_default();
     for (uint j=0; j<DEFAULT_SIZE; j++){
         if (game_get_current_nb_tents_col(g, j) > game_get_expected_nb_tents_col(g,j)){
@@ -39,7 +39,7 @@ bool test__game_get_current_nb_tents_col(void){
 
 /* ********** TEST GAME GET CURRENT NB TENTS ALL ********** */
 
-bool test__game_get_current_nb_tents_all(void){
+bool test_game_get_current_nb_tents_all(void){
     game g = game_default();
     uint c = 0;
     for (uint v=0; v<DEFAULT_SIZE; v++){
@@ -56,11 +56,11 @@ bool test__game_get_current_nb_tents_all(void){
 
 /* ********** GAME PLAY MOVE ********** */
 
-bool test__game_play_move(void){
+bool test_game_play_move(void){
     game g = game_default();
     for (uint i=0; i<DEFAULT_SIZE; i++){
         for (uint j=0; j<DEFAULT_SIZE; j++){
-            if (game_get_square(g,i,j)==TREE && ((game_play_move(g, i, j,TENT) || game_play_move(g, i, j,GRASS) || game_play_move(g, i, j,EMPTY)){
+            if (game_get_square(g,i,j)==TREE && (game_check_move(g,i,j,EMPTY)!=ILLEGAL || game_check_move(g,i,j,GRASS)!=ILLEGAL || game_check_move(g,i,j,TENT)!=ILLEGAL || game_check_move(g,i,j,TREE)!=ILLEGAL)){
                 fprintf(stderr,"Error: illegal move!\n");
                 game_delete(g);
                 return false;
@@ -73,7 +73,7 @@ bool test__game_play_move(void){
 
 /* ********** GAME CHECK MOVE ********** */
 
-bool test__game_check_move(void){
+bool test_game_check_move(void){
     game g = game_default();
     for (uint i=0; i<DEFAULT_SIZE; i++){
         for(uint j=0; j<DEFAULT_SIZE; j++){
@@ -90,7 +90,7 @@ bool test__game_check_move(void){
 
 /* ********** GAME IS OVER ********** */
 
-bool test__game_is_over(void){
+bool test_game_is_over(void){
     game g = game_default();
     game g1 = game_default_solution();
     if (game_is_over(g)==true && game_equal(g,g1)==false){
@@ -129,17 +129,17 @@ int main(int argc, char *argv[]){
     fprintf(stderr, "=> Start test \"%s\"\n enter \"echo $?\" to display if the test is successful.\n", argv[1]);
     bool ok = false;
     if (strcmp("game_get_current_nb_tents_row", argv[1]) == 0)
-        ok = test__game_get_current_nb_tents_row();
+        ok = test_game_get_current_nb_tents_row();
     else if (strcmp("game_get_current_nb_tents_col", argv[1]) == 0)
-        ok = test__game_get_current_nb_tents_col();
+        ok = test_game_get_current_nb_tents_col();
     else if (strcmp("game_get_current_nb_tents_all", argv[1]) == 0)
-        ok = test__game_get_current_nb_tents_all();
+        ok = test_game_get_current_nb_tents_all();
     else if (strcmp("game_play_move", argv[1]) == 0)
-        ok = test__game_play_move();
+        ok = test_game_play_move();
     else if (strcmp("game_check_move", argv[1]) == 0)
-        ok = test__game_check_move();
+        ok = test_game_check_move();
     else if (strcmp("game_is_over", argv[1]) == 0)
-        ok = test__game_is_over();
+        ok = test_game_is_over();
     else {
     fprintf(stderr, "Error: test \"%s\" not found!\n", argv[1]);
     exit(EXIT_FAILURE);

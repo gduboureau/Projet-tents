@@ -31,14 +31,14 @@ add_test(test_gduboureau_game_default ./game_test_gduboureau game_default)
 add_test(test_gduboureau_game_default_solution ./game_test_gduboureau game_default_solution)
 
 #* ********** valoustau ********** *#
-#add_executable(game_test_valoustau game_test_valoustau.c)
+add_executable(game_test_valoustau game_test_valoustau.c)
 
-#target_link_libraries(game_test_valoustau game)
+target_link_libraries(game_test_valoustau game)
 
-#add_test(test_valoustau_game_get_current_nb_tents_row ./game_test_valoustau game_get_current_nb_tents_row)
-#add_test(test_valoustau_game_get_current_nb_tents_col ./game_test_valoustau game_get_current_nb_tents_col)
-#add_test(test_valoustau_game_get_current_nb_tents_all ./game_test_valoustau game_get_current_nb_tents_all)
-#add_test(test_valoustau_game_play_move ./game_test_valoustau game_play_move)
+add_test(test_valoustau_game_get_current_nb_tents_row ./game_test_valoustau game_get_current_nb_tents_row)
+add_test(test_valoustau_game_get_current_nb_tents_col ./game_test_valoustau game_get_current_nb_tents_col)
+add_test(test_valoustau_game_get_current_nb_tents_all ./game_test_valoustau game_get_current_nb_tents_all)
+add_test(test_valoustau_game_play_move ./game_test_valoustau game_play_move)
 #add_test(test_valoustau_game_check_move ./game_test_valoustau game_check_move)
 #add_test(test_valoustau_game_is_over ./game_test_valoustau game_is_over)
 
