@@ -23,6 +23,16 @@ bool test_game_get_square(void){
       game_delete(g);
       return false;
     }
+
+    if(game_get_square(g, 0, 1) == TREE){
+      game_delete(g);
+      return false;
+    }
+
+    if(game_get_square(g, 1, 0) == GRASS){
+      game_delete(g);
+      return false;
+    }
     
     for (i; i < DEFAULT_SIZE; i++)
     {
