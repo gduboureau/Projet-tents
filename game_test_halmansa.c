@@ -23,6 +23,11 @@ bool test_game_get_square(void){
       game_delete(g);
       return false;
     }
+
+    if(game_get_expected_nb_tents_col(g, j) != 4){
+      game_delete(g);
+      return false;
+    }
     
     for (i; i < DEFAULT_SIZE; i++)
     {
