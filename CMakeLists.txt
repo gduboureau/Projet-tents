@@ -28,6 +28,7 @@ add_test(test_gduboureau_game_fill_grass_row ./game_test_gduboureau game_fill_gr
 add_test(test_gduboureau_game_fill_grass_col ./game_test_gduboureau game_fill_grass_col)
 add_test(test_gduboureau_game_print ./game_test_gduboureau game_print)
 add_test(test_gduboureau_game_default ./game_test_gduboureau game_default)
+add_test(test_gduboureau_game_default_solution ./game_test_gduboureau game_default_solution)
 
 #* ********** valoustau ********** *#
 #add_executable(game_test_valoustau game_test_valoustau.c)

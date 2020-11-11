@@ -121,6 +121,30 @@ bool test_game_default(){
 }
 
 /* *********************************************************** */
+bool test_game_default_solution(){
+    game g = game_default_solution();
+    uint tentes_lig[] = {3, 0, 4, 0, 4, 0, 1, 0};
+    uint tentes_col[] = {4, 0, 1, 2, 1, 1, 2, 1};
+
+    square squares[] = {TENT, GRASS, GRASS,TENT,TREE,TREE,TENT,GRASS,
+    TREE, GRASS, GRASS,GRASS,GRASS,GRASS,GRASS,TREE,
+    TENT, GRASS, GRASS,TENT,TREE,TENT,GRASS,TENT,
+    TREE, GRASS, GRASS,GRASS,GRASS,TREE,GRASS,GRASS,
+    TENT, TREE, TENT,GRASS,TENT,GRASS,TENT,GRASS,
+    TREE, GRASS, GRASS,GRASS,TREE,GRASS,TREE,GRASS,
+    TENT, GRASS, GRASS,GRASS,GRASS,GRASS,GRASS,GRASS,
+    TREE,GRASS, GRASS,GRASS,GRASS,GRASS,GRASS,GRASS} ;
+
+    game g1 = game_new(squares, tentes_lig, tentes_col);
+    if (game_equal(g,g1) == false){
+        game_delete(g);
+        game_delete(g1);
+        return false;
+    }
+    game_delete(g);
+    game_delete(g1);
+    return true;
+}
 
 /* *********************************************************** */
 
@@ -144,6 +168,9 @@ int main (int argc, char* argv[]){
     }
     else if(strcmp("game_default", argv[1]) == 0){
         ok = test_game_default();
+    }
+    else if(strcmp("game_default_solution", argv[1]) == 0){
+        ok = test_game_default_solution();
     }
     else{
         fprintf(stderr, "Error: test \"%s\" not found!\n", argv[1]);
