@@ -28,28 +28,22 @@ bool test_game_fill_grass_row(){
 /* *********************************************************** */
 
 bool test_game_restart(){
-    game g = game_new_empty();
+    game g = game_default();
+    if (g==NULL){
+        game_delete(g);
+        return false;
+    }
     for (unsigned int i = 0; i<DEFAULT_SIZE; i++){
         for (unsigned int j = 0; j<DEFAULT_SIZE; j++){
             if (game_get_square(g,i,j) == TENT || game_get_square(g,i,j) == GRASS){
+                game_delete(g);
                 return false;
             }
         }
     }
     if (game_is_over(g) == true){
+        game_delete(g);
         return false;
-    }
-    for(uint i=0;i<DEFAULT_SIZE;i++){
-      if(game_get_expected_nb_tents_row(g,i)!=0){
-        fprintf(stderr,"Error : the game is not empty!\n");
-        return false;
-      }
-    }
-    for(uint j=0;j<DEFAULT_SIZE;j++){
-        if(game_get_expected_nb_tents_row(g,j)!=0){
-            fprintf(stderr,"Error : the game is not empty!\n");
-            return false;
-        }
     }
     game_delete(g);
     return true;
@@ -60,6 +54,7 @@ bool test_game_restart(){
 bool test_game_print(){
     game g = game_default();
     game_print(g);
+    game_delete(g);
     return true;
 }
 
