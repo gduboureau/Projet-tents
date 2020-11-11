@@ -23,10 +23,12 @@ bool test_game_get_square(void){
         for(j; j<DEFAULT_SIZE; j++){
             if(game_get_square(g, i, j) != TENT && game_get_square(g, i, j) != EMPTY && game_get_square(g, i, j) != GRASS && game_get_square(g, i, j) != TREE){
                 fprintf(stderr, "Error : the square isn't valid!\n");
+                game_delete(g);
                 return false;
             }
         }    
     }
+    game_delete(g);
     return true;
 }
 
@@ -39,6 +41,7 @@ bool test_game_set_expected_nb_tents_row(void){
    for(i=0; i<DEFAULT_SIZE; i++){
     game_set_expected_nb_tents_row(g, i, game_get_expected_nb_tents_row(g, i));
    }
+   game_delete(g);
    return true;
   }
 
@@ -51,6 +54,7 @@ bool test_game_set_expected_nb_tents_col(void){
    for(j=0; j<DEFAULT_SIZE; j++){
     game_set_expected_nb_tents_col(g, j, game_get_expected_nb_tents_col(g, j));
    }
+   game_delete(g);
    return true;
   }
 
@@ -62,9 +66,11 @@ bool test_game_get_expected_nb_tents_row(void){
     for(i; i<DEFAULT_SIZE; i++){
         if(game_get_expected_nb_tents_row(g, i)<0 || game_get_expected_nb_tents_row(g, i)>4){
             fprintf(stderr, "Error : number of tents isn't valid!\n");
+            game_delete(g);
             return false;
         }
     }    
+    game_delete(g);
     return true;
 }
 
@@ -76,9 +82,12 @@ bool test_game_get_expected_nb_tents_col(void){
     for(j; j<DEFAULT_SIZE; j++){
         if(game_get_expected_nb_tents_col(g, j)<0 || game_get_expected_nb_tents_col(g, j)>4){
             fprintf(stderr, "Error : number of tents isn't valid!\n");
+            game_delete(g);
             return false;
+            
         }
     }    
+    game_delete(g);
     return true;
 }
 
@@ -88,8 +97,10 @@ bool test_game_get_expected_nb_tents_all(void){
   game g = game_default();
   if(game_get_expected_nb_tents_all(g)<0 || game_get_expected_nb_tents_all(g)>12){
     fprintf(stderr, "Error : number of tents isn't valid!\n");
+    game_delete(g);
     return false;
   }
+  game_delete(g);
   return true;
 }
 
