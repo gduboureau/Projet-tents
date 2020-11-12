@@ -47,49 +47,31 @@ bool test_game_delete(void){
 
 bool test_game_equal(void){
   game g1 = game_default();
-  game g2 = game_copy(g1);
-  game g3 = game_new_empty();
-  game g4 = game_default_solution();
+  game g2 = game_default();
+
   
   for(uint i = 0;i<DEFAULT_SIZE;i++){
     for(uint j=0;j<DEFAULT_SIZE;j++){
-      if(game_get_square(g1,i,j)!=game_get_square(g2,i,j) || game_get_expected_nb_tents_row(g1,i)!=game_get_expected_nb_tents_row(g2,i) || game_get_expected_nb_tents_col(g1,j)!=game_get_expected_nb_tents_col(g2,j)){
+      if(game_get_square(g1,i,j)!=game_get_square(g2,i,j)){
+        fprintf(stderr,"the games are not equal!\n");
         game_delete(g1);
         game_delete(g2);
-        game_delete(g3);
-        game_delete(g4);
         return false;
       }
-      if(game_equal(g1,g3)==true){
+      else if(game_get_expected_nb_tents_row(g1,i)!= game_get_expected_nb_tents_row(g2,i)){
+        fprintf(stderr,"the games are not equal!\n");
         game_delete(g1);
         game_delete(g2);
-        game_delete(g3);
-        game_delete(g4);
         return false;
       }
-      if(game_equal(g1,g2)==false){
+      else if(game_get_expected_nb_tents_col(g1,j)!= game_get_expected_nb_tents_col(g2,j)){
+        fprintf(stderr,"the games are not equal!\n");
         game_delete(g1);
         game_delete(g2);
-        game_delete(g3);
-        game_delete(g4);
         return false;
       }
-      if(game_equal(g1,g4)==true){
-        game_delete(g1);
-        game_delete(g2);
-        game_delete(g3);
-        game_delete(g4);
-        return false;
-      }
-      
     }
-  }
-  
-  game_delete(g1);
-  game_delete(g2);
-  game_delete(g3);
-  game_delete(g4);
-  return true;
+  }    
 }
 
 /* *********************************************************** */
