@@ -68,16 +68,7 @@ bool test_game_equal(void){
         game_delete(g3);
         game_delete(g4);
         return false;
-      }
-      if(game_get_square(g1,i,j)==game_get_square(g4,i,j) && game_get_expected_nb_tents_row(g1,i)!= game_get_expected_nb_tents_row(g4,i) && game_get_expected_nb_tents_col(g1,j)== game_get_expected_nb_tents_col(g4,j)){
-        fprintf(stderr,"the games are not equal!\n");
-        game_delete(g1);
-        game_delete(g2);
-        game_delete(g3);
-        game_delete(g4);
-        return false;
-      }
-      
+      }      
     }
   } 
   game_delete(g1);
