@@ -49,8 +49,6 @@ bool test_game_equal(void){
   game g1 = game_default();
   game g2 = game_default();
   game g3 = game_default_solution();
-  game g4 = game_new_empty();
-
   
   for(uint i = 0;i<DEFAULT_SIZE;i++){
     for(uint j=0;j<DEFAULT_SIZE;j++){
@@ -59,7 +57,13 @@ bool test_game_equal(void){
         game_delete(g1);
         game_delete(g2);
         game_delete(g3);
-        game_delete(g4);
+        return false;
+      }
+      if(game_get_square(g1,i,j)==game_get_square(g3,i,j) && game_get_expected_nb_tents_row(g1,i)!= game_get_expected_nb_tents_row(g3,i) && game_get_expected_nb_tents_col(g1,j)== game_get_expected_nb_tents_col(g3,j) && game_get_current_nb_tents_all(g1)== game_get_current_nb_tents_all(g3)){
+        fprintf(stderr,"the games are not equal!\n");
+        game_delete(g1);
+        game_delete(g2);
+        game_delete(g3);
         return false;
       }
     }
@@ -67,7 +71,6 @@ bool test_game_equal(void){
   game_delete(g1);
   game_delete(g2);
   game_delete(g3);  
-  game_delete(g4);
   return true; 
 }
 
