@@ -63,7 +63,7 @@ bool test_game_equal(void){
     return false; 
   }
 
-  if(game_equal(g1,g3)==true && (c!=DEFAULT_SIZE*DEFAULT_SIZE || game_get_current_nb_tents_all(g1)!=game_get_current_nb_tents_all(g3))){
+  if(game_equal(g1,g3)==true && (d!=DEFAULT_SIZE*DEFAULT_SIZE || game_get_current_nb_tents_all(g1)!=game_get_current_nb_tents_all(g3))){
     game_delete(g1);
     game_delete(g2);
     game_delete(g3); 
