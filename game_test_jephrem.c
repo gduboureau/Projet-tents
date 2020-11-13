@@ -56,14 +56,14 @@ bool test_game_equal(void){
       }
     }
   }
-  if(game_equal(g1,g2)==false && c==DEFAULT_SIZE*DEFAULT_SIZE && game_get_current_nb_tents_all(g1)==game_get_current_nb_tents_all(g2)){
+  if(game_equal(g1,g2)==false && c==DEFAULT_SIZE*DEFAULT_SIZE && game_get_current_nb_tents_all(g1)==game_get_current_nb_tents_all(g2) && game_get_expected_nb_tents_all(g1)==game_get_expected_nb_tents_all(g2)){
     game_delete(g1);
     game_delete(g2);
     game_delete(g3); 
     return false; 
   }
 
-  if(game_equal(g1,g3)==true && (d!=DEFAULT_SIZE*DEFAULT_SIZE || game_get_current_nb_tents_all(g1)!=game_get_current_nb_tents_all(g3))){
+  if(game_equal(g1,g3)==true && (d!=DEFAULT_SIZE*DEFAULT_SIZE || game_get_current_nb_tents_all(g1)!=game_get_current_nb_tents_all(g3) || game_get_expected_nb_tents_all(g1)!=game_get_expected_nb_tents_all(g3))){
     game_delete(g1);
     game_delete(g2);
     game_delete(g3); 
