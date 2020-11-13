@@ -45,7 +45,7 @@ bool test_game_delete(void){
 
 /* *********************************************************** */
 
-bool test_game_equal(void){
+/*bool test_game_equal(void){
   game g1 = game_default();
   game g2 = game_default();
   game g3 = game_default_solution();
@@ -71,7 +71,7 @@ bool test_game_equal(void){
   game_delete(g2);
   game_delete(g3); 
   return true; 
-}
+}*/
 
 /* *********************************************************** */
 
@@ -138,8 +138,12 @@ bool test_game_new(){
 /* *********************************************************** */
 
 bool test_game_set_square(){
-  game g = game_default();
-  game_set_square(g, 0, 1, TENT);
+  game g = game_new_empty();
+  game_set_square(g, 0, 4, TREE);
+  if(game_get_square(g,0,4)!= TREE){
+    game_delete(g);
+    return false;
+  }
   game_delete(g);
   return true;
 }
@@ -160,9 +164,9 @@ int main(int argc, char *argv[]) {
   else if(strcmp("game_copy", argv[1]) == 0){
     ok = test_game_copy();
   }
-  else if(strcmp("game_equal", argv[1]) == 0){
+  /*else if(strcmp("game_equal", argv[1]) == 0){
     ok = test_game_equal();
-  }
+  }*/
   else if(strcmp("game_new_empty", argv[1]) == 0){
     ok = test_game_new_empty();
   }
