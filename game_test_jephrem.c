@@ -26,12 +26,6 @@ bool test_game_delete(void){
   bool test_game_copy(void){
   game g = game_default();
   game g1 = game_copy(g);
-  if(g==NULL || g1 == NULL){
-    fprintf(stderr,"Error : at least one of the two pointers is invalid!\n");
-    game_delete(g);
-    game_delete(g1);
-    return false;
-  }
   if(game_equal(g,g1)==false){
     fprintf(stderr,"Error : g is different from the copied game!\n");
     game_delete(g);
@@ -77,11 +71,6 @@ bool test_game_delete(void){
 
 bool test_game_new_empty(void){
   game g = game_new_empty();
-  if(g==NULL){
-    fprintf(stderr,"Error : g is not a valid pointer!\n");
-    game_delete(g);
-    return false;
-  }
   for(uint i=0;i<DEFAULT_SIZE;i++){
       if(game_get_expected_nb_tents_row(g,i)!=0){
         fprintf(stderr,"Error : the game is not empty!\n");
@@ -126,11 +115,6 @@ bool test_game_new(){
     TREE,EMPTY, EMPTY,EMPTY,EMPTY,EMPTY,EMPTY,EMPTY} ;
 
   game g = game_new(squares,tentes_lig,tentes_col);
-  if(g==NULL){
-    fprintf(stderr,"Error : g is not a valid pointer!\n");
-    game_delete(g);
-    return false;
-  }
   game_delete(g);
   return true;
 }

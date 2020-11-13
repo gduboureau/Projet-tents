@@ -11,13 +11,12 @@ typedef unsigned int uint;
 
 bool test_game_get_current_nb_tents_row(void){
     game g = game_default();
-    for (uint i=0; i<DEFAULT_SIZE; i++){
-        if (game_get_current_nb_tents_row(g, i) > game_get_expected_nb_tents_row(g,i)){
-            fprintf(stderr,"Error: current tents row is not expected (row %d)!\n", i);
-            game_delete(g);
-            return false;
-        }
+    game_play_move(g,0,0,TENT);
+    if(game_get_current_nb_tents_row(g,0)!= 1){
+        game_delete(g);
+        return false;
     }
+    
     game_delete(g);
     return true;
 }
@@ -26,12 +25,10 @@ bool test_game_get_current_nb_tents_row(void){
 
 bool test_game_get_current_nb_tents_col(void){
     game g = game_default();
-    for (uint j=0; j<DEFAULT_SIZE; j++){
-        if (game_get_current_nb_tents_col(g, j) > game_get_expected_nb_tents_col(g,j)){
-            fprintf(stderr,"Error: current tents col is not expected (col %d)!\n", j);
-            game_delete(g);
-            return false;
-        }
+    game_play_move(g,0,3,TENT);
+    if(game_get_current_nb_tents_col(g,3) != 1){
+        game_delete(g);
+        return false;
     }
     game_delete(g);
     return true;
