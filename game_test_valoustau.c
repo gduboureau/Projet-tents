@@ -87,7 +87,7 @@ bool test_game_play_move(void){
             }
         }
     }
-    if(c!=0){
+    if(c==0){
         fprintf(stderr,"Error: illegal move!\n");
         game_delete(g);
         return false;
