@@ -162,18 +162,27 @@ bool test_game_check_move(void){
 /* ********** GAME IS OVER ********** */
 
 bool test_game_is_over(void){
+    uint c = 0;
+    uint x = 0;
     game g = game_default_solution();
     for(uint i=0;i<DEFAULT_SIZE;i++){
         for(uint j=0;j<DEFAULT_SIZE;j++){
-          if(game_get_current_nb_tents_row(g,i)!= game_get_expected_nb_tents_row(g,i) || game_get_current_nb_tents_col(g,j) != game_get_expected_nb_tents_col(g,j)){
-              game_delete(g);
-              return false;
+            if(game_get_square(g,i,j)==TENT){
+                c ++;
+            }
+            if(game_get_square(g,i,j)==TREE){
+                x ++;
             }
         }
+    }
+    if(x != c){
+        game_delete(g);
+        return false;
     }
     game_delete(g);
     return true;
 }
+
 /* ********** USAGE ********** */
 
 void usage(int argc, char *argv[])
