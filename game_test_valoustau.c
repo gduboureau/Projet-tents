@@ -11,14 +11,25 @@ typedef unsigned int uint;
 
 bool test_game_get_current_nb_tents_row(void){
     game g = game_default();
+    game g1 = game_default_solution();
+    uint c = 0;
     for(uint i=0;i<DEFAULT_SIZE;i++){
-        if(game_get_current_nb_tents_row(g, i) > game_get_expected_nb_tents_row(g,i)){
+        c=c+game_get_current_nb_tents_row(g1, i);
+        if(game_get_current_nb_tents_row(g, i) != 0){
             fprintf(stderr,"Error: current tents row is not expected (row %d)!\n", i);
             game_delete(g);
+            game_delete(g1);
             return false;
         }
     }
+    if(c!=12){
+            fprintf(stderr,"Error: current tents row is not expected (row %d)!\n", i);
+            game_delete(g);
+            game_delete(g1);
+            return false;
+        }
     game_delete(g);
+    game_delete(g1);
     return true;
 }
 
@@ -26,14 +37,25 @@ bool test_game_get_current_nb_tents_row(void){
 
 bool test_game_get_current_nb_tents_col(void){
     game g = game_default();
+    game g1 = game_default_solution();
+    uint c = 0;
     for(uint j=0;j<DEFAULT_SIZE;j++){
-        if(game_get_current_nb_tents_col(g, j) > game_get_expected_nb_tents_col(g,j)){
+        c=c+game_get_current_nb_tents_col(g1, j);
+        if(game_get_current_nb_tents_col(g, j) != 0){
             fprintf(stderr,"Error: current tents col is not expected (col %d)!\n", j);
             game_delete(g);
+            game_delete(g1);
             return false;
         }
     }
+    if(c!=12){
+            fprintf(stderr,"Error: current tents col is not expected (col %d)!\n", j);
+            game_delete(g);
+            game_delete(g1);
+            return false;
+        }
     game_delete(g);
+    game_delete(g1);
     return true;
 }
 
