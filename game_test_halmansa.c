@@ -105,6 +105,15 @@ bool test_game_get_expected_nb_tents_col(void){
 
 bool test_game_get_expected_nb_tents_all(void){
   game g = game_default();
+  uint c = 0;
+  for(uint j=0; j<DEFAULT_SIZE; j++){
+    c=c+game_get_expected_nb_tents_col(g, j);
+  }
+  if(game_get_expected_nb_tents_all(g) != c){
+    fprintf(stderr, "Error : number of tents isn't valid!\n");
+    game_delete(g);
+    return false;
+  }
   if(game_get_expected_nb_tents_all(g)<0 || game_get_expected_nb_tents_all(g)>12){
     fprintf(stderr, "Error : number of tents isn't valid!\n");
     game_delete(g);
