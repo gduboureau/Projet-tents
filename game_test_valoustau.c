@@ -11,12 +11,12 @@ typedef unsigned int uint;
 
 bool test_game_get_current_nb_tents_row(void){
     game g = game_default();
-    game_play_move(g,0,0,TENT);
-    if(game_get_current_nb_tents_row(g,0)!= 1){
-        game_delete(g);
-        return false;
+    for(uint i=0;i<DEFAULT_SIZE;i++){
+        if(game_get_current_nb_tents_row(g,i)!= 0){
+            game_delete(g);
+            return false;
+        }
     }
-    
     game_delete(g);
     return true;
 }
@@ -25,10 +25,11 @@ bool test_game_get_current_nb_tents_row(void){
 
 bool test_game_get_current_nb_tents_col(void){
     game g = game_default();
-    game_play_move(g,0,3,TENT);
-    if(game_get_current_nb_tents_col(g,3) != 1){
-        game_delete(g);
-        return false;
+    for(uint j=0;j<DEFAULT_SIZE;j++){
+        if(game_get_current_nb_tents_col(g,j)!= 0){
+            game_delete(g);
+            return false;
+        }
     }
     game_delete(g);
     return true;
