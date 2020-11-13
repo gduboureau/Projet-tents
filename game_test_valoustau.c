@@ -76,14 +76,21 @@ bool test_game_get_current_nb_tents_all(void){
 
 bool test_game_play_move(void){
     game g = game_default();
+    uint c = 0;
     for (uint i=0; i<DEFAULT_SIZE; i++){
         for (uint j=0; j<DEFAULT_SIZE; j++){
-            if (game_get_square(g,i,j)==TREE && (game_check_move(g,i,j,EMPTY)!=ILLEGAL || game_check_move(g,i,j,GRASS)!=ILLEGAL || game_check_move(g,i,j,TENT)!=ILLEGAL || game_check_move(g,i,j,TREE)!=ILLEGAL)){
-                fprintf(stderr,"Error: illegal move!\n");
-                game_delete(g);
-                return false;
+            if(game_get_square(g,i,j)==TREE){
+                game_play_move(g, i, j, TENT);
+            }
+            if(game_get_square(g,i,j)==TREE){
+                c++;
             }
         }
+    }
+    if(c!=0){
+        fprintf(stderr,"Error: illegal move!\n");
+        game_delete(g);
+        return false;
     }
     game_delete(g);
     return true;
