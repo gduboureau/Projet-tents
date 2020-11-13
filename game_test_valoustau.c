@@ -162,20 +162,18 @@ bool test_game_check_move(void){
 /* ********** GAME IS OVER ********** */
 
 bool test_game_is_over(void){
-    game g = game_default();
-    game g1 = game_default_solution();
-
-    if (game_is_over(g)==true && game_equal(g,g1)==false){
-        fprintf(stderr,"Error: the game over is different of game solution!\n");       
-        game_delete(g);
-        game_delete(g1);
-        return false;
+    game g = game_default_solution();
+    for(uint i=0;i<DEFAULT_SIZE;i++){
+        for(uint j=0;j<DEFAULT_SIZE;j++){
+          if(game_get_current_nb_tents_row(g,i)!= game_get_expected_nb_tents_row(g,i) || game_get_current_nb_tents_col(g,j) != game_get_expected_nb_tents_col(g,j)){
+              game_delete(g);
+              return false;
+            }
+        }
     }
     game_delete(g);
     return true;
-
 }
-
 /* ********** USAGE ********** */
 
 void usage(int argc, char *argv[])
