@@ -79,16 +79,15 @@ bool test_game_play_move(void){
     uint c = 0;
     for (uint i=0; i<DEFAULT_SIZE; i++){
         for (uint j=0; j<DEFAULT_SIZE; j++){
-            if(game_get_square(g,i,j)==TREE){
+            if(game_get_square(g,i,j)==EMPTY){
                 game_play_move(g, i, j, TENT);
             }
-            if(game_get_square(g,i,j)==TREE){
+            if(game_get_square(g,i,j)==EMPTY){
                 c++;
             }
         }
     }
-    if(c==0){
-        fprintf(stderr,"Error: illegal move!\n");
+    if(c!=0){
         game_delete(g);
         return false;
     }
