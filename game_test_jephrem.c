@@ -53,7 +53,7 @@ bool test_game_equal(void){
       return false;
       }
 
-game_play_move(g2, 0, 0, TENT);
+game_set_square(g2, 0, 0, TENT);
 game_set_expected_nb_tents_row(g2, 0, 2);
   
   if(game_equal(g1, g2)==true){
@@ -64,8 +64,8 @@ game_set_expected_nb_tents_row(g2, 0, 2);
     return false;
   }
 
-game_play_move(g2, 0, 0, EMPTY);
-game_set_expected_nb_tents_row(g2, 0, 3);
+game_set_square(g1, 0, 0, TENT);
+game_set_expected_nb_tents_row(g1, 0, 2);
   
   if(game_equal(g1, g2)==false){
     game_delete(g1);
