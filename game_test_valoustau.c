@@ -213,7 +213,7 @@ bool test_game_is_over(void){
             }
         }
     }
-    if(game_is_over(g)==true && x!=c){
+    if((game_is_over(g)==true && x!=c) || (game_is_over(g)==false && x==c)){
         game_delete(g);
         return false;
     }
