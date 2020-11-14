@@ -174,10 +174,10 @@ bool test_game_is_over(void){
     for(uint i=0;i<DEFAULT_SIZE;i++){
         for(uint j=0;j<DEFAULT_SIZE;j++){
             if(game_get_square(g,i,j)==TENT){
-                c ++;
+                c=c+1;
             }
             if(game_get_square(g,i,j)==TREE){
-                x ++;
+                x=x+1;
             }
             if(game_get_current_nb_tents_row(g,i) != game_get_expected_nb_tents_row(g,i)){
                 game_delete(g);
@@ -205,7 +205,7 @@ bool test_game_is_over(void){
             }
         }
     }
-    if((game_is_over(g)==true && x!=c) || game_is_over(g)==false && x==c ){
+    if(game_is_over(g)==true && x!=c){
         game_delete(g);
         return false;
     }
