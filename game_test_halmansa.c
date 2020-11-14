@@ -15,6 +15,29 @@ void usage(int argc, char *argv[]) {
 
 /* *********************************************************** */
 
+bool test_game_play_move(void){
+    game g = game_default();
+    uint c = 0;
+    for (uint i=0; i<DEFAULT_SIZE; i++){
+        for (uint j=0; j<DEFAULT_SIZE; j++){
+            if(game_get_square(g,i,j)==EMPTY){
+                game_play_move(g, i, j, TENT);
+            }
+            if(game_get_square(g,i,j)==EMPTY){
+                c++;
+            }
+        }
+    }
+    if(c!=0){
+        game_delete(g);
+        return false;
+    }
+    game_delete(g);
+    return true;
+}
+
+/* *********************************************************** */
+
 bool test_game_get_square(void){
     game g = game_default_solution();
     if(game_get_expected_nb_tents_row(g, 0) != 3){
@@ -156,7 +179,11 @@ int main(int argc, char *argv[]) {
   else if(strcmp("game_get_expected_nb_tents_all", argv[1]) == 0){
     ok = test_game_get_expected_nb_tents_all();
   }
-  
+
+  else if(strcmp("game_play_move", argv[1]) == 0){
+    ok = test_game_play_move();
+  }
+
   else {
     fprintf(stderr, "Error: test \"%s\" not found!\n", argv[1]);
     exit(EXIT_FAILURE);
