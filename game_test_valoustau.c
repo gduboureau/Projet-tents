@@ -129,6 +129,46 @@ bool test_game_check_move(void){
                 return false;
             }
 
+            //------------------------------------Analyse arbre présent au moins une fois autour d'une tente donnée-----------------------------------------//
+
+            if (i==0 && j>0 && j<DEFAULT_SIZE && (game_get_square(g,i+1,j)!=TREE && game_get_square(g,i,j-1)!=TREE && game_get_square(g,i,j+1)!=TREE && game_check_move(g,i,j,TENT)!=LOSING)){ //tent i==0 bordure j exclue
+                game_delete(g);
+                return false;
+            }
+            if (i>0 && i<DEFAULT_SIZE && j>0 && j<DEFAULT_SIZE (game_get_square(g,i-1,j)!=TREE && game_get_square(g,i+1,j)!=TREE && game_get_square(g,i,j-1)!=TREE && game_get_square(g,i,j+1)!=TREE && game_check_move(g,i,j,TENT)!=LOSING)){ //tent toute bordure exclue
+                game_delete(g);
+                return false;
+            }
+            if (i==0 && j==0 && (game_get_square(g,i+1,j)!=TREE && game_get_square(g,i,j+1)!=TREE && game_check_move(g,i,j,TENT)!=LOSING)){ //tent en haut a gauche 
+                game_delete(g);
+                return false;
+            }
+            if (i>0 && j==0 && i<DEFAULT_SIZE && (game_get_square(g,i-1,j)!=TREE && game_get_square(g,i+1,j)!=TREE && game_get_square(g,i,j+1)!=TREE && game_check_move(g,i,j,TENT)!=LOSING)){ //tent j==0 toute bordure i exclue
+                game_delete(g);
+                return false;
+            }
+            if (i==DEFAULT_SIZE && j==0 && (game_get_square(g,i-1,j)!=TREE && game_get_square(g,i,j+1)!=TREE && game_check_move(g,i,j,TENT)!=LOSING)){ //tent en bas a gauche
+                game_delete(g);
+                return false;
+            }
+            if (i==DEFAULT_SIZE && j>0 && j<DEFAULT_SIZE && (game_get_square(g,i-1,j)!=TREE && game_get_square(g,i,j-1)!=TREE && game_get_square(g,i,j+1)!=TREE && game_check_move(g,i,j,TENT)!=LOSING)){ //tent i==DEFAULT_SIZE bordure j exclue
+                game_delete(g);
+                return false;
+            }
+            if (i==DEFAULT_SIZE && j==DEFAULT_SIZE && (game_get_square(g,i-1,j)!=TREE && game_get_square(g,i,j-1)!=TREE && game_check_move(g,i,j,TENT)!=LOSING)){ //tent en bas a droite
+                game_delete(g);
+                return false;
+            }
+            if (i>0 && j==DEFAULT_SIZE && i<DEFAULT_SIZE && (game_get_square(g,i-1,j)!=TREE && game_get_square(g,i+1,j)!=TREE && game_get_square(g,i,j-1)!=TREE && game_check_move(g,i,j,TENT)!=LOSING)){ //tent j==DEFAULT_SIZE bordure i exclue
+                game_delete(g);
+                return false;
+            }
+            if (i==0 && j==DEFAULT_SIZE && (game_get_square(g,i+1,j)!=TREE && game_get_square(g,i,j-1)!=TREE && game_check_move(g,i,j,TENT)!=LOSING)){ //tent en haut a droite
+                game_delete(g);
+                return false;
+            }
+
+
             if(game_get_square(g, i, 0)==EMPTY && game_check_move(g, i, 0, GRASS) != LOSING){
                 fprintf(stderr,"Error: the game move at position (%d,%d) must be LOSING!\n", i, j);
                 game_delete(g);
