@@ -42,51 +42,44 @@ bool test_game_delete(void){
 bool test_game_equal(void){
   game g1 = game_default();
   game g2 = game_default();
-  game g3 = game_new_empty();
-  game g4 = game_new_empty();
 
-  if(game_equal(g1, g2)!=true){
+  if(game_equal(g1, g2)==false){
       game_delete(g1);
       game_delete(g2);
-      game_delete(g3);
-      game_delete(g4);
+
       return false;
       }
 
 game_set_square(g2, 0, 0, TENT);
 game_set_expected_nb_tents_row(g2, 0, 2);
   
-  if(game_equal(g1, g2)!=false){
+  if(game_equal(g1, g2)==true){
     game_delete(g1);
     game_delete(g2);
-    game_delete(g3);
-    game_delete(g4);
+
     return false;
   }
 
 game_set_square(g1, 0, 0, TENT);
 game_set_expected_nb_tents_row(g1, 0, 2);
   
-  if(game_equal(g1, g2)!=true){
+  if(game_equal(g1, g2)==false){
     game_delete(g1);
     game_delete(g2);
-    game_delete(g3);
-    game_delete(g4);
     return false;
   }
 
-  if(game_equal(g3, g4)!=true){
+g1 = game_new_empty();
+g2 = game_new_empty();
+
+  if(game_equal(g1, g2)==false){
     game_delete(g1);
     game_delete(g2);
-    game_delete(g3);
-    game_delete(g4);
     return false;
   }
 
   game_delete(g1);
   game_delete(g2);
-  game_delete(g3);
-  game_delete(g4);
   return true;
 }
 /* *********************************************************** */
