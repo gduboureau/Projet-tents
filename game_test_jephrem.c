@@ -47,6 +47,7 @@ bool test_game_equal(void){
   uint c = 0;
   uint d = 0;
   uint e = 0;
+  game_play_move(g3, 0, 0, GRASS);
   for(int i = 0; i <DEFAULT_SIZE; i++){
      for(int j = 0; j <DEFAULT_SIZE; j++){
        if(game_equal(g1, g2)==true && (game_get_square(g1, i, j) != game_get_square(g2, i, j) || game_get_expected_nb_tents_row(g1, i) != game_get_expected_nb_tents_row(g2, i) || game_get_expected_nb_tents_col(g1, j) != game_get_expected_nb_tents_col(g2, j) || game_get_current_nb_tents_row(g1, i) != game_get_current_nb_tents_row(g2, i) || game_get_current_nb_tents_col(g1, j) != game_get_current_nb_tents_col(g2, j))){
