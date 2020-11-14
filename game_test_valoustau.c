@@ -170,7 +170,7 @@ bool test_game_check_move(void){
 bool test_game_is_over(void){
     uint c = 0;
     uint x = 0;
-    game g = game_default_solution();
+    game g = game_default();
     for(uint i=0;i<DEFAULT_SIZE;i++){
         for(uint j=0;j<DEFAULT_SIZE;j++){
             if(game_get_square(g,i,j)==TENT){
