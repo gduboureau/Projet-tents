@@ -65,6 +65,14 @@ bool test_game_equal(void){
           return false;
        }
 
+       if(game_equal(g3, g2)==true && (game_get_square(g3, i, j) != game_get_square(g2, i, j) || game_get_expected_nb_tents_row(g3, i) != game_get_expected_nb_tents_row(g2, i) || game_get_expected_nb_tents_col(g3, j) != game_get_expected_nb_tents_col(g2, j) || game_get_current_nb_tents_row(g3, i) != game_get_current_nb_tents_row(g2, i) || game_get_current_nb_tents_col(g3, j) != game_get_current_nb_tents_col(g2, j))){
+          game_delete(g1);
+          game_delete(g2);
+          game_delete(g3);
+          game_delete(g4);
+          return false;
+       }
+
        if(game_get_square(g1, i, j) == game_get_square(g3, i, j) && game_get_expected_nb_tents_row(g1, i) == game_get_expected_nb_tents_row(g3, i) && game_get_expected_nb_tents_col(g1, j) == game_get_expected_nb_tents_col(g3, j) && game_get_current_nb_tents_row(g1, i) == game_get_current_nb_tents_row(g3, i) && game_get_current_nb_tents_col(g1, j) == game_get_current_nb_tents_col(g3, j)){
           c++;
        }
