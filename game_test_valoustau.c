@@ -205,6 +205,14 @@ bool test_game_is_over(void){
             }
         }
     }
+    for(uint i=0;i<DEFAULT_SIZE -1;i++){
+        for(uint j=DEFAULT_SIZE-1;j<0;j--){
+            if(game_is_over(g)==true && game_get_square(g,i,j)==TENT && game_get_square(g,i-1,j-1)==TENT  ){
+                game_delete(g);
+                return false;
+            }
+        }
+    }
     if(game_is_over(g)==true && x!=c){
         game_delete(g);
         return false;
