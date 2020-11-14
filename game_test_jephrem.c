@@ -40,28 +40,52 @@ bool test_game_delete(void){
 /* *********************************************************** */
 
 bool test_game_equal(void){
-  game g1 = game_new_empty();
-  game g2 = game_new_empty();
-  uint c = 0;
+  game g1 = game_default();
+  game g2 = game_default();
+  game g3 = game_new_empty();
+  game g4 = game_new_empty();
 
   if(game_equal(g1, g2)==false){
       game_delete(g1);
       game_delete(g2);
+      game_delete(g3);
+      game_delete(g4);
       return false;
       }
 
-game_play_move(g2, 0, 0, GRASS);
-game_set_expected_nb_tents_row(g1, 0, 1);
+game_play_move(g2, 0, 0, TENT);
   
   if(game_equal(g1, g2)==true){
     game_delete(g1);
     game_delete(g2);
+    game_delete(g3);
+    game_delete(g4);
+    return false;
+  }
+
+game_play_move(g2, 0, 0, EMPTY);
+  
+  if(game_equal(g1, g2)==false){
+    game_delete(g1);
+    game_delete(g2);
+    game_delete(g3);
+    game_delete(g4);
+    return false;
+  }
+
+  if(game_equal(g3, g4)==false){
+    game_delete(g1);
+    game_delete(g2);
+    game_delete(g3);
+    game_delete(g4);
     return false;
   }
 
   game_delete(g1);
   game_delete(g2);
-    return true;
+  game_delete(g3);
+  game_delete(g4);
+  return true;
 }
 /* *********************************************************** */
 
