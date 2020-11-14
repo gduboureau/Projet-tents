@@ -43,27 +43,17 @@ bool test_game_equal(void){
   game g1 = game_new_empty();
   game g2 = game_new_empty();
   uint c = 0;
-  for(int i = 0; i <DEFAULT_SIZE; i++){
-     for(int j = 0; j <DEFAULT_SIZE; j++){
-       if(game_equal(g1, g2)==true && (game_get_square(g1, i, j) != game_get_square(g2, i, j) || game_get_expected_nb_tents_row(g1, i) != game_get_expected_nb_tents_row(g2, i) || game_get_expected_nb_tents_col(g1, j) != game_get_expected_nb_tents_col(g2, j))){
-         game_delete(g1);
-         game_delete(g2);
-         return false;
-       }
-    }
-  }
+
+  if(game_equal(g1, g2)==false){
+      game_delete(g1);
+      game_delete(g2);
+      return false;
+      }
+
 game_play_move(g2, 0, 0, GRASS);
 game_set_expected_nb_tents_row(g1, 0, 1);
   
-  for(int i = 0; i <DEFAULT_SIZE; i++){
-     for(int j = 0; j <DEFAULT_SIZE; j++){
-       if(game_get_square(g1, i, j) != game_get_square(g2, i, j) || game_get_expected_nb_tents_row(g1, i) != game_get_expected_nb_tents_row(g2, i) || game_get_expected_nb_tents_col(g1, j) != game_get_expected_nb_tents_col(g2, j)){
-         c++;
-       }
-    }
-  }
-
-  if(game_equal(g1, g2)==true && c != 0){
+  if(game_equal(g1, g2)==true){
     game_delete(g1);
     game_delete(g2);
     return false;
