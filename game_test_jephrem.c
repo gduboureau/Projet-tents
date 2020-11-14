@@ -54,6 +54,7 @@ bool test_game_equal(void){
       }
 
 game_play_move(g2, 0, 0, TENT);
+game_set_expected_nb_tents_row(g2, 0, 2);
   
   if(game_equal(g1, g2)==true){
     game_delete(g1);
@@ -64,6 +65,7 @@ game_play_move(g2, 0, 0, TENT);
   }
 
 game_play_move(g2, 0, 0, EMPTY);
+game_set_expected_nb_tents_row(g2, 0, 3);
   
   if(game_equal(g1, g2)==false){
     game_delete(g1);
