@@ -135,7 +135,7 @@ bool test_game_check_move(void){
                 game_delete(g);
                 return false;
             }
-            if (i>0 && i<DEFAULT_SIZE-1 && j>0 && j<DEFAULT_SIZE-1 (game_get_square(g,i-1,j)!=TREE && game_get_square(g,i+1,j)!=TREE && game_get_square(g,i,j-1)!=TREE && game_get_square(g,i,j+1)!=TREE && game_check_move(g,i,j,TENT)!=LOSING)){ //tent toute bordure exclue
+            if (i>0 && i<DEFAULT_SIZE-1 && j>0 && j<DEFAULT_SIZE-1 && (game_get_square(g,i-1,j)!=TREE && game_get_square(g,i+1,j)!=TREE && game_get_square(g,i,j-1)!=TREE && game_get_square(g,i,j+1)!=TREE && game_check_move(g,i,j,TENT)!=LOSING)){ //tent toute bordure exclue
                 game_delete(g);
                 return false;
             }
