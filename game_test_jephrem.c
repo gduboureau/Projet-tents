@@ -46,7 +46,6 @@ bool test_game_equal(void){
   if(game_equal(g1, g2)==false){
       game_delete(g1);
       game_delete(g2);
-
       return false;
       }
 
@@ -55,7 +54,6 @@ game_set_square(g2, 0, 0, TENT);
   if(game_equal(g1, g2)==true){
     game_delete(g1);
     game_delete(g2);
-
     return false;
   }
 
@@ -65,7 +63,6 @@ game_set_expected_nb_tents_row(g2, 0, 2);
   if(game_equal(g1, g2)==true){
     game_delete(g1);
     game_delete(g2);
-
     return false;
   }
 
@@ -78,7 +75,7 @@ game_set_expected_nb_tents_row(g1, 0, 2);
   }
 
 g1 = game_new_empty();
-g2 = game_copy(g2);
+g2 = game_copy(g1);
 
   if(game_equal(g1, g2)==false){
     game_delete(g1);
