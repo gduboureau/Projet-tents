@@ -232,7 +232,8 @@ bool test_game_is_over(void){
         game_delete(g);
         return false;
     }
-    
+
+ /* test avec nb != tree et de tents */   
     game_set_square(g, 0, 0, GRASS);
     
     if(game_is_over(g)==true){
@@ -240,6 +241,7 @@ bool test_game_is_over(void){
         return false;
     }
 
+ /* test avec nb != tents current et tents expected */
     game_set_square(g, 0, 0, TENT);
     game_set_expected_nb_tents_row(g, 0, 4);
     
@@ -249,6 +251,23 @@ bool test_game_is_over(void){
         }
     
     game_set_expected_nb_tents_row(g, 0, 3);
+    game_set_square(g, 0, 1, TENT);
+
+    if(game_is_over(g)==true){
+        game_delete(g);
+        return false;
+        }
+
+    game_set_square(g, 0, 1, GRASS);
+    
+
+/* test avec game default */
+    g = game_default();
+
+    if(game_is_over(g)==true){
+        game_delete(g);
+        return false;
+        }
 
     game_delete(g);
     return true;
