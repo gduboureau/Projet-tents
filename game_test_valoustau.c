@@ -260,7 +260,7 @@ bool test_game_is_over(void){
         return false;
         }
 
- /* test avec nb != tents current et tents expected*/
+ /* test avec nb != tents current et tents expected
 
     g = game_new_empty();
     game_set_expected_nb_tents_row(g, 0, 1);
