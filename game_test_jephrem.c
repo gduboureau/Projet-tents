@@ -154,6 +154,71 @@ bool test_game_set_square(){
 
 /* *********************************************************** */
 
+bool test_game_check_move(void){
+  game g = game_new_empty();
+  game_set_expected_nb_tents_row(g, 0, 2);
+  game_set_expected_nb_tents_col(g, 2, 1);
+  game_set_expected_nb_tents_col(g, 3, 1);
+  game_set_square(g, 0, 1, TREE);
+  game_set_square(g, 0, 4, TREE);
+  game_set_square(g, 0, 2, TENT);
+
+  if(game_check_move(g, 0, 3, TENT) != LOSING){
+    game_delete(g);
+    return false;
+  }
+
+  game_set_expected_nb_tents_row(g, 0, 1);
+  if(game_check_move(g, 0, 5, TENT) != LOSING){
+    game_delete(g);
+    return false;
+  }
+  
+  g = game_new_empty();
+  game_set_expected_nb_tents_row(g,0,3);
+  game_set_expected_nb_tents_col(g, 3, 1);
+  game_set_expected_nb_tents_col(g, 6, 1);
+  game_set_expected_nb_tents_col(g, 1, 1);
+  game_set_square(g,0,4,TREE);
+  game_set_square(g,0,5,TREE);
+  game_set_square(g,1,1,TREE);
+  game_set_square(g,0,3,TENT);
+  game_set_square(g,0,6,TENT);
+  game_set_square(g,0,7,GRASS);
+  game_set_square(g,0,2,GRASS);
+  game_set_square(g,0,0,GRASS);
+  if(game_check_move(g,0,1,GRASS) != LOSING){
+    game_delete(g);
+    return false;
+  }
+
+  g = game_new_empty();
+
+  game_set_square(g,0,3,TREE);
+  if(game_check_move(g,0,3,EMPTY) != ILLEGAL){
+    game_delete(g);
+    return false;
+  }
+
+  if(game_check_move(g,0,5,TREE) != ILLEGAL){
+    game_delete(g);
+    return false;
+  }
+
+  game_set_expected_nb_tents_row(g,0,1);
+  game_set_expected_nb_tents_col(g,4,1);
+
+  if(game_check_move(g,0,4,TENT) != REGULAR){
+    game_delete(g);
+    return false;
+  }
+  game_delete(g);
+  return true;
+
+}
+
+/* *********************************************************** */
+
 int main(int argc, char *argv[]) {
   if (argc == 1){
     usage(argc, argv);
@@ -179,6 +244,9 @@ int main(int argc, char *argv[]) {
   }
   else if(strcmp("game_set_square", argv[1]) == 0){
     ok = test_game_set_square();
+  }
+  else if(strcmp("game_check_move", argv[1]) == 0){
+    ok = test_game_check_move();
   }
   else {
     fprintf(stderr, "Error: test \"%s\" not found!\n", argv[1]);

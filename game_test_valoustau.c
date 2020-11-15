@@ -97,7 +97,7 @@ bool test_game_play_move(void){
 
 /* ********** GAME CHECK MOVE ********** */
 
-bool test_game_check_move(void){
+/*bool test_game_check_move(void){
     game g = game_default();
     for (uint i=0; i<DEFAULT_SIZE; i++){
         for(uint j=0; j<DEFAULT_SIZE; j++){
@@ -227,7 +227,7 @@ bool test_game_check_move(void){
     }
     game_delete(g);
     return true;
-}
+}*/
 
 /* ********** GAME IS OVER ********** */
 
@@ -283,18 +283,6 @@ bool test_game_is_over(void){
         return false;
         }
 
- /* test avec nb != tents current et tents expected
-
-    g = game_new_empty();
-    game_set_expected_nb_tents_row(g, 0, 1);
-    game_set_expected_nb_tents_col(g, 3, 1);
-
-    if(game_is_over(g)==true){
-        game_delete(g);
-        return false;
-        }
-*/
-
     game_delete(g);
     return true;
 }
@@ -324,8 +312,8 @@ int main(int argc, char *argv[]){
         ok = test_game_get_current_nb_tents_all();
     else if (strcmp("game_play_move", argv[1]) == 0)
         ok = test_game_play_move();
-    else if (strcmp("game_check_move", argv[1]) == 0)
-        ok = test_game_check_move();
+    /*else if (strcmp("game_check_move", argv[1]) == 0)
+        ok = test_game_check_move();*/
     else if (strcmp("game_is_over", argv[1]) == 0)
         ok = test_game_is_over();
     else {
