@@ -185,6 +185,12 @@ bool test_game_check_move(void){
     return false;
   }
 
+  g = game_default();
+  if(game_check_move(g,0,0,TENT) != REGULAR){
+    game_delete(g);
+    return false;
+  }
+
   game_delete(g);
   return true;
 
