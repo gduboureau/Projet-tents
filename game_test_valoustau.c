@@ -241,9 +241,10 @@ bool test_game_is_over(void){
         return false;
     }
 
- /* test avec nb != tents current et tents expected
+ /* test avec nb != tents current et tents expected */
     game_set_square(g, 0, 0, TENT);
     game_set_expected_nb_tents_row(g, 0, 4);
+    game_set_expected_nb_tents_col(g, 1, 1);
     
     if(game_is_over(g)==true){
         game_delete(g);
