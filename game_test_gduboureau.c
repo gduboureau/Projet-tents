@@ -10,6 +10,63 @@ void usage (int argc, char *argv[]){
     fprintf(stderr, "Usage: %s <testname> (trop ou pas assez d'arguments)\n", argv[0]);
 }
 
+/* *********************************************************** */
+
+bool test_game_is_over(void){
+    game g = game_default_solution();
+    
+    if(game_is_over(g)==false){
+        game_delete(g);
+        return false;
+    }
+
+ /* test avec nb != tree et de tents */   
+    game_set_square(g, 0, 0, GRASS);
+    
+    if(game_is_over(g)==true){
+        game_delete(g);
+        return false;
+    }
+
+/* test si un tree est adjacent avec au moins une tent */ 
+
+    g = game_new_empty();
+
+    if(game_is_over(g)==false){
+        game_delete(g);
+        return false;
+    }
+
+    game_set_square(g, 0, 3, TENT);
+    game_set_square(g, 1, 0, TREE);
+    game_set_expected_nb_tents_row(g, 0, 1);
+    game_set_expected_nb_tents_col(g, 3, 1);
+
+    if(game_is_over(g)==true){
+        game_delete(g);
+        return false;
+        }
+
+/* test avec deux tents adjacentes*/
+
+    g = game_new_empty();
+
+    game_set_expected_nb_tents_row(g, 0, 2);
+    game_set_expected_nb_tents_col(g, 2, 1);
+    game_set_expected_nb_tents_col(g, 3, 1);
+    game_set_square(g, 0, 1, TREE);
+    game_set_square(g, 0, 4, TREE);
+    game_set_square(g, 0, 2, TENT);
+    game_set_square(g, 0, 3, TENT);
+
+    if(game_is_over(g)==true){
+        game_delete(g);
+        return false;
+        }
+
+    game_delete(g);
+    return true;
+}
 
 /* *********************************************************** */
 
@@ -171,6 +228,9 @@ int main (int argc, char* argv[]){
     }
     else if(strcmp("game_default_solution", argv[1]) == 0){
         ok = test_game_default_solution();
+    }
+    else if (strcmp("game_is_over", argv[1]) == 0){
+        ok = test_game_is_over();
     }
     else{
         fprintf(stderr, "Error: test \"%s\" not found!\n", argv[1]);

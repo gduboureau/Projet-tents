@@ -29,6 +29,7 @@ add_test(test_gduboureau_game_fill_grass_col ./game_test_gduboureau game_fill_gr
 add_test(test_gduboureau_game_print ./game_test_gduboureau game_print)
 add_test(test_gduboureau_game_default ./game_test_gduboureau game_default)
 add_test(test_gduboureau_game_default_solution ./game_test_gduboureau game_default_solution)
+add_test(test_gduboureau_game_is_over ./game_test_gduboureau game_is_over)
 
 #* ********** valoustau ********** *#
 add_executable(game_test_valoustau game_test_valoustau.c)
@@ -40,7 +41,6 @@ add_test(test_valoustau_game_get_current_nb_tents_col ./game_test_valoustau game
 add_test(test_valoustau_game_get_current_nb_tents_all ./game_test_valoustau game_get_current_nb_tents_all)
 add_test(test_valoustau_game_play_move ./game_test_valoustau game_play_move)
 add_test(test_valoustau_game_check_move ./game_test_valoustau game_check_move)
-add_test(test_valoustau_game_is_over ./game_test_valoustau game_is_over)
 
 #* ********** jephrem ********** *#
 add_executable(game_test_jephrem game_test_jephrem.c)
