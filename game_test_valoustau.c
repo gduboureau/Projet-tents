@@ -244,6 +244,12 @@ bool test_game_is_over(void){
 /* test si un tree est adjacent avec au moins une tent */ 
 
     g = game_new_empty();
+
+    if(game_is_over(g)==false){
+        game_delete(g);
+        return false;
+    }
+    
     game_set_square(g, 0, 3, TENT);
     game_set_square(g, 1, 0, TREE);
 
