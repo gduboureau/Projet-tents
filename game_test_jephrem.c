@@ -154,64 +154,6 @@ bool test_game_set_square(){
 
 /* *********************************************************** */
 
-/*bool test_game_check_move(void){
-  game g = game_default();
-  if(game_check_move(g,0,1,TENT) != LOSING){ //tent not next to a tree
-    game_delete(g);
-    return false;
-  }
-
-  if(game_check_move(g,1,1,TENT) != LOSING){ //n+1 tents when n was expected
-    game_delete(g);
-    return false; 
-  }
-
-  if(game_check_move(g,0,4,TENT) != ILLEGAL){ //replace a tree
-    game_delete(g);
-    return false;
-  }
-  
-  if(game_check_move(g,0,0,TREE) != ILLEGAL){ //add a tree
-    game_delete(g);
-    return false;
-  }
-
-  game_set_square(g,0,3,TENT);
-  game_set_square(g,0,6,TENT);
-  game_set_square(g,0,1,GRASS);
-  game_set_square(g,0,2,GRASS);
-  game_set_square(g,0,7,GRASS);
-  if(game_check_move(g,0,0,GRASS) != LOSING){ //GRASS check
-    game_delete(g);
-    return false;
-  }
-
-  g = game_default();
-  if(game_check_move(g,0,0,TENT) != REGULAR){ // move regular
-    game_delete(g);
-    return false;
-  }
-
-  g = game_new_empty();
-  game_set_expected_nb_tents_row(g, 0, 2);
-  game_set_expected_nb_tents_col(g, 2, 1);
-  game_set_expected_nb_tents_col(g, 3, 1);
-  game_set_square(g, 0, 1, TREE);
-  game_set_square(g, 0, 4, TREE);
-  game_set_square(g, 0, 2, TENT);
-  if(game_check_move(g, 0, 3, TENT) != LOSING){
-    game_delete(g);
-    return false;
-  }
-
-
-  game_delete(g);
-  return true;
-
-}*/
-
-/* *********************************************************** */
-
 int main(int argc, char *argv[]) {
   if (argc == 1){
     usage(argc, argv);
@@ -238,9 +180,6 @@ int main(int argc, char *argv[]) {
   else if(strcmp("game_set_square", argv[1]) == 0){
     ok = test_game_set_square();
   }
-  /*else if(strcmp("game_check_move", argv[1]) == 0){
-    ok = test_game_check_move();
-  }*/
   else {
     fprintf(stderr, "Error: test \"%s\" not found!\n", argv[1]);
     exit(EXIT_FAILURE);
