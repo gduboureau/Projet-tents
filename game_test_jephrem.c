@@ -154,7 +154,7 @@ bool test_game_set_square(){
 
 /* *********************************************************** */
 
-bool test_game_check_move(void){
+/*bool test_game_check_move(void){
   game g = game_default();
   if(game_check_move(g,0,1,TENT) != LOSING){ //tent not next to a tree
     game_delete(g);
@@ -175,6 +175,7 @@ bool test_game_check_move(void){
     game_delete(g);
     return false;
   }
+
   game_set_square(g,0,3,TENT);
   game_set_square(g,0,6,TENT);
   game_set_square(g,0,1,GRASS);
@@ -207,7 +208,7 @@ bool test_game_check_move(void){
   game_delete(g);
   return true;
 
-}
+}*/
 
 /* *********************************************************** */
 
@@ -237,9 +238,9 @@ int main(int argc, char *argv[]) {
   else if(strcmp("game_set_square", argv[1]) == 0){
     ok = test_game_set_square();
   }
-  else if(strcmp("game_check_move", argv[1]) == 0){
+  /*else if(strcmp("game_check_move", argv[1]) == 0){
     ok = test_game_check_move();
-  }
+  }*/
   else {
     fprintf(stderr, "Error: test \"%s\" not found!\n", argv[1]);
     exit(EXIT_FAILURE);

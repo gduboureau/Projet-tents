@@ -53,7 +53,7 @@ add_test(test_jephrem_game_equal ./game_test_jephrem game_equal)
 add_test(test_jephrem_game_new_empty ./game_test_jephrem game_new_empty)
 add_test(test_jephrem_game_new ./game_test_jephrem game_new)
 add_test(test_jephrem_game_set_square ./game_test_jephrem game_set_square)
-add_test(test_jephrem_game_check_move ./game_test_jephrem game_check_move)
+#add_test(test_jephrem_game_check_move ./game_test_jephrem game_check_move)
 
 #* ********** halmansa ********** *#
 add_executable(game_test_halmansa game_test_halmansa.c)

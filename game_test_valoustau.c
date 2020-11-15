@@ -225,6 +225,18 @@ bool test_game_check_move(void){
         game_delete(g1);
         return false;
     }
+
+    g = game_new_empty();
+    game_set_expected_nb_tents_row(g, 0, 2);
+    game_set_expected_nb_tents_col(g, 2, 1);
+    game_set_expected_nb_tents_col(g, 3, 1);
+    game_set_square(g, 0, 1, TREE);
+    game_set_square(g, 0, 4, TREE);
+    game_set_square(g, 0, 2, TENT);
+    if(game_check_move(g, 0, 3, TENT) != LOSING){
+        game_delete(g);
+        return false;
+    }
     game_delete(g);
     return true;
 }
