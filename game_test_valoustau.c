@@ -249,17 +249,27 @@ bool test_game_is_over(void){
         game_delete(g);
         return false;
     }
-    
+
     game_set_square(g, 0, 3, TENT);
     game_set_square(g, 1, 0, TREE);
+    game_set_expected_nb_tents_row(g, 0, 1);
+    game_set_expected_nb_tents_col(g, 3, 1);
 
     if(game_is_over(g)==true){
         game_delete(g);
         return false;
         }
 
- /* test avec nb != tents current et tents expected
+ /* test avec nb != tents current et tents expected*/
 
+    g = game_new_empty();
+    game_set_expected_nb_tents_row(g, 0, 1);
+    game_set_expected_nb_tents_col(g, 3, 1);
+
+    if(game_is_over(g)==true){
+        game_delete(g);
+        return false;
+        }
 
 /* test avec deux tents adjacentes
     game_set_expected_nb_tents_row(g, 0, 3);
@@ -274,23 +284,6 @@ bool test_game_is_over(void){
     game_set_square(g, 0, 1, GRASS);
     game_set_square(g, 0, 3, TENT);
     
-
-/* test avec game new empty *//*
-    g = game_new_empty();
-
-    if(game_is_over(g)==false){
-        game_delete(g);
-        return false;
-        }
-
-    game_set_expected_nb_tents_row(g, 0, 1);
-
-    if(game_is_over(g)==true){
-        game_delete(g);
-        return false;
-        }
-    
-    game_set_expected_nb_tents_row(g, 0, 0);
 */
     game_delete(g);
     return true;
