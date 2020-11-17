@@ -42,3 +42,31 @@ bool game_equal(cgame g1, cgame g2){
 void game_delete(game g){
     return ;
 }
+
+void game_set_square(game g, uint i, uint j, square s){
+    return ;
+}
+
+square game_get_square(cgame g, uint i, uint j){
+    return 0;
+}
+
+void game_set_expected_nb_tents_row(game g, uint i, uint nb_tents){
+    return ;
+}
+
+void game_set_expected_nb_tents_col(game g, uint j, uint nb_tents){
+    return ;
+}
+
+uint game_get_expected_nb_tents_row(cgame g, uint i){
+    return 0;
+}
+
+uint game_get_expected_nb_tents_col(cgame g, uint j){
+    return 0;
+}
+
+uint game_get_expected_nb_tents_all(cgame g){
+    return 0;
+}
