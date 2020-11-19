@@ -20,9 +20,17 @@ enum {
   LOSING = 2,  /**< losing move */
 };
 
-typedef struct game_s *game;
+typedef struct{
+    square *squares;
+    uint *nb_tents_row;
+    uint *nb_tents_col;
+} game_s ;
 
-typedef const struct game_s *cgame;
+typedef const struct{
+    square *squares;
+    uint *nb_tents_row;
+    uint *nb_tents_col;
+} game_s ;
 
 game game_new(square *squares, uint *nb_tents_row, uint *nb_tents_col){  
     return 0;
