@@ -7,7 +7,6 @@ typedef unsigned int uint;
 
 #define DEFAULT_SIZE 8
 
-
 typedef struct {
   square *squares;
   uint *nb_tents_row;
@@ -43,3 +42,21 @@ uint game_get_expected_nb_tents_row(cgame g, uint i) { return 0; }
 uint game_get_expected_nb_tents_col(cgame g, uint j) { return 0; }
 
 uint game_get_expected_nb_tents_all(cgame g) { return 0; }
+
+uint game_get_current_nb_tents_row(cgame g, uint i) { return 0; }
+
+uint game_get_current_nb_tents_col(cgame g, uint j) { return 0; }
+
+uint game_get_current_nb_tents_all(cgame g) { return 0; }
+
+void game_play_move(game g, uint i, uint j, square s) { return; }
+
+int game_check_move(cgame g, uint i, uint j, square s) { return 0; }
+
+bool game_is_over(cgame g) { return 0; }
+
+void game_fill_grass_row(game g, uint i) { return; }
+
+void game_fill_grass_col(game g, uint j) { return; }
+
+void game_restart(game g) { return; }
