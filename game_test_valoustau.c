@@ -115,8 +115,8 @@ bool test_game_check_move(void) {
 
       // LOSING MOVE
       //------------------------------------Analyse si tente présente
-      //autour(+diagonale) d'une tente
-      //donnée-----------------------------------------//
+      // autour(+diagonale) d'une tente
+      // donnée-----------------------------------------//
       if (i == 0 && j > 0 && j < DEFAULT_SIZE - 1 &&
           game_get_square(g, i, j) != TREE &&
           (game_get_square(g, i + 1, j) == TENT ||
@@ -215,8 +215,8 @@ bool test_game_check_move(void) {
       }
 
       //------------------------------------Analyse arbre présent au moins une
-      //fois autour d'une tente
-      //donnée-----------------------------------------//
+      // fois autour d'une tente
+      // donnée-----------------------------------------//
 
       if (i == 0 && j > 0 && j < DEFAULT_SIZE - 1 &&
           (game_get_square(g, i, j) != TREE &&
