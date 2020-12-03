@@ -7,7 +7,7 @@ typedef unsigned int uint;
 
 #define DEFAULT_SIZE 8
 
-typedef struct {
+typedef struct game_s{
   square *squares;
   uint *nb_tents_row;
   uint *nb_tents_col;
@@ -24,7 +24,7 @@ game game_new(square *squares, uint *nb_tents_row, uint *nb_tents_col) {
 }
 
 game game_new_empty(void) { 
-  /*game g = malloc(sizeof(game));
+  game g = malloc(sizeof(game));
   if(g == NULL){
         fprintf(stderr,"not enough memory!\n");
         exit(EXIT_FAILURE);
@@ -38,8 +38,8 @@ game game_new_empty(void) {
   }
   for(uint j=0;j<DEFAULT_SIZE*DEFAULT_SIZE;j++){
     g->squares[j]=EMPTY;
-  }*/
-  return 0; }
+  }
+  return g; }
 
 game game_copy(cgame g) { 
   
@@ -49,7 +49,17 @@ game game_copy(cgame g) {
 bool game_equal(cgame g1, cgame g2) { return 0; }
 
 void game_delete(game g) { 
-  return; }
+    if(g != NULL){
+        free(g->squares);
+        g->squares = NULL;
+        free(g->nb_tents_row);
+        g->nb_tents_row = NULL;
+        free(g->nb_tents_col);
+        g->nb_tents_col = NULL;
+    }
+    free(g);
+    g = NULL;
+}
 
 void game_set_square(game g, uint i, uint j, square s) { return; }
 
