@@ -221,7 +221,7 @@ bool game_is_over(cgame g) { return 0; }
 
 void game_fill_grass_row(game g, uint i) { 
   if (g == NULL || i >= DEFAULT_SIZE){
-    fprintf(stderr,"not enough memory!\n");
+    fprintf(stderr,"parameter not valid!\n");
     exit(EXIT_FAILURE);
   }
   for (uint j = 0; j < DEFAULT_SIZE; j++){
@@ -233,7 +233,7 @@ void game_fill_grass_row(game g, uint i) {
 
 void game_fill_grass_col(game g, uint j){
   if (g == NULL || j >= DEFAULT_SIZE){
-    fprintf(stderr,"not enough memory!\n");
+    fprintf(stderr,"parameter not valid!\n");
     exit(EXIT_FAILURE);
   }
   for (unsigned int i = 0; i < DEFAULT_SIZE; i++){
@@ -243,4 +243,16 @@ void game_fill_grass_col(game g, uint j){
   }
 }
 
-void game_restart(game g) { return; }
+void game_restart(game g) {
+  if (g == NULL) {
+    fprintf(stderr, "parameter not valid!\n");
+    exit(EXIT_FAILURE);
+  }
+  for (unsigned int i = 0; i < DEFAULT_SIZE; i++) {
+    for (unsigned int j = 0; j < DEFAULT_SIZE; j++) {
+      if (game_get_square(g, i, j) != TREE) {
+        game_set_square(g, i, j, EMPTY);
+      }
+    }
+  }
+}
