@@ -67,7 +67,16 @@ uint game_get_expected_nb_tents_col(cgame g, uint j) { return 0; }
 
 /********************* Valentin *********************/
 
-uint game_get_expected_nb_tents_all(cgame g) { return 0; }
+uint game_get_expected_nb_tents_all(cgame g) { 
+  if (g==NULL){
+    exit(EXIT_FAILURE);
+  }
+  uint cpt=0;
+    for (uint j=0; j<DEFAULT_SIZE; j++){
+      cpt+=game_get_expected_nb_tents_row(g,j);
+    }
+  return cpt; 
+  }
 
 uint game_get_current_nb_tents_row(cgame g, uint i) { return 0; }
 
