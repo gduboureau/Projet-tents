@@ -175,11 +175,11 @@ uint game_get_expected_nb_tents_all(cgame g) {
 }
 
 uint game_get_current_nb_tents_row(cgame g, uint i) {
-  if (g == NULL || i >= DEFAULT_SIZE) {
+  if (g == NULL || i >= DEFAULT_SIZE || i<0) {
     exit(EXIT_FAILURE);
   }
   uint cpt = 0;
-  for (uint k; k < DEFAULT_SIZE; k++) {
+  for (uint k=0; k < DEFAULT_SIZE; k++) {
     if (game_get_square(g, i, k) == TENT) {
       cpt += 1;
     }
@@ -188,11 +188,11 @@ uint game_get_current_nb_tents_row(cgame g, uint i) {
 }
 
 uint game_get_current_nb_tents_col(cgame g, uint j) {
-  if (g == NULL || j >= DEFAULT_SIZE) {
+  if (g == NULL || j >= DEFAULT_SIZE || j<0) {
     exit(EXIT_FAILURE);
   }
   uint cpt = 0;
-  for (uint k; k < DEFAULT_SIZE; k++) {
+  for (uint k=0; k < DEFAULT_SIZE; k++) {
     if (game_get_square(g, k, j) == TENT) {
       cpt += 1;
     }
