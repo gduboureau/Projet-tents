@@ -2,6 +2,7 @@
 #include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 typedef unsigned int uint;
 
@@ -20,7 +21,18 @@ typedef const struct game_s *cgame;
 /********************* Jennifer *********************/
 
 game game_new(square *squares, uint *nb_tents_row, uint *nb_tents_col) {
-  return 0;
+  if(squares == NULL || nb_tents_row == NULL || nb_tents_col == NULL){
+    exit(EXIT_FAILURE);
+  }
+  game g = game_new_empty();
+  for (uint i = 0; i < DEFAULT_SIZE; i++) {
+    g->nb_tents_row[i] = nb_tents_row[i];
+    g->nb_tents_col[i] = nb_tents_col[i];
+  }
+  for (uint j = 0; j < DEFAULT_SIZE * DEFAULT_SIZE; j++) {
+    g->squares[j] = squares[j];
+  }
+  return g; 
 }
 
 game game_new_empty(void) {
@@ -54,11 +66,25 @@ game game_new_empty(void) {
   return g;
 }
 
-game game_copy(cgame g) { 
-  
-  return 0; }
+game game_copy(cgame g) {
+  if(g == NULL){
+    exit(EXIT_FAILURE);
+  } 
+  game g1 = game_new_empty();
+  for(uint i=0;i<DEFAULT_SIZE;i++){
+    g1->nb_tents_row[i] = game_get_expected_nb_tents_row(g,i);
+    g1->nb_tents_col[i] = game_get_expected_nb_tents_col(g,i);
+    for(uint j=0;j<DEFAULT_SIZE;j++){
+      g1->squares[(i*DEFAULT_SIZE + j)]= game_get_square(g,i,j); 
+    }
+  }
+  return g1; 
+}
 
 bool game_equal(cgame g1, cgame g2) { 
+  if(g1 == NULL || g2 == NULL){
+    exit(EXIT_FAILURE);
+  }
   for(uint i=0;i<DEFAULT_SIZE;i++){
     for(uint j=0;j<DEFAULT_SIZE;j++){
       if(game_get_square(g1,i,j) == game_get_square(g2,i,j) && game_get_expected_nb_tents_row(g1,i) == game_get_expected_nb_tents_row(g2,i) && game_get_expected_nb_tents_col(g1,j) == game_get_expected_nb_tents_col(g2,j)){
@@ -82,7 +108,9 @@ void game_delete(game g) {
   g = NULL;
 }
 
-void game_set_square(game g, uint i, uint j, square s) { return; }
+void game_set_square(game g, uint i, uint j, square s) { 
+  g->squares[i*DEFAULT_SIZE+j]= s;
+  }
 
 /********************* Hugo *********************/
 
