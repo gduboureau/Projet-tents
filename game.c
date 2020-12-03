@@ -78,11 +78,42 @@ uint game_get_expected_nb_tents_all(cgame g) {
   return cpt; 
   }
 
-uint game_get_current_nb_tents_row(cgame g, uint i) { return 0; }
+uint game_get_current_nb_tents_row(cgame g, uint i) { 
+    if (g==NULL || i>=DEFAULT_SIZE){
+        exit(EXIT_FAILURE);
+    }
+    uint cpt=0;
+    for (uint k; k<DEFAULT_SIZE; k++){
+        if (game_get_square(g,i,k)==TENT){
+            cpt+=1;
+        }
+    }
+    return cpt; 
+}
 
-uint game_get_current_nb_tents_col(cgame g, uint j) { return 0; }
+uint game_get_current_nb_tents_col(cgame g, uint j) { 
+    if (g==NULL || j>=DEFAULT_SIZE){
+        exit(EXIT_FAILURE);
+    }
+    uint cpt=0;
+    for (uint k; k<DEFAULT_SIZE; k++){
+        if (game_get_square(g,k,j)==TENT){
+            cpt+=1;
+        }
+    }
+    return cpt; 
+}
 
-uint game_get_current_nb_tents_all(cgame g) { return 0; }
+uint game_get_current_nb_tents_all(cgame g) { 
+    if (g==NULL){
+        exit(EXIT_FAILURE);
+    }
+    uint cpt=0;
+    for (uint j=0; j<DEFAULT_SIZE; j++){
+      cpt+=game_get_current_nb_tents_row(g,j);
+    }
+  return cpt; 
+} 
 
 void game_play_move(game g, uint i, uint j, square s) { return; }
 
