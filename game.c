@@ -44,11 +44,19 @@ game game_new_empty(void) {
 
 game game_copy(cgame g) { return 0; }
 
-bool game_equal(cgame g1, cgame g2) { return 0; }
+bool game_equal(cgame g1, cgame g2) { 
+  for(uint i=0;i<DEFAULT_SIZE;i++){
+    for(uint j=0;j<DEFAULT_SIZE;j++){
+      if(game_get_square(g1,i,j) == game_get_square(g2,i,j) && game_get_expected_nb_tents_row(g1,i) == game_get_expected_nb_tents_row(g2,i) && game_get_expected_nb_tents_col(g1,j) == game_get_expected_nb_tents_col(g2,j)){
+        return true;
+      }
+    }
+  }
+  return false; }
 
 void game_delete(game g) {
   if (g == NULL) {
-    return;
+    return ;
   }
   free(g->squares);
   g->squares = NULL;
