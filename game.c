@@ -41,7 +41,7 @@ game game_new_empty(void) {
 
 game game_copy(cgame g) { return 0; }
 
-bool game_equal(cgame g1, cgame g2) { return 0; }
+bool game_equal(cgame g1, cgame g2) { return 1; }
 
 void game_delete(game g) { return; }
 
