@@ -68,6 +68,7 @@ game game_new_empty(void) {
 
 game game_copy(cgame g) {
   if (g == NULL) {
+    fprintf(stderr, "parameter not valid!\n");
     exit(EXIT_FAILURE);
   }
   game g1 = game_new_empty();
@@ -83,6 +84,7 @@ game game_copy(cgame g) {
 
 bool game_equal(cgame g1, cgame g2) {
   if (g1 == NULL || g2 == NULL) {
+    fprintf(stderr, "at least one of the parameters isn't valid!\n");
     exit(EXIT_FAILURE);
   }
   for (uint i = 0; i < DEFAULT_SIZE; i++) {
@@ -101,6 +103,7 @@ bool game_equal(cgame g1, cgame g2) {
 
 void game_delete(game g) {
   if (g == NULL) {
+    fprintf(stderr, "parameter not valid!\n");
     return;
   }
   free(g->squares);
@@ -175,11 +178,11 @@ uint game_get_expected_nb_tents_all(cgame g) {
 }
 
 uint game_get_current_nb_tents_row(cgame g, uint i) {
-  if (g == NULL || i >= DEFAULT_SIZE || i<0) {
+  if (g == NULL || i >= DEFAULT_SIZE || i < 0) {
     exit(EXIT_FAILURE);
   }
   uint cpt = 0;
-  for (uint k=0; k < DEFAULT_SIZE; k++) {
+  for (uint k = 0; k < DEFAULT_SIZE; k++) {
     if (game_get_square(g, i, k) == TENT) {
       cpt += 1;
     }
@@ -188,11 +191,11 @@ uint game_get_current_nb_tents_row(cgame g, uint i) {
 }
 
 uint game_get_current_nb_tents_col(cgame g, uint j) {
-  if (g == NULL || j >= DEFAULT_SIZE || j<0) {
+  if (g == NULL || j >= DEFAULT_SIZE || j < 0) {
     exit(EXIT_FAILURE);
   }
   uint cpt = 0;
-  for (uint k=0; k < DEFAULT_SIZE; k++) {
+  for (uint k = 0; k < DEFAULT_SIZE; k++) {
     if (game_get_square(g, k, j) == TENT) {
       cpt += 1;
     }
@@ -219,26 +222,26 @@ int game_check_move(cgame g, uint i, uint j, square s) { return 0; }
 
 bool game_is_over(cgame g) { return 0; }
 
-void game_fill_grass_row(game g, uint i) { 
-  if (g == NULL || i >= DEFAULT_SIZE){
-    fprintf(stderr,"parameter not valid!\n");
+void game_fill_grass_row(game g, uint i) {
+  if (g == NULL || i >= DEFAULT_SIZE) {
+    fprintf(stderr, "parameter not valid!\n");
     exit(EXIT_FAILURE);
   }
-  for (uint j = 0; j < DEFAULT_SIZE; j++){
-    if (game_get_square(g,i,j) == EMPTY){
-      game_set_square(g,i,j,GRASS);
+  for (uint j = 0; j < DEFAULT_SIZE; j++) {
+    if (game_get_square(g, i, j) == EMPTY) {
+      game_set_square(g, i, j, GRASS);
     }
   }
- }
+}
 
-void game_fill_grass_col(game g, uint j){
-  if (g == NULL || j >= DEFAULT_SIZE){
-    fprintf(stderr,"parameter not valid!\n");
+void game_fill_grass_col(game g, uint j) {
+  if (g == NULL || j >= DEFAULT_SIZE) {
+    fprintf(stderr, "parameter not valid!\n");
     exit(EXIT_FAILURE);
   }
-  for (unsigned int i = 0; i < DEFAULT_SIZE; i++){
-    if (game_get_square(g,i,j) == EMPTY){
-      game_set_square(g,i,j,GRASS);
+  for (unsigned int i = 0; i < DEFAULT_SIZE; i++) {
+    if (game_get_square(g, i, j) == EMPTY) {
+      game_set_square(g, i, j, GRASS);
     }
   }
 }
