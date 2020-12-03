@@ -65,15 +65,47 @@ void game_set_square(game g, uint i, uint j, square s) { return; }
 
 /********************* Hugo *********************/
 
-square game_get_square(cgame g, uint i, uint j) { return 0; }
+square game_get_square(cgame g, uint i, uint j) {
+    if(g == NULL || i >= DEFAULT_SIZE || j >= DEFAULT_SIZE){
+        fprintf(stderr,"parameter not valid!\n");
+        exit(EXIT_FAILURE);
+    }
+    return g->squares[(i*DEFAULT_SIZE)+j];
+    }
 
-void game_set_expected_nb_tents_row(game g, uint i, uint nb_tents) { return; }
+void game_set_expected_nb_tents_row(game g, uint i, uint nb_tents) {
+    if(g == NULL || i >= DEFAULT_SIZE){
+        fprintf(stderr,"parameter not valid!\n");
+        exit(EXIT_FAILURE);
+    }
+    g->nb_tents_row[i]=nb_tents;
+    return; 
+    }
 
-void game_set_expected_nb_tents_col(game g, uint j, uint nb_tents) { return; }
+void game_set_expected_nb_tents_col(game g, uint j, uint nb_tents) {
+    if(g == NULL || j >= DEFAULT_SIZE){
+        fprintf(stderr,"parameter not valid!\n");
+        exit(EXIT_FAILURE);
+    }
+    g->nb_tents_col[j]=nb_tents;
+    return; 
+    }
 
-uint game_get_expected_nb_tents_row(cgame g, uint i) { return 0; }
+uint game_get_expected_nb_tents_row(cgame g, uint i) {
+    if(g == NULL || i >= DEFAULT_SIZE || i < 0){
+        fprintf(stderr,"parameter not valid!\n");
+        exit(EXIT_FAILURE);
+    }
+    return g->nb_tents_row[i];
+    }
 
-uint game_get_expected_nb_tents_col(cgame g, uint j) { return 0; }
+uint game_get_expected_nb_tents_col(cgame g, uint j) {
+    if(g == NULL || j >= DEFAULT_SIZE || j < 0){
+        fprintf(stderr,"parameter not valid!\n");
+        exit(EXIT_FAILURE);
+    }
+    return g->nb_tents_col[j];
+    }
 
 /********************* Valentin *********************/
 
