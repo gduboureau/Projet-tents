@@ -39,7 +39,7 @@ game game_new_empty(void) {
   }
   return 0; }
 
-game game_copy(cgame g) { return 0; }
+game game_copy(cgame g) { return 1; }
 
 bool game_equal(cgame g1, cgame g2) { return 0; }
 
