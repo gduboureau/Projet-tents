@@ -21,7 +21,23 @@ game game_new(square *squares, uint *nb_tents_row, uint *nb_tents_col) {
   return 0;
 }
 
-game game_new_empty(void) { return 0; }
+game game_new_empty(void) { 
+  game g = malloc(sizeof(game));
+  if(g == NULL){
+        fprintf(stderr,"not enough memory!\n");
+        exit(EXIT_FAILURE);
+    }
+  g->squares = malloc(sizeof(square)*DEFAULT_SIZE*DEFAULT_SIZE);
+  g->nb_tents_row = malloc(sizeof(uint)*DEFAULT_SIZE);
+  g-> nb_tents_col = malloc(sizeof(uint)*DEFAULT_SIZE);
+  for(uint i=0;i<DEFAULT_SIZE;i++){
+    g->nb_tents_row[i] = 0;
+    g->nb_tents_col[i] = 0;
+  }
+  for(uint j=0;j<DEFAULT_SIZE*DEFAULT_SIZE;j++){
+    g->squares[j]=EMPTY;
+  }
+  return 0; }
 
 game game_copy(cgame g) { return 0; }
 
