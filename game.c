@@ -70,12 +70,7 @@ square game_get_square(cgame g, uint i, uint j) {
         fprintf(stderr,"parameter not valid!\n");
         exit(EXIT_FAILURE);
     }
-    if(i==0){
-      return g->squares[j];
-    }
-    else{
-      return g->squares[(i*DEFAULT_SIZE)+j];
-    }
+    return g->squares[(i*DEFAULT_SIZE)+j];
 }
 
 void game_set_expected_nb_tents_row(game g, uint i, uint nb_tents) {
