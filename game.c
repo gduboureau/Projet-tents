@@ -66,15 +66,20 @@ void game_set_square(game g, uint i, uint j, square s) { return; }
 /********************* Hugo *********************/
 
 square game_get_square(cgame g, uint i, uint j) {
-    if(g == NULL || i >= DEFAULT_SIZE || j >= DEFAULT_SIZE){
+    if(g == NULL || i >= DEFAULT_SIZE || j >= DEFAULT_SIZE || i < 0 || j < 0){
         fprintf(stderr,"parameter not valid!\n");
         exit(EXIT_FAILURE);
     }
-    return g->squares[(i*DEFAULT_SIZE)+j];
+    if(i==0){
+      return g->squares[j];
     }
+    else{
+      return g->squares[(i*DEFAULT_SIZE)+j];
+    }
+}
 
 void game_set_expected_nb_tents_row(game g, uint i, uint nb_tents) {
-    if(g == NULL || i >= DEFAULT_SIZE){
+    if(g == NULL || i >= DEFAULT_SIZE || i < 0){
         fprintf(stderr,"parameter not valid!\n");
         exit(EXIT_FAILURE);
     }
@@ -83,7 +88,7 @@ void game_set_expected_nb_tents_row(game g, uint i, uint nb_tents) {
     }
 
 void game_set_expected_nb_tents_col(game g, uint j, uint nb_tents) {
-    if(g == NULL || j >= DEFAULT_SIZE){
+    if(g == NULL || j >= DEFAULT_SIZE || j < 0){
         fprintf(stderr,"parameter not valid!\n");
         exit(EXIT_FAILURE);
     }
