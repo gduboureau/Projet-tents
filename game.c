@@ -29,12 +29,24 @@ game game_new_empty(void) {
     fprintf(stderr, "not enough memory!\n");
     exit(EXIT_FAILURE);
   }
-  g->squares = malloc(sizeof(square) * DEFAULT_SIZE * DEFAULT_SIZE);
   g->nb_tents_row = malloc(sizeof(uint) * DEFAULT_SIZE);
+  if (g->nb_tents_row == NULL) {
+    fprintf(stderr, "not enough memory!\n");
+    exit(EXIT_FAILURE);
+  }
   g->nb_tents_col = malloc(sizeof(uint) * DEFAULT_SIZE);
+  if (g->nb_tents_col == NULL) {
+    fprintf(stderr, "not enough memory!\n");
+    exit(EXIT_FAILURE);
+  }
   for (uint i = 0; i < DEFAULT_SIZE; i++) {
     g->nb_tents_row[i] = 0;
     g->nb_tents_col[i] = 0;
+  }
+  g->squares = malloc(sizeof(square) * DEFAULT_SIZE * DEFAULT_SIZE);
+  if (g->squares == NULL) {
+    fprintf(stderr, "not enough memory!\n");
+    exit(EXIT_FAILURE);
   }
   for (uint j = 0; j < DEFAULT_SIZE * DEFAULT_SIZE; j++) {
     g->squares[j] = EMPTY;
@@ -42,7 +54,9 @@ game game_new_empty(void) {
   return g;
 }
 
-game game_copy(cgame g) { return 0; }
+game game_copy(cgame g) { 
+  
+  return 0; }
 
 bool game_equal(cgame g1, cgame g2) { 
   for(uint i=0;i<DEFAULT_SIZE;i++){
