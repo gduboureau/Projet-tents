@@ -214,7 +214,12 @@ uint game_get_current_nb_tents_all(cgame g) {
   return cpt;
 }
 
-void game_play_move(game g, uint i, uint j, square s) { return; }
+void game_play_move(game g, uint i, uint j, square s) { 
+  if (g==NULL || i>=DEFAULT_SIZE || j>=DEFAULT_SIZE || s==TREE || game_get_square(g,i,j)==TREE){
+    exit(EXIT_FAILURE);
+  }
+  game_set_square(g,i,j,s);
+  }
 
 /********************* Guillaume *********************/
 
