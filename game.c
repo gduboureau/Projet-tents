@@ -320,54 +320,54 @@ int game_check_move(cgame g, uint i, uint j, square s) {
   // fois autour d'une tente
   // donnée-----------------------------------------//
 
-  if (i == 0 && j > 0 && j < DEFAULT_SIZE - 1 &&
+  if (i == 0 && s==TENT && j > 0 && j < DEFAULT_SIZE - 1 &&
       game_get_square(g, i + 1, j) != TREE &&
       game_get_square(g, i, j - 1) != TREE &&
       game_get_square(g, i, j + 1) != TREE) {  // tent i==0 bordure j exclue
     return LOSING;
   }
-  if (i > 0 && i < DEFAULT_SIZE - 1 && j > 0 && j < DEFAULT_SIZE - 1 &&
+  if (i > 0 && s==TENT && i < DEFAULT_SIZE - 1 && j > 0 && j < DEFAULT_SIZE - 1 &&
       game_get_square(g, i - 1, j) != TREE &&
       game_get_square(g, i + 1, j) != TREE &&
       game_get_square(g, i, j - 1) != TREE &&
       game_get_square(g, i, j + 1) != TREE) {  // tent toute bordure exclue
     return LOSING;
   }
-  if (i == 0 && j == 0 && game_get_square(g, i + 1, j) != TREE &&
+  if (i == 0 && s==TENT && j == 0 && game_get_square(g, i + 1, j) != TREE &&
       game_get_square(g, i, j + 1) != TREE) {  // tent en haut a gauche
     return LOSING;
   }
-  if (i > 0 && j == 0 && i < DEFAULT_SIZE - 1 &&
+  if (i > 0 && s==TENT && j == 0 && i < DEFAULT_SIZE - 1 &&
       game_get_square(g, i - 1, j) != TREE &&
       game_get_square(g, i + 1, j) != TREE &&
       game_get_square(g, i, j + 1) !=
           TREE) {  // tent j==0 toute bordure i exclue
     return LOSING;
   }
-  if (i == DEFAULT_SIZE - 1 && j == 0 && game_get_square(g, i - 1, j) != TREE &&
+  if (i == DEFAULT_SIZE - 1 && s==TENT && j == 0 && game_get_square(g, i - 1, j) != TREE &&
       game_get_square(g, i, j + 1) != TREE) {  // tent en bas a gauche
     return LOSING;
   }
-  if (i == DEFAULT_SIZE - 1 && j > 0 && j < DEFAULT_SIZE - 1 &&
+  if (i == DEFAULT_SIZE - 1 && s==TENT && j > 0 && j < DEFAULT_SIZE - 1 &&
       game_get_square(g, i - 1, j) != TREE &&
       game_get_square(g, i, j - 1) != TREE &&
       game_get_square(g, i, j + 1) !=
           TREE) {  // tent i==DEFAULT_SIZE-1 bordure j exclue
     return LOSING;
   }
-  if (i == DEFAULT_SIZE - 1 && j == DEFAULT_SIZE - 1 &&
+  if (i == DEFAULT_SIZE - 1 && s==TENT && j == DEFAULT_SIZE - 1 &&
       game_get_square(g, i - 1, j) != TREE &&
       game_get_square(g, i, j - 1) != TREE) {  // tent en bas a droite
     return LOSING;
   }
-  if (i > 0 && j == DEFAULT_SIZE - 1 && i < DEFAULT_SIZE - 1 &&
+  if (i > 0 && j == DEFAULT_SIZE - 1 && s==TENT && i < DEFAULT_SIZE - 1 &&
       game_get_square(g, i - 1, j) != TREE &&
       game_get_square(g, i + 1, j) != TREE &&
       game_get_square(g, i, j - 1) !=
           TREE) {  // tent j==DEFAULT_SIZE-1 bordure i exclue
     return LOSING;
   }
-  if (i == 0 && j == DEFAULT_SIZE - 1 && game_get_square(g, i + 1, j) != TREE &&
+  if (i == 0 && j == DEFAULT_SIZE - 1 && s==TENT && game_get_square(g, i + 1, j) != TREE &&
       game_get_square(g, i, j - 1) != TREE) {  // tent en haut a droite
     return LOSING;
   }
@@ -585,7 +585,7 @@ bool game_is_over(cgame g) {
     return false;
   }
   if (game_get_expected_nb_tents_all(g) < game_get_current_nb_tents_all(g)) {
-    return LOSING;
+    return false;
   }
   return true;
 }
