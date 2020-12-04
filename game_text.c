@@ -51,6 +51,10 @@ int main(void) {
         game_play_move(g, row, column, GRASS);
         printf("> action: play move 'g' into square (%d,%d)\n", row, column);
       }
+      if (game_check_move(g, row, column, GRASS) == LOSING) {
+        game_play_move(g, row, column, GRASS);
+        printf("Warning: losing move on square (%d,%d)!\n", row, column);
+      }
       if (game_check_move(g, row, column, GRASS) == ILLEGAL) {
         printf("Warning: you can't put a grass on a tree (%d,%d)!\n", row,
                column);
