@@ -37,7 +37,7 @@ game game_new(square *squares, uint *nb_tents_row, uint *nb_tents_col) {
 
 game game_new_empty(void) {
   game g = malloc(sizeof(game_s));
-  if (g == NULL){
+  if (g == NULL) {
     fprintf(stderr, "not enough memory!\n");
     exit(EXIT_FAILURE);
   }
