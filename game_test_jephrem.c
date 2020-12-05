@@ -72,17 +72,21 @@ bool test_game_equal(void) {
     return false;
   }
 
-  g1 = game_new_empty();
-  g2 = game_copy(g1);
+  game g3 = game_new_empty();
+  game g4 = game_copy(g3);
 
-  if (game_equal(g1, g2) == false) {
+  if (game_equal(g3, g4) == false) {
     game_delete(g1);
     game_delete(g2);
+    game_delete(g3);
+    game_delete(g4);
     return false;
   }
 
   game_delete(g1);
   game_delete(g2);
+  game_delete(g3);
+  game_delete(g4);
   return true;
 }
 /* *********************************************************** */

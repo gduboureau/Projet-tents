@@ -30,41 +30,47 @@ bool test_game_is_over(void) {
 
   /* test si un tree est adjacent avec au moins une tent */
 
-  g = game_new_empty();
+  game g1 = game_new_empty();
 
-  if (game_is_over(g) == false) {
+  if (game_is_over(g1) == false) {
+    game_delete(g1);
     game_delete(g);
     return false;
   }
 
-  game_set_square(g, 0, 3, TENT);
-  game_set_square(g, 1, 0, TREE);
-  game_set_expected_nb_tents_row(g, 0, 1);
-  game_set_expected_nb_tents_col(g, 3, 1);
+  game_set_square(g1, 0, 3, TENT);
+  game_set_square(g1, 1, 0, TREE);
+  game_set_expected_nb_tents_row(g1, 0, 1);
+  game_set_expected_nb_tents_col(g1, 3, 1);
 
-  if (game_is_over(g) == true) {
+  if (game_is_over(g1) == true) {
     game_delete(g);
+    game_delete(g1);
     return false;
   }
 
   /* test avec deux tents adjacentes*/
 
-  g = game_new_empty();
+  game g2 = game_new_empty();
 
-  game_set_expected_nb_tents_row(g, 0, 2);
-  game_set_expected_nb_tents_col(g, 2, 1);
-  game_set_expected_nb_tents_col(g, 3, 1);
-  game_set_square(g, 0, 1, TREE);
-  game_set_square(g, 0, 4, TREE);
-  game_set_square(g, 0, 2, TENT);
-  game_set_square(g, 0, 3, TENT);
+  game_set_expected_nb_tents_row(g2, 0, 2);
+  game_set_expected_nb_tents_col(g2, 2, 1);
+  game_set_expected_nb_tents_col(g2, 3, 1);
+  game_set_square(g2, 0, 1, TREE);
+  game_set_square(g2, 0, 4, TREE);
+  game_set_square(g2, 0, 2, TENT);
+  game_set_square(g2, 0, 3, TENT);
 
-  if (game_is_over(g) == true) {
+  if (game_is_over(g2) == true) {
     game_delete(g);
+    game_delete(g1);
+    game_delete(g2);
     return false;
   }
 
   game_delete(g);
+  game_delete(g1);
+  game_delete(g2);
   return true;
 }
 
@@ -142,6 +148,7 @@ bool test_game_restart() {
     game_delete(g1);
     return false;
   }
+  game_delete(g1);
   game_delete(g);
   return true;
 }

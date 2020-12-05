@@ -36,8 +36,8 @@ game game_new(square *squares, uint *nb_tents_row, uint *nb_tents_col) {
 }
 
 game game_new_empty(void) {
-  game g = malloc(sizeof(game));
-  if (g == NULL) {
+  game g = malloc(sizeof(game_s));
+  if (g == NULL){
     fprintf(stderr, "not enough memory!\n");
     exit(EXIT_FAILURE);
   }
@@ -108,10 +108,10 @@ void game_delete(game g) {
   }
   free(g->squares);
   g->squares = NULL;
-  free(g->nb_tents_row);
-  g->nb_tents_row = NULL;
   free(g->nb_tents_col);
   g->nb_tents_col = NULL;
+  free(g->nb_tents_row);
+  g->nb_tents_row = NULL;
   free(g);
   g = NULL;
 }
