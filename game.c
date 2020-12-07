@@ -380,9 +380,9 @@ int game_check_move(cgame g, uint i, uint j, square s) {
 
   /* Analyse si tente non attendue dans une row/col */
 
-  if (s == TENT && ((game_get_expected_nb_tents_row(g, i) <=
+  if (s == TENT && ((game_get_expected_nb_tents_row(g, i) <
                      game_get_current_nb_tents_row(g, i)) ||
-                    (game_get_expected_nb_tents_col(g, j) <=
+                    (game_get_expected_nb_tents_col(g, j) <
                      game_get_current_nb_tents_col(g, j)))) {
     return LOSING;
   }
