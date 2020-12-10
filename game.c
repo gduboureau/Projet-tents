@@ -12,11 +12,38 @@ typedef struct game_s {
   square *squares;
   uint *nb_tents_row;
   uint *nb_tents_col;
+  uint nb_rows;
+  uint nb_cols;
+  bool wrapping;
+  bool diagadj;
 } game_s;
 
 typedef struct game_s *game;
 
 typedef const struct game_s *cgame;
+
+game game_new_ext(uint nb_rows, uint nb_cols, square *squares,
+                  uint *nb_tents_row, uint *nb_tents_col, bool wrapping,
+                  bool diagadj) {
+  return 0;
+}
+
+game game_new_empty_ext(uint nb_rows, uint nb_cols, bool wrapping,
+                        bool diagadj) {
+  return 0;
+}
+
+uint game_nb_rows(cgame g) { return 0; }
+
+uint game_nb_cols(cgame g) { return 0; }
+
+bool game_is_wrapping(cgame g) { return 0; }
+
+bool game_is_diagadj(cgame g) { return 0; }
+
+void game_undo(game g) { return; }
+
+void game_redo(game g) { return; }
 
 /********************* Jennifer *********************/
 

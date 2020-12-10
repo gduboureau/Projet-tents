@@ -77,3 +77,26 @@ Guillaume :
 - game_fill_grass_row
 - game_fill_grass_col
 - game_restart
+
+## Game_ext : 
+
+Jennifer :
+
+- game_undo
+- game_redo
+
+Hugo :
+
+- game_new_ext
+- game_new_empty_ext
+
+Valentin :
+
+- game_is_wrapping
+- game_is_diagadj
+
+Guillaume :
+
+- game_nb_rows
+- game_nb_cols
+
