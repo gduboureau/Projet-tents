@@ -12,38 +12,11 @@ typedef struct game_s {
   square *squares;
   uint *nb_tents_row;
   uint *nb_tents_col;
-  uint nb_rows;
-  uint nb_cols;
-  bool wrapping;
-  bool diagadj;
 } game_s;
 
 typedef struct game_s *game;
 
 typedef const struct game_s *cgame;
-
-game game_new_ext(uint nb_rows, uint nb_cols, square *squares,
-                  uint *nb_tents_row, uint *nb_tents_col, bool wrapping,
-                  bool diagadj) {
-  return 0;
-}
-
-game game_new_empty_ext(uint nb_rows, uint nb_cols, bool wrapping,
-                        bool diagadj) {
-  return 0;
-}
-
-uint game_nb_rows(cgame g) { return 0; }
-
-uint game_nb_cols(cgame g) { return 0; }
-
-bool game_is_wrapping(cgame g) { return 0; }
-
-bool game_is_diagadj(cgame g) { return 0; }
-
-void game_undo(game g) { return; }
-
-void game_redo(game g) { return; }
 
 /********************* Jennifer *********************/
 
@@ -403,6 +376,726 @@ int game_check_move(cgame g, uint i, uint j, square s) {
       game_get_square(g, i + 1, j) != TREE &&
       game_get_square(g, i, j - 1) != TREE) {  // tent en haut a droite
     return LOSING;
+  }
+
+  /* Analyse si arbre adj grass puis arbre entouré de grass */
+
+  if (i == 0 && j == 0 && s == GRASS) {  // grass placé coin gauche haut
+    if (game_get_square(g, i + 1, j) == TREE &&
+        (game_get_square(g, i + 1, j + 1) == GRASS ||
+         game_get_square(g, i + 1, j + 1) == TREE) &&
+        (game_get_square(g, i + 2, j) == GRASS ||
+         game_get_square(g, i + 2, j) == TREE)) {
+      // analyse arbre i+1 de grass
+      return LOSING;
+    }
+    if (game_get_square(g, i, j + 1) == TREE &&
+        (game_get_square(g, i + 1, j + 1) == GRASS ||
+         game_get_square(g, i + 1, j + 1) == TREE) &&
+        (game_get_square(g, i, j + 2) == GRASS ||
+         game_get_square(g, i, j + 2) == TREE)) {
+      // analyse arbre j+1 de grass
+      return LOSING;
+    }
+  }
+
+  if (i == 0 && j == 1 &&
+      s == GRASS) {  // grass placé coin gauche haut +1 horizontal
+    if (game_get_square(g, i, j - 1) == TREE &&
+        (game_get_square(g, i + 1, j - 1) == GRASS ||
+         game_get_square(g, i + 1, j - 1) == TREE)) {
+      return LOSING;
+    }
+    if (game_get_square(g, i + 1, j) == TREE &&
+        (game_get_square(g, i + 1, j - 1) == GRASS ||
+         game_get_square(g, i + 1, j - 1) == TREE) &&
+        (game_get_square(g, i + 1, j + 1) == GRASS ||
+         game_get_square(g, i + 1, j + 1) == TREE) &&
+        (game_get_square(g, i + 2, j) == GRASS ||
+         game_get_square(g, i + 2, j) == TREE)) {
+      return LOSING;
+    }
+    if (game_get_square(g, i, j + 1) == TREE &&
+        (game_get_square(g, i + 1, j + 1) == TREE ||
+         game_get_square(g, i + 1, j + 1) == GRASS) &&
+        (game_get_square(g, i, j + 2) == TREE ||
+         game_get_square(g, i, j + 2) == GRASS)) {
+      return LOSING;
+    }
+  }
+
+  if (i == 0 && j > 1 && j < DEFAULT_SIZE - 2 &&
+      s == GRASS) {  // grass placé ligne du haut (i==0), "coin+" exclue
+    if (game_get_square(g, i, j - 1) == TREE &&
+        (game_get_square(g, i, j - 2) == TREE ||
+         game_get_square(g, i, j - 2) == GRASS) &&
+        (game_get_square(g, i + 1, j - 1) == TREE ||
+         game_get_square(g, i + 1, j - 1) == GRASS)) {
+      return LOSING;
+    }
+    if (game_get_square(g, i + 1, j) == TREE &&
+        (game_get_square(g, i + 1, j - 1) == TREE ||
+         game_get_square(g, i + 1, j - 1) == GRASS) &&
+        (game_get_square(g, i + 2, j) == TREE ||
+         game_get_square(g, i + 2, j) == GRASS) &&
+        (game_get_square(g, i + 1, j + 1) == TREE ||
+         game_get_square(g, i + 1, j + 1) == GRASS)) {
+      return LOSING;
+    }
+    if (game_get_square(g, i, j + 1) == TREE &&
+        (game_get_square(g, i + 1, j + 1) == TREE ||
+         game_get_square(g, i + 1, j + 1) == GRASS) &&
+        (game_get_square(g, i, j + 2) == TREE ||
+         game_get_square(g, i, j + 2) == GRASS)) {
+      return LOSING;
+    }
+  }
+
+  if (i == 0 && j == DEFAULT_SIZE - 2 &&
+      s == GRASS) {  // grass placé coin droit haut -1 horizontal
+    if (game_get_square(g, i, j - 1) == TREE &&
+        (game_get_square(g, i + 1, j - 1) == TREE ||
+         game_get_square(g, i + 1, j - 1) == GRASS) &&
+        (game_get_square(g, i, j - 2) == TREE ||
+         game_get_square(g, i, j - 2) == GRASS)) {
+      return LOSING;
+    }
+    if (game_get_square(g, i + 1, j) == TREE &&
+        (game_get_square(g, i + 1, j - 1) == GRASS ||
+         game_get_square(g, i + 1, j - 1) == TREE) &&
+        (game_get_square(g, i + 1, j + 1) == GRASS ||
+         game_get_square(g, i + 1, j + 1) == TREE) &&
+        (game_get_square(g, i + 2, j) == GRASS ||
+         game_get_square(g, i + 2, j) == TREE)) {
+      return LOSING;
+    }
+    if (game_get_square(g, i, j + 1) == TREE &&
+        (game_get_square(g, i + 1, j + 1) == TREE ||
+         game_get_square(g, i + 1, j + 1) == GRASS)) {
+      return LOSING;
+    }
+  }
+
+  if (i == 0 && j == DEFAULT_SIZE - 1 &&
+      s == GRASS) {  // grass placé coin droit haut
+    if (game_get_square(g, i, j - 1) == TREE &&
+        (game_get_square(g, i + 1, j - 1) == TREE ||
+         game_get_square(g, i + 1, j - 1) == GRASS) &&
+        (game_get_square(g, i, j - 2) == TREE ||
+         game_get_square(g, i, j - 2) == GRASS)) {
+      return LOSING;
+    }
+    if (game_get_square(g, i + 1, j) == TREE &&
+        (game_get_square(g, i + 1, j - 1) == GRASS ||
+         game_get_square(g, i + 1, j - 1) == TREE) &&
+        (game_get_square(g, i + 2, j) == GRASS ||
+         game_get_square(g, i + 2, j) == TREE)) {
+      return LOSING;
+    }
+  }
+
+  if (i == 1 && j == 0 &&
+      s == GRASS) {  // grass placé coin gauche haut +1 verticale
+    if (game_get_square(g, i - 1, j) == TREE &&
+        (game_get_square(g, i - 1, j + 1) == TREE ||
+         game_get_square(g, i - 1, j + 1) == GRASS)) {
+      return LOSING;
+    }
+    if (game_get_square(g, i, j + 1) == TREE &&
+        (game_get_square(g, i - 1, j + 1) == TREE ||
+         game_get_square(g, i - 1, j + 1) == GRASS) &&
+        (game_get_square(g, i, j + 2) == TREE ||
+         game_get_square(g, i, j + 2) == GRASS) &&
+        (game_get_square(g, i + 1, j + 1) == TREE ||
+         game_get_square(g, i + 1, j + 1) == GRASS)) {
+      return LOSING;
+    }
+    if (game_get_square(g, i + 1, j) == TREE &&
+        (game_get_square(g, i + 1, j + 1) == TREE ||
+         game_get_square(g, i + 1, j + 1) == GRASS) &&
+        (game_get_square(g, i + 2, j) == TREE ||
+         game_get_square(g, i + 2, j) == GRASS)) {
+      return LOSING;
+    }
+  }
+
+  if (i == 1 && j == 1 && s == GRASS) {  // grass placé coin gauche haut +1h +1v
+    if (game_get_square(g, i - 1, j) == TREE &&
+        (game_get_square(g, i - 1, j - 1) == TREE ||
+         game_get_square(g, i - 1, j - 1) == GRASS) &&
+        (game_get_square(g, i - 1, j + 1) == TREE ||
+         game_get_square(g, i - 1, j + 1) == GRASS)) {
+      return LOSING;
+    }
+    if (game_get_square(g, i, j - 1) == TREE &&
+        (game_get_square(g, i - 1, j - 1) == TREE ||
+         game_get_square(g, i - 1, j - 1) == GRASS) &&
+        (game_get_square(g, i + 1, j - 1) == TREE ||
+         game_get_square(g, i + 1, j - 1) == GRASS)) {
+      return LOSING;
+    }
+    if (game_get_square(g, i + 1, j) == TREE &&
+        (game_get_square(g, i + 1, j - 1) == TREE ||
+         game_get_square(g, i + 1, j - 1) == GRASS) &&
+        (game_get_square(g, i + 2, j) == TREE ||
+         game_get_square(g, i + 2, j) == GRASS) &&
+        (game_get_square(g, i + 1, j + 1) == TREE ||
+         game_get_square(g, i + 1, j + 1) == GRASS)) {
+      return LOSING;
+    }
+    if (game_get_square(g, i, j + 1) == TREE &&
+        (game_get_square(g, i + 1, j + 1) == TREE ||
+         game_get_square(g, i + 1, j + 1) == GRASS) &&
+        (game_get_square(g, i, j + 2) == TREE ||
+         game_get_square(g, i, j + 2) == GRASS) &&
+        (game_get_square(g, i - 1, j + 1) == TREE ||
+         game_get_square(g, i - 1, j + 1) == GRASS)) {
+      return LOSING;
+    }
+  }
+
+  if (i == 1 && j > 1 && j < DEFAULT_SIZE - 2 &&
+      s == GRASS) {  // grass placé 2eme ligne du haut (i==1), "coin+" exclue
+    if (game_get_square(g, i - 1, j) == TREE &&
+        (game_get_square(g, i - 1, j - 1) == TREE ||
+         game_get_square(g, i - 1, j - 1) == GRASS) &&
+        (game_get_square(g, i - 1, j + 1) == TREE ||
+         game_get_square(g, i - 1, j + 1) == GRASS)) {
+      return LOSING;
+    }
+    if (game_get_square(g, i, j - 1) == TREE &&
+        (game_get_square(g, i - 1, j - 1) == TREE ||
+         game_get_square(g, i - 1, j - 1) == GRASS) &&
+        (game_get_square(g, i, j - 2) == TREE ||
+         game_get_square(g, i, j - 2) == GRASS) &&
+        (game_get_square(g, i + 1, j - 1) == TREE ||
+         game_get_square(g, i + 1, j - 1) == GRASS)) {
+      return LOSING;
+    }
+    if (game_get_square(g, i + 1, j) == TREE &&
+        (game_get_square(g, i + 1, j - 1) == TREE ||
+         game_get_square(g, i + 1, j - 1) == GRASS) &&
+        (game_get_square(g, i + 2, j) == TREE ||
+         game_get_square(g, i + 2, j) == GRASS) &&
+        (game_get_square(g, i + 1, j + 1) == TREE ||
+         game_get_square(g, i + 1, j + 1) == GRASS)) {
+      return LOSING;
+    }
+    if (game_get_square(g, i, j + 1) == TREE &&
+        (game_get_square(g, i + 1, j + 1) == TREE ||
+         game_get_square(g, i + 1, j + 1) == GRASS) &&
+        (game_get_square(g, i, j + 2) == TREE ||
+         game_get_square(g, i, j + 2) == GRASS) &&
+        (game_get_square(g, i - 1, j + 1) == TREE ||
+         game_get_square(g, i - 1, j + 1) == GRASS)) {
+      return LOSING;
+    }
+  }
+
+  if (i == 1 && j == DEFAULT_SIZE - 2 &&
+      s == GRASS) {  // grass placé coin droit haut -1h +1v
+    if (game_get_square(g, i - 1, j) == TREE &&
+        (game_get_square(g, i - 1, j - 1) == TREE ||
+         game_get_square(g, i - 1, j - 1) == GRASS) &&
+        (game_get_square(g, i - 1, j + 1) == TREE ||
+         game_get_square(g, i - 1, j + 1) == GRASS)) {
+      return LOSING;
+    }
+    if (game_get_square(g, i, j - 1) == TREE &&
+        (game_get_square(g, i - 1, j - 1) == TREE ||
+         game_get_square(g, i - 1, j - 1) == GRASS) &&
+        (game_get_square(g, i, j - 2) == TREE ||
+         game_get_square(g, i, j - 2) == GRASS) &&
+        (game_get_square(g, i + 1, j - 1) == TREE ||
+         game_get_square(g, i + 1, j - 1) == GRASS)) {
+      return LOSING;
+    }
+    if (game_get_square(g, i + 1, j) == TREE &&
+        (game_get_square(g, i + 1, j - 1) == TREE ||
+         game_get_square(g, i + 1, j - 1) == GRASS) &&
+        (game_get_square(g, i + 2, j) == TREE ||
+         game_get_square(g, i + 2, j) == GRASS) &&
+        (game_get_square(g, i + 1, j + 1) == TREE ||
+         game_get_square(g, i + 1, j + 1) == GRASS)) {
+      return LOSING;
+    }
+    if (game_get_square(g, i, j + 1) == TREE &&
+        (game_get_square(g, i - 1, j + 1) == TREE ||
+         game_get_square(g, i - 1, j + 1) == GRASS) &&
+        (game_get_square(g, i + 1, j + 1) == TREE ||
+         game_get_square(g, i + 1, j + 1) == GRASS)) {
+      return LOSING;
+    }
+  }
+
+  if (i == 1 && j == DEFAULT_SIZE - 1 &&
+      s == GRASS) {  // grass placé coin droit haut +1 verticale
+    if (game_get_square(g, i - 1, j) == TREE &&
+        (game_get_square(g, i - 1, j - 1) == TREE ||
+         game_get_square(g, i - 1, j - 1) == GRASS)) {
+      return LOSING;
+    }
+    if (game_get_square(g, i, j - 1) == TREE &&
+        (game_get_square(g, i - 1, j - 1) == TREE ||
+         game_get_square(g, i - 1, j - 1) == GRASS) &&
+        (game_get_square(g, i, j - 2) == TREE ||
+         game_get_square(g, i, j - 2) == GRASS) &&
+        (game_get_square(g, i + 1, j - 1) == TREE ||
+         game_get_square(g, i + 1, j - 1) == GRASS)) {
+      return LOSING;
+    }
+    if (game_get_square(g, i + 1, j) == TREE &&
+        (game_get_square(g, i + 1, j - 1) == GRASS ||
+         game_get_square(g, i + 1, j - 1) == TREE) &&
+        (game_get_square(g, i + 2, j) == GRASS ||
+         game_get_square(g, i + 2, j) == TREE)) {
+      return LOSING;
+    }
+  }
+
+  if (j == 0 && i > 1 && i < DEFAULT_SIZE - 2 &&
+      s == GRASS) {  // grass placé ligne gauche (j==0), "coin+" exclue
+    if (game_get_square(g, i - 1, j) == TREE &&
+        (game_get_square(g, i - 2, j) == TREE ||
+         game_get_square(g, i - 2, j) == GRASS) &&
+        (game_get_square(g, i - 1, j + 1) == TREE ||
+         game_get_square(g, i - 1, j + 1) == GRASS)) {
+      return LOSING;
+    }
+    if (game_get_square(g, i, j + 1) == TREE &&
+        (game_get_square(g, i - 1, j + 1) == TREE ||
+         game_get_square(g, i - 1, j + 1) == GRASS) &&
+        (game_get_square(g, i, j + 2) == TREE ||
+         game_get_square(g, i, j + 2) == GRASS) &&
+        (game_get_square(g, i + 1, j + 1) == TREE ||
+         game_get_square(g, i + 1, j + 1) == GRASS)) {
+      return LOSING;
+    }
+    if (game_get_square(g, i + 1, j) == TREE &&
+        (game_get_square(g, i + 1, j + 1) == TREE ||
+         game_get_square(g, i + 1, j + 1) == GRASS) &&
+        (game_get_square(g, i + 2, j) == TREE ||
+         game_get_square(g, i + 2, j) == GRASS)) {
+      return LOSING;
+    }
+  }
+
+  if (j == 1 && i > 1 && i < DEFAULT_SIZE - 2 &&
+      s == GRASS) {  // grass placé 2eme ligne gauche (j==1), "coin+" exclue
+    if (game_get_square(g, i - 1, j) == TREE &&
+        (game_get_square(g, i - 1, j - 1) == TREE ||
+         game_get_square(g, i - 1, j - 1) == GRASS) &&
+        (game_get_square(g, i - 2, j) == TREE ||
+         game_get_square(g, i - 2, j) == GRASS) &&
+        (game_get_square(g, i - 1, j + 1) == TREE ||
+         game_get_square(g, i - 1, j + 1) == GRASS)) {
+      return LOSING;
+    }
+    if (game_get_square(g, i, j - 1) == TREE &&
+        (game_get_square(g, i - 1, j - 1) == TREE ||
+         game_get_square(g, i - 1, j - 1) == GRASS) &&
+        (game_get_square(g, i + 1, j - 1) == TREE ||
+         game_get_square(g, i + 1, j - 1) == GRASS)) {
+      return LOSING;
+    }
+    if (game_get_square(g, i + 1, j) == TREE &&
+        (game_get_square(g, i + 1, j - 1) == TREE ||
+         game_get_square(g, i + 1, j - 1) == GRASS) &&
+        (game_get_square(g, i + 2, j) == TREE ||
+         game_get_square(g, i + 2, j) == GRASS) &&
+        (game_get_square(g, i + 1, j + 1) == TREE ||
+         game_get_square(g, i + 1, j + 1) == GRASS)) {
+      return LOSING;
+    }
+    if (game_get_square(g, i, j + 1) == TREE &&
+        (game_get_square(g, i - 1, j + 1) == TREE ||
+         game_get_square(g, i - 1, j + 1) == GRASS) &&
+        (game_get_square(g, i, j + 2) == TREE ||
+         game_get_square(g, i, j + 2) == GRASS) &&
+        (game_get_square(g, i + 1, j + 1) == TREE ||
+         game_get_square(g, i + 1, j + 1) == GRASS)) {
+      return LOSING;
+    }
+  }
+
+  if (j > 1 && j < DEFAULT_SIZE - 2 && i > 1 && i < DEFAULT_SIZE - 2 &&
+      s == GRASS) {  // grass placé "centre jeu", "coin+" exclue
+    if (game_get_square(g, i - 1, j) == TREE &&
+        (game_get_square(g, i - 1, j - 1) == TREE ||
+         game_get_square(g, i - 1, j - 1) == GRASS) &&
+        (game_get_square(g, i - 2, j) == TREE ||
+         game_get_square(g, i - 2, j) == GRASS) &&
+        (game_get_square(g, i - 1, j + 1) == TREE ||
+         game_get_square(g, i - 1, j + 1) == GRASS)) {
+      return LOSING;
+    }
+    if (game_get_square(g, i, j - 1) == TREE &&
+        (game_get_square(g, i - 1, j - 1) == TREE ||
+         game_get_square(g, i - 1, j - 1) == GRASS) &&
+        (game_get_square(g, i, j - 2) == TREE ||
+         game_get_square(g, i, j - 2) == GRASS) &&
+        (game_get_square(g, i + 1, j - 1) == TREE ||
+         game_get_square(g, i + 1, j - 1) == GRASS)) {
+      return LOSING;
+    }
+    if (game_get_square(g, i + 1, j) == TREE &&
+        (game_get_square(g, i + 1, j - 1) == TREE ||
+         game_get_square(g, i + 1, j - 1) == GRASS) &&
+        (game_get_square(g, i + 2, j) == TREE ||
+         game_get_square(g, i + 2, j) == GRASS) &&
+        (game_get_square(g, i + 1, j + 1) == TREE ||
+         game_get_square(g, i + 1, j + 1) == GRASS)) {
+      return LOSING;
+    }
+    if (game_get_square(g, i, j + 1) == TREE &&
+        (game_get_square(g, i - 1, j + 1) == TREE ||
+         game_get_square(g, i - 1, j + 1) == GRASS) &&
+        (game_get_square(g, i, j + 2) == TREE ||
+         game_get_square(g, i, j + 2) == GRASS) &&
+        (game_get_square(g, i + 1, j + 1) == TREE ||
+         game_get_square(g, i + 1, j + 1) == GRASS)) {
+      return LOSING;
+    }
+  }
+
+  if (j == DEFAULT_SIZE - 2 && i > 1 && i < DEFAULT_SIZE - 2 &&
+      s == GRASS) {  // grass placé ligne droite-1 (j==DEFAULT_SIZE-2), "coin+"
+                     // exclue
+    if (game_get_square(g, i - 1, j) == TREE &&
+        (game_get_square(g, i - 1, j - 1) == TREE ||
+         game_get_square(g, i - 1, j - 1) == GRASS) &&
+        (game_get_square(g, i - 2, j) == TREE ||
+         game_get_square(g, i - 2, j) == GRASS) &&
+        (game_get_square(g, i - 1, j + 1) == TREE ||
+         game_get_square(g, i - 1, j + 1) == GRASS)) {
+      return LOSING;
+    }
+    if (game_get_square(g, i, j - 1) == TREE &&
+        (game_get_square(g, i - 1, j - 1) == TREE ||
+         game_get_square(g, i - 1, j - 1) == GRASS) &&
+        (game_get_square(g, i, j - 2) == TREE ||
+         game_get_square(g, i, j - 2) == GRASS) &&
+        (game_get_square(g, i + 1, j - 1) == TREE ||
+         game_get_square(g, i + 1, j - 1) == GRASS)) {
+      return LOSING;
+    }
+    if (game_get_square(g, i + 1, j) == TREE &&
+        (game_get_square(g, i + 1, j - 1) == TREE ||
+         game_get_square(g, i + 1, j - 1) == GRASS) &&
+        (game_get_square(g, i + 2, j) == TREE ||
+         game_get_square(g, i + 2, j) == GRASS) &&
+        (game_get_square(g, i + 1, j + 1) == TREE ||
+         game_get_square(g, i + 1, j + 1) == GRASS)) {
+      return LOSING;
+    }
+    if (game_get_square(g, i, j + 1) == TREE &&
+        (game_get_square(g, i - 1, j + 1) == TREE ||
+         game_get_square(g, i - 1, j + 1) == GRASS) &&
+        (game_get_square(g, i + 1, j + 1) == TREE ||
+         game_get_square(g, i + 1, j + 1) == GRASS)) {
+      return LOSING;
+    }
+  }
+
+  if (j == DEFAULT_SIZE - 1 && i > 1 && i < DEFAULT_SIZE - 2 &&
+      s == GRASS) {  // grass placé ligne droite (j==DEFAULT_SIZE-1), "coin+"
+                     // exclue
+    if (game_get_square(g, i - 1, j) == TREE &&
+        (game_get_square(g, i - 1, j - 1) == TREE ||
+         game_get_square(g, i - 1, j - 1) == GRASS) &&
+        (game_get_square(g, i - 2, j) == TREE ||
+         game_get_square(g, i - 2, j) == GRASS)) {
+      return LOSING;
+    }
+    if (game_get_square(g, i, j - 1) == TREE &&
+        (game_get_square(g, i - 1, j - 1) == TREE ||
+         game_get_square(g, i - 1, j - 1) == GRASS) &&
+        (game_get_square(g, i, j - 2) == TREE ||
+         game_get_square(g, i, j - 2) == GRASS) &&
+        (game_get_square(g, i + 1, j - 1) == TREE ||
+         game_get_square(g, i + 1, j - 1) == GRASS)) {
+      return LOSING;
+    }
+    if (game_get_square(g, i + 1, j) == TREE &&
+        (game_get_square(g, i + 1, j - 1) == GRASS ||
+         game_get_square(g, i + 1, j - 1) == TREE) &&
+        (game_get_square(g, i + 2, j) == GRASS ||
+         game_get_square(g, i + 2, j) == TREE)) {
+      return LOSING;
+    }
+  }
+
+  if (j == 0 && i == DEFAULT_SIZE - 2 &&
+      s == GRASS) {  // grass placé coin gauche bas -1v
+    if (game_get_square(g, i - 1, j) == TREE &&
+        (game_get_square(g, i - 2, j) == TREE ||
+         game_get_square(g, i - 2, j) == GRASS) &&
+        (game_get_square(g, i - 1, j + 1) == TREE ||
+         game_get_square(g, i - 1, j + 1) == GRASS)) {
+      return LOSING;
+    }
+    if (game_get_square(g, i, j + 1) == TREE &&
+        (game_get_square(g, i - 1, j + 1) == TREE ||
+         game_get_square(g, i - 1, j + 1) == GRASS) &&
+        (game_get_square(g, i, j + 2) == TREE ||
+         game_get_square(g, i, j + 2) == GRASS) &&
+        (game_get_square(g, i + 1, j + 1) == TREE ||
+         game_get_square(g, i + 1, j + 1) == GRASS)) {
+      return LOSING;
+    }
+    if (game_get_square(g, i + 1, j) == TREE &&
+        (game_get_square(g, i + 1, j + 1) == TREE ||
+         game_get_square(g, i + 1, j + 1) == GRASS)) {
+      return LOSING;
+    }
+  }
+
+  if (j == 1 && i == DEFAULT_SIZE - 2 &&
+      s == GRASS) {  // grass placé coin gauche bas -1v +1h
+    if (game_get_square(g, i - 1, j) == TREE &&
+        (game_get_square(g, i - 1, j - 1) == TREE ||
+         game_get_square(g, i - 1, j - 1) == GRASS) &&
+        (game_get_square(g, i - 2, j) == TREE ||
+         game_get_square(g, i - 2, j) == GRASS) &&
+        (game_get_square(g, i - 1, j + 1) == TREE ||
+         game_get_square(g, i - 1, j + 1) == GRASS)) {
+      return LOSING;
+    }
+    if (game_get_square(g, i, j - 1) == TREE &&
+        (game_get_square(g, i - 1, j - 1) == TREE ||
+         game_get_square(g, i - 1, j - 1) == GRASS) &&
+        (game_get_square(g, i + 1, j - 1) == TREE ||
+         game_get_square(g, i + 1, j - 1) == GRASS)) {
+      return LOSING;
+    }
+    if (game_get_square(g, i + 1, j) == TREE &&
+        (game_get_square(g, i + 1, j - 1) == TREE ||
+         game_get_square(g, i + 1, j - 1) == GRASS) &&
+        (game_get_square(g, i + 1, j + 1) == TREE ||
+         game_get_square(g, i + 1, j + 1) == GRASS)) {
+      return LOSING;
+    }
+    if (game_get_square(g, i, j + 1) == TREE &&
+        (game_get_square(g, i - 1, j + 1) == TREE ||
+         game_get_square(g, i - 1, j + 1) == GRASS) &&
+        (game_get_square(g, i, j + 2) == TREE ||
+         game_get_square(g, i, j + 2) == GRASS) &&
+        (game_get_square(g, i + 1, j + 1) == TREE ||
+         game_get_square(g, i + 1, j + 1) == GRASS)) {
+      return LOSING;
+    }
+  }
+
+  if (i == DEFAULT_SIZE - 2 && j > 1 && j < DEFAULT_SIZE - 2 &&
+      s == GRASS) {  // grass placé ligne du bas-1 (i==DEFAULT_SIZE-2), "coin+"
+                     // exclue
+    if (game_get_square(g, i - 1, j) == TREE &&
+        (game_get_square(g, i - 1, j - 1) == TREE ||
+         game_get_square(g, i - 1, j - 1) == GRASS) &&
+        (game_get_square(g, i - 2, j) == TREE ||
+         game_get_square(g, i - 2, j) == GRASS) &&
+        (game_get_square(g, i - 1, j + 1) == TREE ||
+         game_get_square(g, i - 1, j + 1) == GRASS)) {
+      return LOSING;
+    }
+    if (game_get_square(g, i, j - 1) == TREE &&
+        (game_get_square(g, i - 1, j - 1) == TREE ||
+         game_get_square(g, i - 1, j - 1) == GRASS) &&
+        (game_get_square(g, i, j - 2) == TREE ||
+         game_get_square(g, i, j - 2) == GRASS) &&
+        (game_get_square(g, i + 1, j - 1) == TREE ||
+         game_get_square(g, i + 1, j - 1) == GRASS)) {
+      return LOSING;
+    }
+    if (game_get_square(g, i + 1, j) == TREE &&
+        (game_get_square(g, i + 1, j - 1) == TREE ||
+         game_get_square(g, i + 1, j - 1) == GRASS) &&
+        (game_get_square(g, i + 1, j + 1) == TREE ||
+         game_get_square(g, i + 1, j + 1) == GRASS)) {
+      return LOSING;
+    }
+    if (game_get_square(g, i, j + 1) == TREE &&
+        (game_get_square(g, i - 1, j + 1) == TREE ||
+         game_get_square(g, i - 1, j + 1) == GRASS) &&
+        (game_get_square(g, i, j + 2) == TREE ||
+         game_get_square(g, i, j + 2) == GRASS) &&
+        (game_get_square(g, i + 1, j + 1) == TREE ||
+         game_get_square(g, i + 1, j + 1) == GRASS)) {
+      return LOSING;
+    }
+  }
+
+  if (j == DEFAULT_SIZE - 2 && i == DEFAULT_SIZE - 2 &&
+      s == GRASS) {  // grass placé coin droit bas -1v -1h
+    if (game_get_square(g, i - 1, j) == TREE &&
+        (game_get_square(g, i - 1, j - 1) == TREE ||
+         game_get_square(g, i - 1, j - 1) == GRASS) &&
+        (game_get_square(g, i - 2, j) == TREE ||
+         game_get_square(g, i - 2, j) == GRASS) &&
+        (game_get_square(g, i - 1, j + 1) == TREE ||
+         game_get_square(g, i - 1, j + 1) == GRASS)) {
+      return LOSING;
+    }
+    if (game_get_square(g, i, j - 1) == TREE &&
+        (game_get_square(g, i - 1, j - 1) == TREE ||
+         game_get_square(g, i - 1, j - 1) == GRASS) &&
+        (game_get_square(g, i, j - 2) == TREE ||
+         game_get_square(g, i, j - 2) == GRASS) &&
+        (game_get_square(g, i + 1, j - 1) == TREE ||
+         game_get_square(g, i + 1, j - 1) == GRASS)) {
+      return LOSING;
+    }
+    if (game_get_square(g, i + 1, j) == TREE &&
+        (game_get_square(g, i + 1, j - 1) == TREE ||
+         game_get_square(g, i + 1, j - 1) == GRASS) &&
+        (game_get_square(g, i + 1, j + 1) == TREE ||
+         game_get_square(g, i + 1, j + 1) == GRASS)) {
+      return LOSING;
+    }
+    if (game_get_square(g, i, j + 1) == TREE &&
+        (game_get_square(g, i - 1, j + 1) == TREE ||
+         game_get_square(g, i - 1, j + 1) == GRASS) &&
+        (game_get_square(g, i + 1, j + 1) == TREE ||
+         game_get_square(g, i + 1, j + 1) == GRASS)) {
+      return LOSING;
+    }
+  }
+
+  if (j == DEFAULT_SIZE - 1 && i == DEFAULT_SIZE - 2 &&
+      s == GRASS) {  // grass placé coin droit bas -1v
+    if (game_get_square(g, i - 1, j) == TREE &&
+        (game_get_square(g, i - 1, j - 1) == TREE ||
+         game_get_square(g, i - 1, j - 1) == GRASS)) {
+      return LOSING;
+    }
+    if (game_get_square(g, i, j - 1) == TREE &&
+        (game_get_square(g, i - 1, j - 1) == TREE ||
+         game_get_square(g, i - 1, j - 1) == GRASS) &&
+        (game_get_square(g, i, j - 2) == TREE ||
+         game_get_square(g, i, j - 2) == GRASS) &&
+        (game_get_square(g, i + 1, j - 1) == TREE ||
+         game_get_square(g, i + 1, j - 1) == GRASS)) {
+      return LOSING;
+    }
+    if (game_get_square(g, i + 1, j) == TREE &&
+        (game_get_square(g, i + 1, j - 1) == TREE ||
+         game_get_square(g, i + 1, j - 1) == GRASS)) {
+      return LOSING;
+    }
+  }
+
+  if (j == 0 && i == DEFAULT_SIZE - 1 &&
+      s == GRASS) {  // grass placé coin gauche bas
+    if (game_get_square(g, i - 1, j) == TREE &&
+        (game_get_square(g, i - 2, j) == TREE ||
+         game_get_square(g, i - 2, j) == GRASS) &&
+        (game_get_square(g, i - 1, j + 1) == TREE ||
+         game_get_square(g, i - 1, j + 1) == GRASS)) {
+      return LOSING;
+    }
+    if (game_get_square(g, i, j + 1) == TREE &&
+        (game_get_square(g, i - 1, j + 1) == TREE ||
+         game_get_square(g, i - 1, j + 1) == GRASS) &&
+        (game_get_square(g, i, j + 2) == TREE ||
+         game_get_square(g, i, j + 2) == GRASS)) {
+      return LOSING;
+    }
+  }
+
+  if (j == 1 && i == DEFAULT_SIZE - 1 &&
+      s == GRASS) {  // grass placé coin gauche bas +1h
+    if (game_get_square(g, i, j - 1) == TREE &&
+        (game_get_square(g, i - 1, j - 1) == TREE ||
+         game_get_square(g, i - 1, j - 1) == GRASS)) {
+      return LOSING;
+    }
+    if (game_get_square(g, i - 1, j) == TREE &&
+        (game_get_square(g, i - 1, j - 1) == TREE ||
+         game_get_square(g, i - 1, j - 1) == GRASS) &&
+        (game_get_square(g, i - 2, j) == TREE ||
+         game_get_square(g, i - 2, j) == GRASS) &&
+        (game_get_square(g, i - 1, j + 1) == TREE ||
+         game_get_square(g, i - 1, j + 1) == GRASS)) {
+      return LOSING;
+    }
+    if (game_get_square(g, i, j + 1) == TREE &&
+        (game_get_square(g, i - 1, j + 1) == TREE ||
+         game_get_square(g, i - 1, j + 1) == GRASS) &&
+        (game_get_square(g, i, j + 2) == TREE ||
+         game_get_square(g, i, j + 2) == GRASS)) {
+      return LOSING;
+    }
+  }
+
+  if (i == DEFAULT_SIZE - 1 && j > 1 && j < DEFAULT_SIZE - 2 &&
+      s == GRASS) {  // grass placé ligne du bas (i==DEFAULT_SIZE-1), "coin+"
+                     // exclue
+    if (game_get_square(g, i - 1, j) == TREE &&
+        (game_get_square(g, i - 1, j - 1) == TREE ||
+         game_get_square(g, i - 1, j - 1) == GRASS) &&
+        (game_get_square(g, i - 2, j) == TREE ||
+         game_get_square(g, i - 2, j) == GRASS) &&
+        (game_get_square(g, i - 1, j + 1) == TREE ||
+         game_get_square(g, i - 1, j + 1) == GRASS)) {
+      return LOSING;
+    }
+    if (game_get_square(g, i, j - 1) == TREE &&
+        (game_get_square(g, i - 1, j - 1) == TREE ||
+         game_get_square(g, i - 1, j - 1) == GRASS) &&
+        (game_get_square(g, i, j - 2) == TREE ||
+         game_get_square(g, i, j - 2) == GRASS)) {
+      return LOSING;
+    }
+    if (game_get_square(g, i, j + 1) == TREE &&
+        (game_get_square(g, i - 1, j + 1) == TREE ||
+         game_get_square(g, i - 1, j + 1) == GRASS) &&
+        (game_get_square(g, i, j + 2) == TREE ||
+         game_get_square(g, i, j + 2) == GRASS)) {
+      return LOSING;
+    }
+  }
+
+  if (j == DEFAULT_SIZE - 2 && i == DEFAULT_SIZE - 1 &&
+      s == GRASS) {  // grass placé coin droit bas -1h
+    if (game_get_square(g, i - 1, j) == TREE &&
+        (game_get_square(g, i - 1, j - 1) == TREE ||
+         game_get_square(g, i - 1, j - 1) == GRASS) &&
+        (game_get_square(g, i - 2, j) == TREE ||
+         game_get_square(g, i - 2, j) == GRASS) &&
+        (game_get_square(g, i - 1, j + 1) == TREE ||
+         game_get_square(g, i - 1, j + 1) == GRASS)) {
+      return LOSING;
+    }
+    if (game_get_square(g, i, j - 1) == TREE &&
+        (game_get_square(g, i - 1, j - 1) == TREE ||
+         game_get_square(g, i - 1, j - 1) == GRASS) &&
+        (game_get_square(g, i, j - 2) == TREE ||
+         game_get_square(g, i, j - 2) == GRASS)) {
+      return LOSING;
+    }
+    if (game_get_square(g, i, j + 1) == TREE &&
+        (game_get_square(g, i - 1, j + 1) == TREE ||
+         game_get_square(g, i - 1, j + 1) == GRASS)) {
+      return LOSING;
+    }
+  }
+
+  if (j == DEFAULT_SIZE - 1 && i == DEFAULT_SIZE - 1 &&
+      s == GRASS) {  // grass placé coin droit bas
+    if (game_get_square(g, i - 1, j) == TREE &&
+        (game_get_square(g, i - 1, j - 1) == TREE ||
+         game_get_square(g, i - 1, j - 1) == GRASS) &&
+        (game_get_square(g, i - 2, j) == TREE ||
+         game_get_square(g, i - 2, j) == GRASS)) {
+      return LOSING;
+    }
+    if (game_get_square(g, i, j - 1) == TREE &&
+        (game_get_square(g, i - 1, j - 1) == TREE ||
+         game_get_square(g, i - 1, j - 1) == GRASS) &&
+        (game_get_square(g, i, j - 2) == TREE ||
+         game_get_square(g, i, j - 2) == GRASS)) {
+      return LOSING;
+    }
   }
 
   /* Analyse si tente non attendue dans une row/col */
