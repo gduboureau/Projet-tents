@@ -23,9 +23,10 @@ typedef struct game_s *game;
 
 typedef const struct game_s *cgame;
 
-/********game_ext********/ 
+/********game_ext********/
 
 /********************* Hugo *********************/
+
 game game_new_ext(uint nb_rows, uint nb_cols, square *squares,
                   uint *nb_tents_row, uint *nb_tents_col, bool wrapping,
                   bool diagadj) {
@@ -38,9 +39,21 @@ game game_new_empty_ext(uint nb_rows, uint nb_cols, bool wrapping,
 
 /********************* Guillaume *********************/
 
-uint game_nb_rows(cgame g) { return 1; }
+uint game_nb_rows(cgame g) {
+  if (g == NULL) {
+    fprintf(stderr, "Parameter not valid!\n");
+    exit(EXIT_FAILURE);
+  }
+  return g->nb_rows;
+}
 
-uint game_nb_cols(cgame g) { return 1; }
+uint game_nb_cols(cgame g) {
+  if (g == NULL) {
+    fprintf(stderr, "Parameter not valid!\n");
+    exit(EXIT_FAILURE);
+  }
+  return g->nb_cols;
+}
 
 /********************* Valentin *********************/
 
