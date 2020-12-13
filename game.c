@@ -30,11 +30,58 @@ typedef const struct game_s *cgame;
 game game_new_ext(uint nb_rows, uint nb_cols, square *squares,
                   uint *nb_tents_row, uint *nb_tents_col, bool wrapping,
                   bool diagadj) {
-  return NULL;
+  if (squares == NULL || nb_tents_row == NULL || nb_tents_col == NULL) {
+    exit(EXIT_FAILURE);
+  }
+  game g = game_new_empty();
+  for (uint i = 0; i < DEFAULT_SIZE; i++) {
+    g->nb_tents_row[i] = nb_tents_row[i];
+    g->nb_tents_col[i] = nb_tents_col[i];
+  }
+  for (uint j = 0; j < DEFAULT_SIZE * DEFAULT_SIZE; j++) {
+    g->squares[j] = squares[j];
+  }
+  g->nb_rows = nb_rows;
+  g->nb_cols = nb_cols;
+  g->wrapping = wrapping;
+  g->diagadj = diagadj;
+  return g;
+
 }
 game game_new_empty_ext(uint nb_rows, uint nb_cols, bool wrapping,
                         bool diagadj) {
-  return NULL;
+  game g = malloc(sizeof(game_s)); 
+  if(g==NULL){
+    fprintf(stderr,"Not enough memory!\n");
+    exit(EXIT_FAILURE);
+  }
+  g->nb_tents_row = malloc(sizeof(uint) * DEFAULT_SIZE);
+  if (g->nb_tents_row == NULL) {
+    fprintf(stderr, "not enough memory!\n");
+    exit(EXIT_FAILURE);
+  }
+  g->nb_tents_col = malloc(sizeof(uint) * DEFAULT_SIZE);
+  if (g->nb_tents_col == NULL) {
+    fprintf(stderr, "not enough memory!\n");
+    exit(EXIT_FAILURE);
+  }
+  for (uint i = 0; i < DEFAULT_SIZE; i++) {
+    g->nb_tents_row[i] = 0;
+    g->nb_tents_col[i] = 0;
+  }
+  g->squares = malloc(sizeof(square) * DEFAULT_SIZE * DEFAULT_SIZE);
+  if (g->squares == NULL) {
+    fprintf(stderr, "not enough memory!\n");
+    exit(EXIT_FAILURE);
+  }
+  for (uint j = 0; j < DEFAULT_SIZE * DEFAULT_SIZE; j++) {
+    g->squares[j] = EMPTY;
+  }
+  g->nb_rows = nb_rows;
+  g->nb_cols = nb_cols;
+  g->wrapping = wrapping;
+  g->diagadj = diagadj;
+  return g;
 }
 
 /********************* Guillaume *********************/
