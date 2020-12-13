@@ -57,9 +57,21 @@ uint game_nb_cols(cgame g) {
 
 /********************* Valentin *********************/
 
-bool game_is_wrapping(cgame g) { return 1; }
+bool game_is_wrapping(cgame g) {
+  if (g == NULL) {
+    fprintf(stderr, "Parameter not valid!\n");
+    exit(EXIT_FAILURE);
+  }
+  return g->wrapping;
+}
 
-bool game_is_diagadj(cgame g) { return 1; }
+bool game_is_diagadj(cgame g) {
+  if (g == NULL) {
+    fprintf(stderr, "Parameter not valid!\n");
+    exit(EXIT_FAILURE);
+  }
+  return g->diagadj;
+}
 
 /********************* Jennifer *********************/
 void game_undo(game g) { return; }
