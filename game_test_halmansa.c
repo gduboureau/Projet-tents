@@ -4,12 +4,64 @@
 #include <string.h>
 
 #include "game.h"
+#include "game.c"
 #include "game_aux.h"
 
 void usage(int argc, char *argv[]) {
   fprintf(stderr, "Usage: %s <testname> [<...>]\n", argv[0]);
   exit(EXIT_FAILURE);
 }
+
+/* *********************************************************** */
+
+bool test_game_new_ext(void){
+  return true;
+}
+
+
+
+/* *********************************************************** */
+
+
+bool test_game_new_empty_ext(void){
+  game g = game_new_empty_ext(1, 1, false, false);
+  for (uint o = 1; o < 10; o++) { /* nb rows de 1 à 9*/
+    for (uint p = 1; p < 10; p++) { /* nb cols de 1 à 9 */
+      for (uint q = 0; q < 2; q++) { /* wrapping true ou false*/
+        for (uint r = 0; r < 2; r++) { /* diagadj true ou false*/
+          g = game_new_empty_ext(o, p, q, r);
+          for (uint i = 0; i < g->nb_rows; i++) {
+            if (game_get_expected_nb_tents_row(g, i) != 0) {
+              fprintf(stderr, "Error : the game is not empty!\n");
+              game_delete(g);
+              return false;
+            }
+          }
+          for (uint j = 0; j < g->nb_cols; j++) {
+            if (game_get_expected_nb_tents_row(g, j) != 0) {
+              fprintf(stderr, "Error : the game is not empty!\n");
+              game_delete(g);
+              return false;
+            }
+          }
+
+          for (uint x = 0; x < g->nb_rows; x++) {
+            for (uint y = 0; y < g->nb_cols; y++) {
+              if (game_get_square(g, x, y) != EMPTY) {
+                fprintf(stderr, "Error : the game is not empty!\n");
+                game_delete(g);
+                return false;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+  game_delete(g);
+  return true;
+}
+
 
 /* *********************************************************** */
 
@@ -180,6 +232,14 @@ int main(int argc, char *argv[]) {
 
   else if (strcmp("game_play_move", argv[1]) == 0) {
     ok = test_game_play_move();
+  }
+
+  else if (strcmp("game_new_ext", argv[1]) == 0) {
+    ok = test_game_new_ext();
+  }
+
+  else if (strcmp("game_new_empty_ext", argv[1]) == 0) {
+    ok = test_game_new_empty_ext();
   }
 
   else {
