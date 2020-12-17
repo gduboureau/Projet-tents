@@ -101,7 +101,7 @@ bool test_game_new_empty(void) {
     }
   }
   for (uint j = 0; j < DEFAULT_SIZE; j++) {
-    if (game_get_expected_nb_tents_row(g, j) != 0) {
+    if (game_get_expected_nb_tents_col(g, j) != 0) {
       fprintf(stderr, "Error : the game is not empty!\n");
       game_delete(g);
       return false;

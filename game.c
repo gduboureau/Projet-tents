@@ -56,6 +56,10 @@ game game_new_empty_ext(uint nb_rows, uint nb_cols, bool wrapping,
     fprintf(stderr, "Not enough memory!\n");
     exit(EXIT_FAILURE);
   }
+  g->nb_rows = nb_rows;
+  g->nb_cols = nb_cols;
+  g->wrapping = wrapping;
+  g->diagadj = diagadj;
   g->nb_tents_row = malloc(sizeof(uint) * nb_rows);
   if (g->nb_tents_row == NULL) {
     fprintf(stderr, "not enough memory!\n");
@@ -81,10 +85,7 @@ game game_new_empty_ext(uint nb_rows, uint nb_cols, bool wrapping,
   for (uint j = 0; j < nb_rows*nb_cols; j++) {
     g->squares[j] = EMPTY;
   }
-  g->nb_rows = nb_rows;
-  g->nb_cols = nb_cols;
-  g->wrapping = wrapping;
-  g->diagadj = diagadj;
+  
   return g;
 }
 
