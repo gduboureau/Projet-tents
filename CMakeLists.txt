@@ -66,3 +66,5 @@ add_test(test_halmansa_game_set_expected_nb_tents_row ./game_test_halmansa game_
 add_test(test_halmansa_game_set_expected_nb_tents_col ./game_test_halmansa game_set_expected_nb_tents_col)
 add_test(test_halmansa_game_get_expected_nb_tents_all ./game_test_halmansa game_get_expected_nb_tents_all)
 add_test(test_halmansa_game_play_move ./game_test_halmansa game_play_move)
+add_test(test_halmansa_game_new_ext ./game_test_halmansa game_new_ext)
+add_test(test_halmansa_game_new_empty_ext ./game_test_halmansa game_new_empty_ext)
