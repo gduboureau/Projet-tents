@@ -2,9 +2,187 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include "game.c"
 #include "game.h"
 #include "game_aux.h"
+#include "game_ext.h"
 typedef unsigned int uint;
+
+/* ********** TEST GAME IS WRAPPING ********** */
+bool test_game_is_wrapping(void) {
+  // cgame g = game_default();
+  // uint nb_cols = g->nb_cols;
+  // uint nb_rows = g->nb_rows;
+  return 0;
+}
+
+/* ********** TEST GAME IS DIAGADJ ********** */
+bool test_game_is_diagadj(void) {
+  game g = game_default();
+  uint nb_cols = g->nb_cols;
+  uint nb_rows = g->nb_cols;
+  for (uint i = 0; i < nb_cols; i++) {
+    for (uint j = 0; j < nb_rows; j++) {
+      if (game_is_diagadj(g)) {
+        if (i == 0 && j > 0 && j < nb_cols - 1 &&
+            game_get_square(g, i, j) != TREE &&
+            (game_get_square(g, i + 1, j + 1) == TENT ||
+             game_get_square(g, i + 1, j - 1) == TENT) &&
+            game_check_move(g, i, j, TENT) ==
+                LOSING) {  // tent diag i==0 bordure j exclue
+          game_delete(g);
+          return false;
+        }
+        if (i > 0 && i < nb_rows - 1 && j > 0 && j < nb_cols - 1 &&
+            game_get_square(g, i, j) != TREE &&
+            (game_get_square(g, i - 1, j - 1) == TENT ||
+             game_get_square(g, i + 1, j + 1) == TENT ||
+             game_get_square(g, i + 1, j - 1) == TENT ||
+             game_get_square(g, i - 1, j + 1) == TENT) &&
+            game_check_move(g, i, j, TENT) ==
+                LOSING) {  // tent diag toute bordure exclue
+          game_delete(g);
+          return false;
+        }
+        if (i == 0 && j == 0 && game_get_square(g, i, j) != TREE &&
+            (game_get_square(g, i + 1, j + 1) == TENT) &&
+            game_check_move(g, i, j, TENT) ==
+                LOSING) {  // tent diag en haut a gauche
+          game_delete(g);
+          return false;
+        }
+        if (i > 0 && j == 0 && i < nb_rows - 1 &&
+            game_get_square(g, i, j) != TREE &&
+            (game_get_square(g, i + 1, j + 1) == TENT ||
+             game_get_square(g, i - 1, j + 1) == TENT) &&
+            game_check_move(g, i, j, TENT) ==
+                LOSING) {  // tent diag j==0 toute bordure i exclue
+          game_delete(g);
+          return false;
+        }
+        if (i == nb_rows - 1 && j == 0 && game_get_square(g, i, j) != TREE &&
+            (game_get_square(g, i - 1, j + 1) == TENT) &&
+            game_check_move(g, i, j, TENT) ==
+                LOSING) {  // tent diag en bas a gauche
+          game_delete(g);
+          return false;
+        }
+        if (i == nb_rows - 1 && j > 0 && j < nb_rows - 1 &&
+            game_get_square(g, i, j) != TREE &&
+            (game_get_square(g, i - 1, j - 1) == TENT ||
+             game_get_square(g, i - 1, j + 1) == TENT) &&
+            game_check_move(g, i, j, TENT) ==
+                LOSING) {  // tent diag i==DEFAULT_SIZE-1 bordure j exclue
+          game_delete(g);
+          return false;
+        }
+        if (i == nb_rows - 1 && j == nb_cols - 1 &&
+            game_get_square(g, i, j) != TREE &&
+            (game_get_square(g, i - 1, j - 1) == TENT) &&
+            game_check_move(g, i, j, TENT) ==
+                LOSING) {  // tent diag en bas a droite
+          game_delete(g);
+          return false;
+        }
+        if (i > 0 && j == nb_cols - 1 && i < nb_rows - 1 &&
+            game_get_square(g, i, j) != TREE &&
+            (game_get_square(g, i + 1, j - 1) == TENT ||
+             game_get_square(g, i - 1, j - 1) == TENT) &&
+            game_check_move(g, i, j, TENT) ==
+                LOSING) {  // tent diag j==DEFAULT_SIZE-1 bordure i exclue
+          game_delete(g);
+          return false;
+        }
+        if (i == 0 && j == nb_cols - 1 && game_get_square(g, i, j) != TREE &&
+            (game_get_square(g, i + 1, j - 1) == TENT) &&
+            game_check_move(g, i, j, TENT) ==
+                LOSING) {  // tent diag en haut a droite
+          game_delete(g);
+          return false;
+        }
+      }
+      if (!game_is_diagadj(g)) {
+        if (i == 0 && j > 0 && j < nb_cols - 1 &&
+            game_get_square(g, i, j) != TREE &&
+            (game_get_square(g, i + 1, j + 1) == TENT ||
+             game_get_square(g, i + 1, j - 1) == TENT) &&
+            game_check_move(g, i, j, TENT) !=
+                LOSING) {  // tent diag i==0 bordure j exclue
+          game_delete(g);
+          return false;
+        }
+        if (i > 0 && i < nb_rows - 1 && j > 0 && j < nb_cols - 1 &&
+            game_get_square(g, i, j) != TREE &&
+            (game_get_square(g, i - 1, j - 1) == TENT ||
+             game_get_square(g, i + 1, j + 1) == TENT ||
+             game_get_square(g, i + 1, j - 1) == TENT ||
+             game_get_square(g, i - 1, j + 1) == TENT) &&
+            game_check_move(g, i, j, TENT) !=
+                LOSING) {  // tent diag toute bordure exclue
+          game_delete(g);
+          return false;
+        }
+        if (i == 0 && j == 0 && game_get_square(g, i, j) != TREE &&
+            (game_get_square(g, i + 1, j + 1) == TENT) &&
+            game_check_move(g, i, j, TENT) !=
+                LOSING) {  // tent diag en haut a gauche
+          game_delete(g);
+          return false;
+        }
+        if (i > 0 && j == 0 && i < nb_rows - 1 &&
+            game_get_square(g, i, j) != TREE &&
+            (game_get_square(g, i + 1, j + 1) == TENT ||
+             game_get_square(g, i - 1, j + 1) == TENT) &&
+            game_check_move(g, i, j, TENT) !=
+                LOSING) {  // tent diag j==0 toute bordure i exclue
+          game_delete(g);
+          return false;
+        }
+        if (i == nb_rows - 1 && j == 0 && game_get_square(g, i, j) != TREE &&
+            (game_get_square(g, i - 1, j + 1) == TENT) &&
+            game_check_move(g, i, j, TENT) !=
+                LOSING) {  // tent diag en bas a gauche
+          game_delete(g);
+          return false;
+        }
+        if (i == nb_rows - 1 && j > 0 && j < nb_rows - 1 &&
+            game_get_square(g, i, j) != TREE &&
+            (game_get_square(g, i - 1, j - 1) == TENT ||
+             game_get_square(g, i - 1, j + 1) == TENT) &&
+            game_check_move(g, i, j, TENT) !=
+                LOSING) {  // tent diag i==DEFAULT_SIZE-1 bordure j exclue
+          game_delete(g);
+          return false;
+        }
+        if (i == nb_rows - 1 && j == nb_cols - 1 &&
+            game_get_square(g, i, j) != TREE &&
+            (game_get_square(g, i - 1, j - 1) == TENT) &&
+            game_check_move(g, i, j, TENT) !=
+                LOSING) {  // tent diag en bas a droite
+          game_delete(g);
+          return false;
+        }
+        if (i > 0 && j == nb_cols - 1 && i < nb_rows - 1 &&
+            game_get_square(g, i, j) != TREE &&
+            (game_get_square(g, i + 1, j - 1) == TENT ||
+             game_get_square(g, i - 1, j - 1) == TENT) &&
+            game_check_move(g, i, j, TENT) !=
+                LOSING) {  // tent diag j==DEFAULT_SIZE-1 bordure i exclue
+          game_delete(g);
+          return false;
+        }
+        if (i == 0 && j == nb_cols - 1 && game_get_square(g, i, j) != TREE &&
+            (game_get_square(g, i + 1, j - 1) == TENT) &&
+            game_check_move(g, i, j, TENT) !=
+                LOSING) {  // tent diag en haut a droite
+          game_delete(g);
+          return false;
+        }
+      }
+    }
+  }
+  return true;
+}
 
 /* ********** TEST GAME GET CURRENT NB TENTS ROW ********** */
 
@@ -413,6 +591,8 @@ int main(int argc, char *argv[]) {
     ok = test_game_play_move();
   else if (strcmp("game_check_move", argv[1]) == 0)
     ok = test_game_check_move();
+  else if (strcmp("game_is_diagadj", argv[1]) == 0)
+    ok = test_game_is_diagadj();
   else {
     fprintf(stderr, "Error: test \"%s\" not found!\n", argv[1]);
     exit(EXIT_FAILURE);
