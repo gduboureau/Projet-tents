@@ -3,8 +3,8 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "game.h"
 #include "game.c"
+#include "game.h"
 #include "game_aux.h"
 
 void usage(int argc, char *argv[]) {
@@ -14,7 +14,7 @@ void usage(int argc, char *argv[]) {
 
 /* *********************************************************** */
 
-bool test_game_new_ext(void){
+bool test_game_new_ext(void) {
   uint tentes_lig[] = {3, 0, 4, 0, 4, 0, 1, 0};
   uint tentes_col[] = {4, 0, 1, 2, 1, 1, 2, 1};
 
@@ -32,39 +32,35 @@ bool test_game_new_ext(void){
   return true;
 }
 
-
-
 /* *********************************************************** */
 
-
-bool test_game_new_empty_ext(void){
+bool test_game_new_empty_ext(void) {
   game g = game_new_empty_ext(9, 9, true, true);
   for (uint i = 0; i < g->nb_rows; i++) {
-            if (g->nb_tents_row[i] != 0) {
-              fprintf(stderr, "Error : the game is not empty!\n");
-              game_delete(g);
-              return false;
-            }
-          }
-          for (uint j = 0; j < g->nb_cols; j++) {
-            if (g->nb_tents_col[j] != 0) {
-              fprintf(stderr, "Error : the game is not empty!\n");
-              game_delete(g);
-              return false;
-            }
-          }
+    if (g->nb_tents_row[i] != 0) {
+      fprintf(stderr, "Error : the game is not empty!\n");
+      game_delete(g);
+      return false;
+    }
+  }
+  for (uint j = 0; j < g->nb_cols; j++) {
+    if (g->nb_tents_col[j] != 0) {
+      fprintf(stderr, "Error : the game is not empty!\n");
+      game_delete(g);
+      return false;
+    }
+  }
 
-          for (uint x = 0; x < g->nb_rows*g->nb_cols; x++) {
-              if (g->squares[x] != EMPTY) {
-                fprintf(stderr, "Error : the game is not empty!\n");
-                game_delete(g);
-                return false;
-              }
-            }
+  for (uint x = 0; x < g->nb_rows * g->nb_cols; x++) {
+    if (g->squares[x] != EMPTY) {
+      fprintf(stderr, "Error : the game is not empty!\n");
+      game_delete(g);
+      return false;
+    }
+  }
   game_delete(g);
   return true;
 }
-
 
 /* *********************************************************** */
 
