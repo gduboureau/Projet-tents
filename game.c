@@ -434,9 +434,7 @@ int game_check_move(cgame g, uint i, uint j, square s) {
        game_get_square(g, i + 1, j - 1) == TENT)) {  // tent en haut a droite
     return LOSING;
   }
-  //------------------------------------Analyse arbre présent au moins une
-  // fois autour d'une tente
-  // donnée-----------------------------------------//
+  //---Analyse arbre présent au moins une fois autour d'une tente donnée---//
 
   if (i == 0 && s == TENT && j > 0 && j < DEFAULT_SIZE - 1 &&
       game_get_square(g, i + 1, j) != TREE &&
