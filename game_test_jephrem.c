@@ -42,6 +42,10 @@ bool test_game_equal(void) {
   game g1 = game_new_empty_ext(8, 8, false, false);
   game g2 = game_copy(g1);
 
+  if (game_is_wrapping(g1) != game_is_wrapping(g2) ||
+      game_is_diagadj(g1) != game_is_diagadj(g2)) {
+    return false;
+  }
   if (game_equal(g1, g2) == false) {
     game_delete(g1);
     game_delete(g2);
@@ -73,7 +77,7 @@ bool test_game_equal(void) {
     return false;
   }
 
-  game g3 = game_new_empty();
+  game g3 = game_new_empty_ext(8, 8, false, false);
   game g4 = game_copy(g3);
 
   if (game_equal(g3, g4) == false) {

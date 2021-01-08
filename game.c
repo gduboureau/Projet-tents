@@ -185,12 +185,12 @@ game game_copy(cgame g) {
     fprintf(stderr, "parameter not valid!\n");
     exit(EXIT_FAILURE);
   }
-  game g1 = game_new_empty();
-  for (uint i = 0; i < DEFAULT_SIZE; i++) {
+  game g1 = game_new_empty_ext(8, 8, false, false);
+  for (uint i = 0; i < g->nb_rows; i++) {
     g1->nb_tents_row[i] = game_get_expected_nb_tents_row(g, i);
-    g1->nb_tents_col[i] = game_get_expected_nb_tents_col(g, i);
-    for (uint j = 0; j < DEFAULT_SIZE; j++) {
-      g1->squares[(i * DEFAULT_SIZE + j)] = game_get_square(g, i, j);
+    for (uint j = 0; j < g->nb_cols; j++) {
+      g1->nb_tents_col[i] = game_get_expected_nb_tents_col(g, i);
+      g1->squares[(i * g->nb_cols + j)] = game_get_square(g, i, j);
     }
   }
   return g1;
@@ -200,6 +200,9 @@ bool game_equal(cgame g1, cgame g2) {
   if (g1 == NULL || g2 == NULL) {
     fprintf(stderr, "at least one of the parameters isn't valid!\n");
     exit(EXIT_FAILURE);
+  }
+  if (g1->wrapping != g2->wrapping || g1->diagadj != g2->diagadj) {
+    return false;
   }
   for (uint i = 0; i < g1->nb_rows; i++) {
     if (g1->nb_tents_row[i] != g2->nb_tents_row[i]) {

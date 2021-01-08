@@ -6,6 +6,7 @@
 #include "game.c"
 #include "game.h"
 #include "game_aux.h"
+#include "game_ext.h"
 
 void usage(int argc, char *argv[]) {
   fprintf(stderr, "Usage: %s <testname> [<...>]\n", argv[0]);
