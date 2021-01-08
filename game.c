@@ -201,13 +201,17 @@ bool game_equal(cgame g1, cgame g2) {
     fprintf(stderr, "at least one of the parameters isn't valid!\n");
     exit(EXIT_FAILURE);
   }
-  for (uint i = 0; i < DEFAULT_SIZE; i++) {
-    if (g1->nb_tents_row[i] != g2->nb_tents_row[i] ||
-        g1->nb_tents_col[i] != g2->nb_tents_col[i]) {
+  for (uint i = 0; i < g1->nb_rows; i++) {
+    if (g1->nb_tents_row[i] != g2->nb_tents_row[i]) {
       return false;
     }
   }
-  for (uint j = 0; j < DEFAULT_SIZE * DEFAULT_SIZE; j++) {
+  for (uint x = 0; x < g1->nb_cols; x++) {
+    if (g1->nb_tents_col[x] != g2->nb_tents_col[x]) {
+      return false;
+    }
+  }
+  for (uint j = 0; j < g1->nb_rows * g1->nb_cols; j++) {
     if (g1->squares[j] != g2->squares[j]) {
       return false;
     }

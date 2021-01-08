@@ -5,6 +5,7 @@
 
 #include "game.h"
 #include "game_aux.h"
+#include "game_ext.h"
 
 void usage(int argc, char *argv[]) {
   fprintf(stderr, "Usage: %s <testname> [<...>]\n", argv[0]);
@@ -38,7 +39,7 @@ bool test_game_copy(void) {
 /* *********************************************************** */
 
 bool test_game_equal(void) {
-  game g1 = game_default();
+  game g1 = game_new_empty_ext(8, 8, false, false);
   game g2 = game_copy(g1);
 
   if (game_equal(g1, g2) == false) {
@@ -144,7 +145,7 @@ bool test_game_new() {
 /* *********************************************************** */
 
 bool test_game_set_square() {
-  game g = game_new_empty();
+  game g = game_new_empty_ext(4, 6, false, false);
   game_set_square(g, 0, 4, TREE);
   if (game_get_square(g, 0, 4) != TREE) {
     game_delete(g);
