@@ -135,11 +135,13 @@ game game_new(square *squares, uint *nb_tents_row, uint *nb_tents_col) {
     exit(EXIT_FAILURE);
   }
   game g = game_new_empty();
-  for (uint i = 0; i < DEFAULT_SIZE; i++) {
+  for (uint i = 0; i < g->nb_rows; i++) {
     g->nb_tents_row[i] = nb_tents_row[i];
-    g->nb_tents_col[i] = nb_tents_col[i];
   }
-  for (uint j = 0; j < DEFAULT_SIZE * DEFAULT_SIZE; j++) {
+  for (uint x = 0; x < g->nb_cols; x++) {
+    g->nb_tents_col[x] = nb_tents_col[x];
+  }
+  for (uint j = 0; j < g->nb_rows * g->nb_cols; j++) {
     g->squares[j] = squares[j];
   }
   return g;
@@ -151,26 +153,32 @@ game game_new_empty(void) {
     fprintf(stderr, "not enough memory!\n");
     exit(EXIT_FAILURE);
   }
-  g->nb_tents_row = malloc(sizeof(uint) * DEFAULT_SIZE);
+  g->nb_cols = 8;
+  g->nb_rows = 8;
+  g->wrapping = false;
+  g->diagadj = false;
+  g->nb_tents_row = malloc(sizeof(uint) * g->nb_rows);
   if (g->nb_tents_row == NULL) {
     fprintf(stderr, "not enough memory!\n");
     exit(EXIT_FAILURE);
   }
-  g->nb_tents_col = malloc(sizeof(uint) * DEFAULT_SIZE);
+  g->nb_tents_col = malloc(sizeof(uint) * g->nb_cols);
   if (g->nb_tents_col == NULL) {
     fprintf(stderr, "not enough memory!\n");
     exit(EXIT_FAILURE);
   }
-  for (uint i = 0; i < DEFAULT_SIZE; i++) {
+  for (uint i = 0; i < g->nb_rows; i++) {
     g->nb_tents_row[i] = 0;
-    g->nb_tents_col[i] = 0;
   }
-  g->squares = malloc(sizeof(square) * DEFAULT_SIZE * DEFAULT_SIZE);
+  for (uint x = 0; x < g->nb_cols; x++) {
+    g->nb_tents_col[x] = 0;
+  }
+  g->squares = malloc(sizeof(square) * g->nb_rows * g->nb_cols);
   if (g->squares == NULL) {
     fprintf(stderr, "not enough memory!\n");
     exit(EXIT_FAILURE);
   }
-  for (uint j = 0; j < DEFAULT_SIZE * DEFAULT_SIZE; j++) {
+  for (uint j = 0; j < g->nb_cols * g->nb_rows; j++) {
     g->squares[j] = EMPTY;
   }
   return g;
