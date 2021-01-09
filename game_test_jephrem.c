@@ -39,7 +39,7 @@ bool test_game_copy(void) {
 /* *********************************************************** */
 
 bool test_game_equal(void) {
-  game g1 = game_new_empty_ext(8, 8, false, false);
+  game g1 = game_default();
   game g2 = game_copy(g1);
 
   if (game_is_wrapping(g1) != game_is_wrapping(g2) ||
@@ -97,15 +97,15 @@ bool test_game_equal(void) {
 /* *********************************************************** */
 
 bool test_game_new_empty(void) {
-  game g = game_new_empty_ext(8,8,false,false);
-  for (uint i = 0; i < DEFAULT_SIZE; i++) {
+  game g = game_new_empty_ext(8, 8, false, false);
+  for (uint i = 0; i < game_nb_rows(g); i++) {
     if (game_get_expected_nb_tents_row(g, i) != 0) {
       fprintf(stderr, "Error : the game is not empty!\n");
       game_delete(g);
       return false;
     }
   }
-  for (uint j = 0; j < DEFAULT_SIZE; j++) {
+  for (uint j = 0; j < game_nb_cols(g); j++) {
     if (game_get_expected_nb_tents_col(g, j) != 0) {
       fprintf(stderr, "Error : the game is not empty!\n");
       game_delete(g);
@@ -113,8 +113,8 @@ bool test_game_new_empty(void) {
     }
   }
 
-  for (uint x = 0; x < DEFAULT_SIZE; x++) {
-    for (uint y = 0; y < DEFAULT_SIZE; y++) {
+  for (uint x = 0; x < game_nb_rows(g); x++) {
+    for (uint y = 0; y < game_nb_cols(g); y++) {
       if (game_get_square(g, x, y) != EMPTY) {
         fprintf(stderr, "Error : the game is not empty!\n");
         game_delete(g);
@@ -141,7 +141,7 @@ bool test_game_new() {
                       EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY,
                       TREE,  EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY};
 
-  game g = game_new(squares, tentes_lig, tentes_col);
+  game g = game_new_ext(8, 8, squares, tentes_lig, tentes_col, false, false);
   game_delete(g);
   return true;
 }
