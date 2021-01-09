@@ -361,7 +361,7 @@ int game_check_move(cgame g, uint i, uint j, square s) {
   /* LOSING MOVE */
 
   /* Analyse si tente adjacente à une tente */
-  if (g->diagadj == false) {
+  if (game_is_diagadj(g) == false) {
     if (i == 0 && j > 0 && j < DEFAULT_SIZE - 1 && s == TENT &&
         (game_get_square(g, i + 1, j) == TENT ||
          game_get_square(g, i, j - 1) == TENT ||
