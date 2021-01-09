@@ -34,6 +34,10 @@ game game_new_ext(uint nb_rows, uint nb_cols, square *squares,
     exit(EXIT_FAILURE);
   }
   game g = game_new_empty_ext(nb_rows, nb_cols, wrapping, diagadj);
+  g->nb_rows = nb_rows;
+  g->nb_cols = nb_cols;
+  g->wrapping = wrapping;
+  g->diagadj = diagadj;
   for (uint i = 0; i < nb_rows; i++) {
     g->nb_tents_row[i] = nb_tents_row[i];
   }
@@ -43,10 +47,6 @@ game game_new_ext(uint nb_rows, uint nb_cols, square *squares,
   for (uint j = 0; j < nb_rows * nb_cols; j++) {
     g->squares[j] = squares[j];
   }
-  g->nb_rows = nb_rows;
-  g->nb_cols = nb_cols;
-  g->wrapping = wrapping;
-  g->diagadj = diagadj;
   return g;
 }
 game game_new_empty_ext(uint nb_rows, uint nb_cols, bool wrapping,
