@@ -309,8 +309,8 @@ bool test_game_check_move(void) {
         game_delete(g);
         return false;
       }
-      if (i > 0 && i < game_nb_rows(g) - 1 && j > 0 && j < game_nb_cols(g) - 1 &&
-          game_get_square(g, i, j) != TREE &&
+      if (i > 0 && i < game_nb_rows(g) - 1 && j > 0 &&
+          j < game_nb_cols(g) - 1 && game_get_square(g, i, j) != TREE &&
           (game_get_square(g, i - 1, j) == TENT ||
            game_get_square(g, i + 1, j) == TENT ||
            game_get_square(g, i, j - 1) == TENT ||
@@ -351,7 +351,8 @@ bool test_game_check_move(void) {
         game_delete(g);
         return false;
       }
-      if (i == game_nb_rows(g) - 1 && j == 0 && game_get_square(g, i, j) != TREE &&
+      if (i == game_nb_rows(g) - 1 && j == 0 &&
+          game_get_square(g, i, j) != TREE &&
           (game_get_square(g, i - 1, j) == TENT ||
            game_get_square(g, i, j + 1) == TENT ||
            (game_get_square(g, i - 1, j + 1) == TENT &&
@@ -398,7 +399,8 @@ bool test_game_check_move(void) {
         game_delete(g);
         return false;
       }
-      if (i == 0 && j == game_nb_cols(g) - 1 && game_get_square(g, i, j) != TREE &&
+      if (i == 0 && j == game_nb_cols(g) - 1 &&
+          game_get_square(g, i, j) != TREE &&
           (game_get_square(g, i + 1, j) == TENT ||
            game_get_square(g, i, j - 1) == TENT ||
            (game_get_square(g, i + 1, j - 1) == TENT &&
@@ -426,8 +428,8 @@ bool test_game_check_move(void) {
         game_delete(g);
         return false;
       }
-      if (i > 0 && i < game_nb_rows(g) - 1 && j > 0 && j < game_nb_cols(g) - 1 &&
-          game_get_square(g, i, j) != TREE &&
+      if (i > 0 && i < game_nb_rows(g) - 1 && j > 0 &&
+          j < game_nb_cols(g) - 1 && game_get_square(g, i, j) != TREE &&
           (game_get_square(g, i - 1, j) == TENT ||
            game_get_square(g, i + 1, j) == TENT ||
            game_get_square(g, i, j - 1) == TENT ||
@@ -468,7 +470,8 @@ bool test_game_check_move(void) {
         game_delete(g);
         return false;
       }
-      if (i == game_nb_rows(g) - 1 && j == 0 && game_get_square(g, i, j) != TREE &&
+      if (i == game_nb_rows(g) - 1 && j == 0 &&
+          game_get_square(g, i, j) != TREE &&
           (game_get_square(g, i - 1, j) == TENT ||
            game_get_square(g, i, j + 1) == TENT ||
            (game_get_square(g, i - 1, j + 1) == TENT &&
@@ -515,7 +518,8 @@ bool test_game_check_move(void) {
         game_delete(g);
         return false;
       }
-      if (i == 0 && j == game_nb_cols(g) - 1 && game_get_square(g, i, j) != TREE &&
+      if (i == 0 && j == game_nb_cols(g) - 1 &&
+          game_get_square(g, i, j) != TREE &&
           (game_get_square(g, i + 1, j) == TENT ||
            game_get_square(g, i, j - 1) == TENT ||
            (game_get_square(g, i + 1, j - 1) == TENT &&
@@ -539,7 +543,8 @@ bool test_game_check_move(void) {
         game_delete(g);
         return false;
       }
-      if (i > 0 && i < game_nb_rows(g) - 1 && j > 0 && j < game_nb_cols(g) - 1 &&
+      if (i > 0 && i < game_nb_rows(g) - 1 && j > 0 &&
+          j < game_nb_cols(g) - 1 &&
           (game_get_square(g, i, j) != TREE &&
            game_get_square(g, i - 1, j) != TREE &&
            game_get_square(g, i + 1, j) != TREE &&
