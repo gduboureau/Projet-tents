@@ -28,7 +28,7 @@ bool test_game_new_ext(void) {
                       EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY,
                       TREE,  EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY};
 
-  game g = game_new_ext(8, 8, squares, tentes_lig, tentes_col, true, true);
+  game g = game_new_ext(8, 8, squares, tentes_lig, tentes_col, false, false);
   game_delete(g);
   return true;
 }
