@@ -18,7 +18,19 @@ bool test_game_is_wrapping(void) {
 
 /* ********** TEST GAME IS DIAGADJ ********** */
 bool test_game_is_diagadj(void) {
-  game g = game_default();
+  uint tentes_lig[] = {3, 0, 4, 0, 4, 0, 1, 0};
+  uint tentes_col[] = {4, 0, 1, 2, 1, 1, 2, 1};
+
+  square squares[] = {EMPTY, EMPTY, EMPTY, EMPTY, TREE,  TREE,  EMPTY, EMPTY,
+                      TREE,  EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, TREE,
+                      EMPTY, EMPTY, EMPTY, EMPTY, TREE,  EMPTY, EMPTY, EMPTY,
+                      TREE,  EMPTY, EMPTY, EMPTY, EMPTY, TREE,  EMPTY, EMPTY,
+                      EMPTY, TREE,  EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY,
+                      TREE,  EMPTY, EMPTY, EMPTY, TREE,  EMPTY, TREE,  EMPTY,
+                      EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY,
+                      TREE,  EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY};
+
+  game g = game_new_ext(8, 8, squares, tentes_lig, tentes_col, true, true);
   uint nb_cols = g->nb_cols;
   uint nb_rows = g->nb_cols;
   for (uint i = 0; i < nb_cols; i++) {
