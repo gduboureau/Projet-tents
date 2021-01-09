@@ -4,6 +4,7 @@
 #include <string.h>
 #include "game.h"
 #include "game_aux.h"
+#include "game_ext.h"
 
 void usage(int argc, char* argv[]) {
   fprintf(stderr, "Usage: %s <testname> (trop ou pas assez d'arguments)\n",
@@ -79,11 +80,11 @@ bool test_game_is_over(void) {
 bool test_game_fill_grass_row() {
   game g = game_default();
   game g1 = game_default();
-  for (unsigned int i = 0; i < DEFAULT_SIZE; i++) {
+  for (unsigned int i = 0; i < game_nb_rows(g); i++) {
     game_fill_grass_row(g, i);
   }
-  for (unsigned int i = 0; i < DEFAULT_SIZE; i++) {
-    for (unsigned int j = 0; j < DEFAULT_SIZE; j++) {
+  for (unsigned int i = 0; i < game_nb_rows(g); i++) {
+    for (unsigned int j = 0; j < game_nb_cols(g); j++) {
       if ((game_get_square(g1, i, j) == EMPTY &&
            game_get_square(g, i, j) != GRASS) ||
           (game_get_square(g1, i, j) != EMPTY &&
@@ -104,11 +105,11 @@ bool test_game_fill_grass_row() {
 bool test_game_fill_grass_col() {
   game g = game_default();
   game g1 = game_default();
-  for (unsigned int j = 0; j < DEFAULT_SIZE; j++) {
+  for (unsigned int j = 0; j < game_nb_cols(g); j++) {
     game_fill_grass_col(g, j);
   }
-  for (unsigned int i = 0; i < DEFAULT_SIZE; i++) {
-    for (unsigned int j = 0; j < DEFAULT_SIZE; j++) {
+  for (unsigned int i = 0; i < game_nb_rows(g); i++) {
+    for (unsigned int j = 0; j < game_nb_cols(g); j++) {
       if ((game_get_square(g1, i, j) == EMPTY &&
            game_get_square(g, i, j) != GRASS) ||
           (game_get_square(g1, i, j) != EMPTY &&
@@ -133,8 +134,8 @@ bool test_game_restart() {
     return false;
   }
   game_restart(g);
-  for (unsigned int i = 0; i < DEFAULT_SIZE; i++) {
-    for (unsigned int j = 0; j < DEFAULT_SIZE; j++) {
+  for (unsigned int i = 0; i < game_nb_rows(g); i++) {
+    for (unsigned int j = 0; j < game_nb_cols(g); j++) {
       if (game_get_square(g, i, j) == TENT ||
           game_get_square(g, i, j) == GRASS) {
         game_delete(g);
