@@ -43,7 +43,7 @@ bool test_game_equal(void) {
   game g2 = game_copy(g1);
 
   if (game_is_wrapping(g1) != game_is_wrapping(g2) ||
-      game_is_diagadj(g1) != game_is_diagadj(g2)) {
+      game_is_diagadj(g1) != game_is_diagadj(g2) || game_nb_cols(g1) != game_nb_cols(g2) || game_nb_rows(g1) != game_nb_rows(g2)) {
     return false;
   }
   if (game_equal(g1, g2) == false) {
