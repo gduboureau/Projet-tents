@@ -190,7 +190,7 @@ bool test_game_get_current_nb_tents_row(void) {
   game g = game_default();
   game g1 = game_default_solution();
   uint c = 0;
-  for (uint i = 0; i < DEFAULT_SIZE; i++) {
+  for (uint i = 0; i < game_nb_rows(g); i++) {
     c = c + game_get_current_nb_tents_row(g1, i);
     if (game_get_current_nb_tents_row(g, i) != 0) {
       game_delete(g);
@@ -214,7 +214,7 @@ bool test_game_get_current_nb_tents_col(void) {
   game g = game_default();
   game g1 = game_default_solution();
   uint c = 0;
-  for (uint j = 0; j < DEFAULT_SIZE; j++) {
+  for (uint j = 0; j < game_nb_col(g); j++) {
     c = c + game_get_current_nb_tents_col(g1, j);
     if (game_get_current_nb_tents_col(g, j) != 0) {
       game_delete(g);
@@ -237,7 +237,7 @@ bool test_game_get_current_nb_tents_col(void) {
 bool test_game_get_current_nb_tents_all(void) {
   game g = game_default();
   uint c = 0;
-  for (uint v = 0; v < DEFAULT_SIZE; v++) {
+  for (uint v = 0; v < game_nb_cols(g); v++) {
     c += game_get_current_nb_tents_col(g, v);
   }
   if (game_get_current_nb_tents_all(g) != c) {
@@ -254,8 +254,8 @@ bool test_game_get_current_nb_tents_all(void) {
 bool test_game_play_move(void) {
   game g = game_default();
   uint c = 0;
-  for (uint i = 0; i < DEFAULT_SIZE; i++) {
-    for (uint j = 0; j < DEFAULT_SIZE; j++) {
+  for (uint i = 0; i < game_nb_rows(g); i++) {
+    for (uint j = 0; j < game_nb_cols(g); j++) {
       if (game_get_square(g, i, j) == EMPTY) {
         game_play_move(g, i, j, TENT);
       }
