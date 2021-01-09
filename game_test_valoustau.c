@@ -429,6 +429,43 @@ bool test_game_check_move(void) {
         return false;
       }
 
+      if (i == 0 && j == 0 && game_get_square(g, i, j) != TREE &&
+          (game_is_diagadj(g) == false) &&
+          (game_get_square(g, i + 1, j) == TENT ||
+           game_get_square(g, i, j + 1) == TENT ||
+           game_get_square(g, i + 1, j + 1) == TENT) &&
+          game_check_move(g, i, j, TENT) != LOSING) {  // tent en haut a gauche
+        game_delete(g);
+        return false;
+      }
+      if (i == DEFAULT_SIZE - 1 && j == 0 && game_get_square(g, i, j) != TREE &&
+          (game_is_diagadj(g) == false) &&
+          (game_get_square(g, i - 1, j) == TENT ||
+           game_get_square(g, i, j + 1) == TENT ||
+           game_get_square(g, i - 1, j + 1) == TENT) &&
+          game_check_move(g, i, j, TENT) != LOSING) {  // tent en bas a gauche
+        game_delete(g);
+        return false;
+      }
+      if (i == DEFAULT_SIZE - 1 && j == DEFAULT_SIZE - 1 &&
+          (game_is_diagadj(g) == false) && game_get_square(g, i, j) != TREE &&
+          (game_get_square(g, i - 1, j) == TENT ||
+           game_get_square(g, i, j - 1) == TENT ||
+           game_get_square(g, i - 1, j - 1) == TENT) &&
+          game_check_move(g, i, j, TENT) != LOSING) {  // tent en bas a droite
+        game_delete(g);
+        return false;
+      }
+      if (i == 0 && j == DEFAULT_SIZE - 1 && game_get_square(g, i, j) != TREE &&
+          (game_is_diagadj(g) == false) &&
+          (game_get_square(g, i + 1, j) == TENT ||
+           game_get_square(g, i, j - 1) == TENT ||
+           game_get_square(g, i + 1, j - 1) == TENT) &&
+          game_check_move(g, i, j, TENT) != LOSING) {  // tent en haut a droite
+        game_delete(g);
+        return false;
+      }
+
       //------------------------------------Analyse arbre présent au moins une
       // fois autour d'une tente
       // donnée-----------------------------------------//
