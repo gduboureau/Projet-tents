@@ -39,7 +39,7 @@ bool test_game_copy(void) {
 /* *********************************************************** */
 
 bool test_game_equal(void) {
-  game g1 = game_new_empty_ext(8, 8, false, false);
+  game g1 = game_new__empty_ext(8, 8, false, false);
   game g2 = game_copy(g1);
 
   if (game_is_wrapping(g1) != game_is_wrapping(g2) ||
@@ -97,7 +97,7 @@ bool test_game_equal(void) {
 /* *********************************************************** */
 
 bool test_game_new_empty(void) {
-  game g = game_new_empty();
+  game g = game_new_empty_ext(8,8,false,false);
   for (uint i = 0; i < DEFAULT_SIZE; i++) {
     if (game_get_expected_nb_tents_row(g, i) != 0) {
       fprintf(stderr, "Error : the game is not empty!\n");
@@ -149,7 +149,7 @@ bool test_game_new() {
 /* *********************************************************** */
 
 bool test_game_set_square() {
-  game g = game_new_empty_ext(4, 6, false, false);
+  game g = game_new_empty_ext(8, 8, false, false);
   game_set_square(g, 0, 4, TREE);
   if (game_get_square(g, 0, 4) != TREE) {
     game_delete(g);

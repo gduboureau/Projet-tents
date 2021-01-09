@@ -1,13 +1,9 @@
-#include "game.h"
 #include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include "game.h"
 #include "game_ext.h"
-
-typedef unsigned int uint;
-
-#define DEFAULT_SIZE 8
 
 typedef struct game_s {
   square *squares;
@@ -185,7 +181,7 @@ game game_copy(cgame g) {
     fprintf(stderr, "parameter not valid!\n");
     exit(EXIT_FAILURE);
   }
-  game g1 = game_new_empty_ext(8, 8, false, false);
+  game g1 = game_new_empty_ext(g->nb_rows, g->nb_cols, g->wrapping, g->diagadj);
   for (uint i = 0; i < g->nb_rows; i++) {
     g1->nb_tents_row[i] = game_get_expected_nb_tents_row(g, i);
     for (uint j = 0; j < g->nb_cols; j++) {
@@ -238,25 +234,25 @@ void game_delete(game g) {
 }
 
 void game_set_square(game g, uint i, uint j, square s) {
-  if (g == NULL || i >= DEFAULT_SIZE || j >= DEFAULT_SIZE || i < 0 || j < 0) {
+  if (g == NULL || i >= g->nb_rows || j >= g->nb_cols || i < 0 || j < 0) {
     fprintf(stderr, "parameter not valid!\n");
     exit(EXIT_FAILURE);
   }
-  g->squares[i * DEFAULT_SIZE + j] = s;
+  g->squares[i * g->nb_cols + j] = s;
 }
 
 /********************* Hugo *********************/
 
 square game_get_square(cgame g, uint i, uint j) {
-  if (g == NULL || i >= DEFAULT_SIZE || j >= DEFAULT_SIZE || i < 0 || j < 0) {
+  if (g == NULL || i >= g->nb_rows || j >= g->nb_cols|| i < 0 || j < 0) {
     fprintf(stderr, "parameter not valid!\n");
     exit(EXIT_FAILURE);
   }
-  return g->squares[(i * DEFAULT_SIZE) + j];
+  return g->squares[(i * g->nb_cols) + j];
 }
 
 void game_set_expected_nb_tents_row(game g, uint i, uint nb_tents) {
-  if (g == NULL || i >= DEFAULT_SIZE || i < 0) {
+  if (g == NULL || i >= g->nb_rows || i < 0) {
     fprintf(stderr, "parameter not valid!\n");
     exit(EXIT_FAILURE);
   }
@@ -265,7 +261,7 @@ void game_set_expected_nb_tents_row(game g, uint i, uint nb_tents) {
 }
 
 void game_set_expected_nb_tents_col(game g, uint j, uint nb_tents) {
-  if (g == NULL || j >= DEFAULT_SIZE || j < 0) {
+  if (g == NULL || j >= g->nb_cols || j < 0) {
     fprintf(stderr, "parameter not valid!\n");
     exit(EXIT_FAILURE);
   }
@@ -274,7 +270,7 @@ void game_set_expected_nb_tents_col(game g, uint j, uint nb_tents) {
 }
 
 uint game_get_expected_nb_tents_row(cgame g, uint i) {
-  if (g == NULL || i >= DEFAULT_SIZE || i < 0) {
+  if (g == NULL || i >= g->nb_rows || i < 0) {
     fprintf(stderr, "parameter not valid!\n");
     exit(EXIT_FAILURE);
   }
@@ -282,7 +278,7 @@ uint game_get_expected_nb_tents_row(cgame g, uint i) {
 }
 
 uint game_get_expected_nb_tents_col(cgame g, uint j) {
-  if (g == NULL || j >= DEFAULT_SIZE || j < 0) {
+  if (g == NULL || j >= g->nb_cols || j < 0) {
     fprintf(stderr, "parameter not valid!\n");
     exit(EXIT_FAILURE);
   }
@@ -296,18 +292,18 @@ uint game_get_expected_nb_tents_all(cgame g) {
     exit(EXIT_FAILURE);
   }
   uint cpt = 0;
-  for (uint j = 0; j < DEFAULT_SIZE; j++) {
+  for (uint j = 0; j < g->nb_rows; j++) {
     cpt += game_get_expected_nb_tents_row(g, j);
   }
   return cpt;
 }
 
 uint game_get_current_nb_tents_row(cgame g, uint i) {
-  if (g == NULL || i >= DEFAULT_SIZE || i < 0) {
+  if (g == NULL || i >= g->nb_rows || i < 0) {
     exit(EXIT_FAILURE);
   }
   uint cpt = 0;
-  for (uint k = 0; k < DEFAULT_SIZE; k++) {
+  for (uint k = 0; k < g->nb_cols; k++) {
     if (game_get_square(g, i, k) == TENT) {
       cpt += 1;
     }
@@ -316,11 +312,11 @@ uint game_get_current_nb_tents_row(cgame g, uint i) {
 }
 
 uint game_get_current_nb_tents_col(cgame g, uint j) {
-  if (g == NULL || j >= DEFAULT_SIZE || j < 0) {
+  if (g == NULL || j >= g->nb_cols || j < 0) {
     exit(EXIT_FAILURE);
   }
   uint cpt = 0;
-  for (uint k = 0; k < DEFAULT_SIZE; k++) {
+  for (uint k = 0; k < g->nb_rows; k++) {
     if (game_get_square(g, k, j) == TENT) {
       cpt += 1;
     }
@@ -333,14 +329,14 @@ uint game_get_current_nb_tents_all(cgame g) {
     exit(EXIT_FAILURE);
   }
   uint cpt = 0;
-  for (uint j = 0; j < DEFAULT_SIZE; j++) {
+  for (uint j = 0; j < g->nb_rows; j++) {
     cpt += game_get_current_nb_tents_row(g, j);
   }
   return cpt;
 }
 
 void game_play_move(game g, uint i, uint j, square s) {
-  if (g == NULL || i >= DEFAULT_SIZE || j >= DEFAULT_SIZE || s == TREE ||
+  if (g == NULL || i >= g->nb_rows || j >= g->nb_cols || s == TREE ||
       game_get_square(g, i, j) == TREE) {
     exit(EXIT_FAILURE);
   }
@@ -350,7 +346,7 @@ void game_play_move(game g, uint i, uint j, square s) {
 /********************* Guillaume *********************/
 
 int game_check_move(cgame g, uint i, uint j, square s) {
-  if (g == NULL || i >= DEFAULT_SIZE || j >= DEFAULT_SIZE) {
+  if (g == NULL || i >= g->nb_rows || j >= g->nb_cols) {
     fprintf(stderr, "parameter not valid!\n");
     exit(EXIT_FAILURE);
   }
@@ -372,7 +368,7 @@ int game_check_move(cgame g, uint i, uint j, square s) {
     return LOSING;  // tent i==0 bordure j exclue
   }
 
-  if (i > 0 && i < DEFAULT_SIZE - 1 && j > 0 && j < DEFAULT_SIZE - 1 &&
+  if (i > 0 && i < g->nb_rows - 1 && j > 0 && j < g->nb_cols - 1 &&
       s == TENT &&
       (game_get_square(g, i - 1, j) == TENT ||
        game_get_square(g, i + 1, j) == TENT ||
@@ -397,7 +393,7 @@ int game_check_move(cgame g, uint i, uint j, square s) {
     return LOSING;
   }
 
-  if (i > 0 && j == 0 && i < DEFAULT_SIZE - 1 && s == TENT &&
+  if (i > 0 && j == 0 && i < g->nb_rows - 1 && s == TENT &&
       (game_get_square(g, i - 1, j) == TENT ||
        game_get_square(g, i + 1, j) == TENT ||
        game_get_square(g, i, j + 1) == TENT ||
@@ -408,7 +404,7 @@ int game_check_move(cgame g, uint i, uint j, square s) {
     return LOSING;
   }
 
-  if (i == DEFAULT_SIZE - 1 && j == 0 && s == TENT &&
+  if (i == g->nb_rows - 1 && j == 0 && s == TENT &&
       (game_get_square(g, i - 1, j) == TENT ||
        game_get_square(g, i, j + 1) == TENT ||
        (game_get_square(g, i - 1, j + 1) == TENT &&
@@ -416,7 +412,7 @@ int game_check_move(cgame g, uint i, uint j, square s) {
     return LOSING;
   }
 
-  if (i == DEFAULT_SIZE - 1 && j > 0 && j < DEFAULT_SIZE - 1 && s == TENT &&
+  if (i == g->nb_rows - 1 && j > 0 && j < g->nb_cols - 1 && s == TENT &&
       (game_get_square(g, i - 1, j) == TENT ||
        game_get_square(g, i, j - 1) == TENT ||
        game_get_square(g, i, j + 1) == TENT ||
@@ -424,11 +420,11 @@ int game_check_move(cgame g, uint i, uint j, square s) {
         game_is_diagadj(g) == false) ||
        (game_get_square(g, i - 1, j + 1) == TENT &&
         game_is_diagadj(g) ==
-            false))) {  // tent i==DEFAULT_SIZE-1 bordure j exclue
+            false))) {  // tent i==g->nb_rows-1 bordure j exclue
     return LOSING;
   }
 
-  if (i == DEFAULT_SIZE - 1 && j == DEFAULT_SIZE - 1 && s == TENT &&
+  if (i == g->nb_rows - 1 && j == g->nb_cols - 1 && s == TENT &&
       (game_get_square(g, i - 1, j) == TENT ||
        game_get_square(g, i, j - 1) == TENT ||
        (game_get_square(g, i - 1, j - 1) == TENT &&
@@ -436,7 +432,7 @@ int game_check_move(cgame g, uint i, uint j, square s) {
     return LOSING;
   }
 
-  if (i > 0 && j == DEFAULT_SIZE - 1 && i < DEFAULT_SIZE - 1 && s == TENT &&
+  if (i > 0 && j == g->nb_cols - 1 && i < g->nb_rows- 1 && s == TENT &&
       (game_get_square(g, i - 1, j) == TENT ||
        game_get_square(g, i + 1, j) == TENT ||
        game_get_square(g, i, j - 1) == TENT ||
@@ -444,11 +440,11 @@ int game_check_move(cgame g, uint i, uint j, square s) {
         game_is_diagadj(g) == false) ||
        (game_get_square(g, i - 1, j - 1) == TENT &&
         game_is_diagadj(g) ==
-            false))) {  // tent j==DEFAULT_SIZE-1 bordure i exclue
+            false))) {  // tent j==g->nb_cols-1 bordure i exclue
     return LOSING;
   }
 
-  if (i == 0 && j == DEFAULT_SIZE - 1 && s == TENT &&
+  if (i == 0 && j == g->nb_cols - 1 && s == TENT &&
       (game_get_square(g, i + 1, j) == TENT ||
        game_get_square(g, i, j - 1) == TENT ||
        (game_get_square(g, i + 1, j - 1) == TENT &&
@@ -457,14 +453,14 @@ int game_check_move(cgame g, uint i, uint j, square s) {
   }
   //---Analyse arbre présent au moins une fois autour d'une tente donnée---//
 
-  if (i == 0 && s == TENT && j > 0 && j < DEFAULT_SIZE - 1 &&
+  if (i == 0 && s == TENT && j > 0 && j < g->nb_cols - 1 &&
       game_get_square(g, i + 1, j) != TREE &&
       game_get_square(g, i, j - 1) != TREE &&
       game_get_square(g, i, j + 1) != TREE) {  // tent i==0 bordure j exclue
     return LOSING;
   }
-  if (i > 0 && s == TENT && i < DEFAULT_SIZE - 1 && j > 0 &&
-      j < DEFAULT_SIZE - 1 && game_get_square(g, i - 1, j) != TREE &&
+  if (i > 0 && s == TENT && i < g->nb_rows - 1 && j > 0 &&
+      j < g->nb_cols - 1 && game_get_square(g, i - 1, j) != TREE &&
       game_get_square(g, i + 1, j) != TREE &&
       game_get_square(g, i, j - 1) != TREE &&
       game_get_square(g, i, j + 1) != TREE) {  // tent toute bordure exclue
@@ -474,38 +470,38 @@ int game_check_move(cgame g, uint i, uint j, square s) {
       game_get_square(g, i, j + 1) != TREE) {  // tent en haut a gauche
     return LOSING;
   }
-  if (i > 0 && s == TENT && j == 0 && i < DEFAULT_SIZE - 1 &&
+  if (i > 0 && s == TENT && j == 0 && i < g->nb_rows - 1 &&
       game_get_square(g, i - 1, j) != TREE &&
       game_get_square(g, i + 1, j) != TREE &&
       game_get_square(g, i, j + 1) !=
           TREE) {  // tent j==0 toute bordure i exclue
     return LOSING;
   }
-  if (i == DEFAULT_SIZE - 1 && s == TENT && j == 0 &&
+  if (i == g->nb_rows - 1 && s == TENT && j == 0 &&
       game_get_square(g, i - 1, j) != TREE &&
       game_get_square(g, i, j + 1) != TREE) {  // tent en bas a gauche
     return LOSING;
   }
-  if (i == DEFAULT_SIZE - 1 && s == TENT && j > 0 && j < DEFAULT_SIZE - 1 &&
+  if (i == g->nb_rows - 1 && s == TENT && j > 0 && j < g->nb_cols - 1 &&
       game_get_square(g, i - 1, j) != TREE &&
       game_get_square(g, i, j - 1) != TREE &&
       game_get_square(g, i, j + 1) !=
-          TREE) {  // tent i==DEFAULT_SIZE-1 bordure j exclue
+          TREE) {  // tent i==g->nb_rows-1 bordure j exclue
     return LOSING;
   }
-  if (i == DEFAULT_SIZE - 1 && s == TENT && j == DEFAULT_SIZE - 1 &&
+  if (i == g->nb_rows - 1 && s == TENT && j == g->nb_cols - 1 &&
       game_get_square(g, i - 1, j) != TREE &&
       game_get_square(g, i, j - 1) != TREE) {  // tent en bas a droite
     return LOSING;
   }
-  if (i > 0 && j == DEFAULT_SIZE - 1 && s == TENT && i < DEFAULT_SIZE - 1 &&
+  if (i > 0 && j == g->nb_cols - 1 && s == TENT && i < g->nb_rows - 1 &&
       game_get_square(g, i - 1, j) != TREE &&
       game_get_square(g, i + 1, j) != TREE &&
       game_get_square(g, i, j - 1) !=
-          TREE) {  // tent j==DEFAULT_SIZE-1 bordure i exclue
+          TREE) {  // tent j==g->nb_cols-1 bordure i exclue
     return LOSING;
   }
-  if (i == 0 && j == DEFAULT_SIZE - 1 && s == TENT &&
+  if (i == 0 && j == g->nb_cols - 1 && s == TENT &&
       game_get_square(g, i + 1, j) != TREE &&
       game_get_square(g, i, j - 1) != TREE) {  // tent en haut a droite
     return LOSING;
@@ -557,7 +553,7 @@ int game_check_move(cgame g, uint i, uint j, square s) {
     }
   }
 
-  if (i == 0 && j > 1 && j < DEFAULT_SIZE - 2 &&
+  if (i == 0 && j > 1 && j < g->nb_cols - 2 &&
       s == GRASS) {  // grass placé ligne du haut (i==0), "coin+" exclue
     if (game_get_square(g, i, j - 1) == TREE &&
         (game_get_square(g, i, j - 2) == TREE ||
@@ -584,7 +580,7 @@ int game_check_move(cgame g, uint i, uint j, square s) {
     }
   }
 
-  if (i == 0 && j == DEFAULT_SIZE - 2 &&
+  if (i == 0 && j == g->nb_cols - 2 &&
       s == GRASS) {  // grass placé coin droit haut -1 horizontal
     if (game_get_square(g, i, j - 1) == TREE &&
         (game_get_square(g, i + 1, j - 1) == TREE ||
@@ -609,7 +605,7 @@ int game_check_move(cgame g, uint i, uint j, square s) {
     }
   }
 
-  if (i == 0 && j == DEFAULT_SIZE - 1 &&
+  if (i == 0 && j == g->nb_cols - 1 &&
       s == GRASS) {  // grass placé coin droit haut
     if (game_get_square(g, i, j - 1) == TREE &&
         (game_get_square(g, i + 1, j - 1) == TREE ||
@@ -687,7 +683,7 @@ int game_check_move(cgame g, uint i, uint j, square s) {
     }
   }
 
-  if (i == 1 && j > 1 && j < DEFAULT_SIZE - 2 &&
+  if (i == 1 && j > 1 && j < g->nb_cols - 2 &&
       s == GRASS) {  // grass placé 2eme ligne du haut (i==1), "coin+" exclue
     if (game_get_square(g, i - 1, j) == TREE &&
         (game_get_square(g, i - 1, j - 1) == TREE ||
@@ -725,7 +721,7 @@ int game_check_move(cgame g, uint i, uint j, square s) {
     }
   }
 
-  if (i == 1 && j == DEFAULT_SIZE - 2 &&
+  if (i == 1 && j == g->nb_cols - 2 &&
       s == GRASS) {  // grass placé coin droit haut -1h +1v
     if (game_get_square(g, i - 1, j) == TREE &&
         (game_get_square(g, i - 1, j - 1) == TREE ||
@@ -761,7 +757,7 @@ int game_check_move(cgame g, uint i, uint j, square s) {
     }
   }
 
-  if (i == 1 && j == DEFAULT_SIZE - 1 &&
+  if (i == 1 && j == g->nb_cols - 1 &&
       s == GRASS) {  // grass placé coin droit haut +1 verticale
     if (game_get_square(g, i - 1, j) == TREE &&
         (game_get_square(g, i - 1, j - 1) == TREE ||
@@ -786,7 +782,7 @@ int game_check_move(cgame g, uint i, uint j, square s) {
     }
   }
 
-  if (j == 0 && i > 1 && i < DEFAULT_SIZE - 2 &&
+  if (j == 0 && i > 1 && i < g->nb_rows - 2 &&
       s == GRASS) {  // grass placé ligne gauche (j==0), "coin+" exclue
     if (game_get_square(g, i - 1, j) == TREE &&
         (game_get_square(g, i - 2, j) == TREE ||
@@ -813,7 +809,7 @@ int game_check_move(cgame g, uint i, uint j, square s) {
     }
   }
 
-  if (j == 1 && i > 1 && i < DEFAULT_SIZE - 2 &&
+  if (j == 1 && i > 1 && i <g->nb_rows - 2 &&
       s == GRASS) {  // grass placé 2eme ligne gauche (j==1), "coin+" exclue
     if (game_get_square(g, i - 1, j) == TREE &&
         (game_get_square(g, i - 1, j - 1) == TREE ||
@@ -851,7 +847,7 @@ int game_check_move(cgame g, uint i, uint j, square s) {
     }
   }
 
-  if (j > 1 && j < DEFAULT_SIZE - 2 && i > 1 && i < DEFAULT_SIZE - 2 &&
+  if (j > 1 && j < g->nb_cols - 2 && i > 1 && i < g->nb_rows- 2 &&
       s == GRASS) {  // grass placé "centre jeu", "coin+" exclue
     if (game_get_square(g, i - 1, j) == TREE &&
         (game_get_square(g, i - 1, j - 1) == TREE ||
@@ -891,8 +887,8 @@ int game_check_move(cgame g, uint i, uint j, square s) {
     }
   }
 
-  if (j == DEFAULT_SIZE - 2 && i > 1 && i < DEFAULT_SIZE - 2 &&
-      s == GRASS) {  // grass placé ligne droite-1 (j==DEFAULT_SIZE-2), "coin+"
+  if (j == g->nb_cols - 2 && i > 1 && i < g->nb_rows - 2 &&
+      s == GRASS) {  // grass placé ligne droite-1 (j==g->nb_cols-2), "coin+"
                      // exclue
     if (game_get_square(g, i - 1, j) == TREE &&
         (game_get_square(g, i - 1, j - 1) == TREE ||
@@ -930,8 +926,8 @@ int game_check_move(cgame g, uint i, uint j, square s) {
     }
   }
 
-  if (j == DEFAULT_SIZE - 1 && i > 1 && i < DEFAULT_SIZE - 2 &&
-      s == GRASS) {  // grass placé ligne droite (j==DEFAULT_SIZE-1), "coin+"
+  if (j == g->nb_cols - 1 && i > 1 && i < g->nb_rows - 2 &&
+      s == GRASS) {  // grass placé ligne droite (j==g->nb_cols-1), "coin+"
                      // exclue
     if (game_get_square(g, i - 1, j) == TREE &&
         (game_get_square(g, i - 1, j - 1) == TREE ||
@@ -958,7 +954,7 @@ int game_check_move(cgame g, uint i, uint j, square s) {
     }
   }
 
-  if (j == 0 && i == DEFAULT_SIZE - 2 &&
+  if (j == 0 && i == g->nb_rows - 2 &&
       s == GRASS) {  // grass placé coin gauche bas -1v
     if (game_get_square(g, i - 1, j) == TREE &&
         (game_get_square(g, i - 2, j) == TREE ||
@@ -983,7 +979,7 @@ int game_check_move(cgame g, uint i, uint j, square s) {
     }
   }
 
-  if (j == 1 && i == DEFAULT_SIZE - 2 &&
+  if (j == 1 && i == g->nb_rows - 2 &&
       s == GRASS) {  // grass placé coin gauche bas -1v +1h
     if (game_get_square(g, i - 1, j) == TREE &&
         (game_get_square(g, i - 1, j - 1) == TREE ||
@@ -1019,8 +1015,8 @@ int game_check_move(cgame g, uint i, uint j, square s) {
     }
   }
 
-  if (i == DEFAULT_SIZE - 2 && j > 1 && j < DEFAULT_SIZE - 2 &&
-      s == GRASS) {  // grass placé ligne du bas-1 (i==DEFAULT_SIZE-2), "coin+"
+  if (i == g->nb_rows - 2 && j > 1 && j < g->nb_cols - 2 &&
+      s == GRASS) {  // grass placé ligne du bas-1 (i==g->nb_rows-2), "coin+"
                      // exclue
     if (game_get_square(g, i - 1, j) == TREE &&
         (game_get_square(g, i - 1, j - 1) == TREE ||
@@ -1058,7 +1054,7 @@ int game_check_move(cgame g, uint i, uint j, square s) {
     }
   }
 
-  if (j == DEFAULT_SIZE - 2 && i == DEFAULT_SIZE - 2 &&
+  if (j == g->nb_cols - 2 && i == g->nb_rows - 2 &&
       s == GRASS) {  // grass placé coin droit bas -1v -1h
     if (game_get_square(g, i - 1, j) == TREE &&
         (game_get_square(g, i - 1, j - 1) == TREE ||
@@ -1094,7 +1090,7 @@ int game_check_move(cgame g, uint i, uint j, square s) {
     }
   }
 
-  if (j == DEFAULT_SIZE - 1 && i == DEFAULT_SIZE - 2 &&
+  if (j == g->nb_cols - 1 && i == g->nb_rows - 2 &&
       s == GRASS) {  // grass placé coin droit bas -1v
     if (game_get_square(g, i - 1, j) == TREE &&
         (game_get_square(g, i - 1, j - 1) == TREE ||
@@ -1117,7 +1113,7 @@ int game_check_move(cgame g, uint i, uint j, square s) {
     }
   }
 
-  if (j == 0 && i == DEFAULT_SIZE - 1 &&
+  if (j == 0 && i == g->nb_rows - 1 &&
       s == GRASS) {  // grass placé coin gauche bas
     if (game_get_square(g, i - 1, j) == TREE &&
         (game_get_square(g, i - 2, j) == TREE ||
@@ -1135,7 +1131,7 @@ int game_check_move(cgame g, uint i, uint j, square s) {
     }
   }
 
-  if (j == 1 && i == DEFAULT_SIZE - 1 &&
+  if (j == 1 && i == g->nb_rows - 1 &&
       s == GRASS) {  // grass placé coin gauche bas +1h
     if (game_get_square(g, i, j - 1) == TREE &&
         (game_get_square(g, i - 1, j - 1) == TREE ||
@@ -1160,8 +1156,8 @@ int game_check_move(cgame g, uint i, uint j, square s) {
     }
   }
 
-  if (i == DEFAULT_SIZE - 1 && j > 1 && j < DEFAULT_SIZE - 2 &&
-      s == GRASS) {  // grass placé ligne du bas (i==DEFAULT_SIZE-1), "coin+"
+  if (i == g->nb_rows - 1 && j > 1 && j < g->nb_cols - 2 &&
+      s == GRASS) {  // grass placé ligne du bas (i==g->nb_rows-1), "coin+"
                      // exclue
     if (game_get_square(g, i - 1, j) == TREE &&
         (game_get_square(g, i - 1, j - 1) == TREE ||
@@ -1188,7 +1184,7 @@ int game_check_move(cgame g, uint i, uint j, square s) {
     }
   }
 
-  if (j == DEFAULT_SIZE - 2 && i == DEFAULT_SIZE - 1 &&
+  if (j == g->nb_cols - 2 && i == g->nb_rows - 1 &&
       s == GRASS) {  // grass placé coin droit bas -1h
     if (game_get_square(g, i - 1, j) == TREE &&
         (game_get_square(g, i - 1, j - 1) == TREE ||
@@ -1213,7 +1209,7 @@ int game_check_move(cgame g, uint i, uint j, square s) {
     }
   }
 
-  if (j == DEFAULT_SIZE - 1 && i == DEFAULT_SIZE - 1 &&
+  if (j == g->nb_cols - 1 && i == g->nb_rows - 1 &&
       s == GRASS) {  // grass placé coin droit bas
     if (game_get_square(g, i - 1, j) == TREE &&
         (game_get_square(g, i - 1, j - 1) == TREE ||
@@ -1248,14 +1244,14 @@ int game_check_move(cgame g, uint i, uint j, square s) {
 
   /*Compteur de EMPTY colonne*/
   uint c = 0;
-  for (uint x = 0; x < DEFAULT_SIZE; x++) {
+  for (uint x = 0; x < g->nb_rows; x++) {
     if (game_get_square(g, x, j) == EMPTY) {
       c++;
     }
   }
   /*Compteur de EMPTY ligne*/
   uint d = 0;
-  for (uint y = 0; y < DEFAULT_SIZE; y++) {
+  for (uint y = 0; y < g->nb_cols; y++) {
     if (game_get_square(g, i, y) == EMPTY) {
       d++;
     }
@@ -1280,9 +1276,9 @@ bool game_is_over(cgame g) {
   //------------------------------------Analyse si tente présente
   // autour(+diagonale) d'une tente
   // donnée-----------------------------------------//
-  for (uint i = 0; i < DEFAULT_SIZE; i++) {
-    for (uint j = 0; j < DEFAULT_SIZE; j++) {
-      if (i == 0 && j > 0 && j < DEFAULT_SIZE - 1 &&
+  for (uint i = 0; i < g->nb_rows; i++) {
+    for (uint j = 0; j < g->nb_cols; j++) {
+      if (i == 0 && j > 0 && j < g->nb_cols - 1 &&
           game_get_square(g, i, j) == TENT &&
           (game_get_square(g, i + 1, j) == TENT ||
            game_get_square(g, i, j - 1) == TENT ||
@@ -1291,7 +1287,7 @@ bool game_is_over(cgame g) {
            game_get_square(g, i + 1, j - 1) == TENT)) {
         return false;  // tent i==0 bordure j exclue
       }
-      if (i > 0 && i < DEFAULT_SIZE - 1 && j > 0 && j < DEFAULT_SIZE - 1 &&
+      if (i > 0 && i < g->nb_rows - 1 && j > 0 && j < g->nb_cols - 1 &&
           game_get_square(g, i, j) == TENT &&
           (game_get_square(g, i - 1, j) == TENT ||
            game_get_square(g, i + 1, j) == TENT ||
@@ -1311,7 +1307,7 @@ bool game_is_over(cgame g) {
                TENT)) {  // tent en haut a gauche
         return false;
       }
-      if (i > 0 && j == 0 && i < DEFAULT_SIZE - 1 &&
+      if (i > 0 && j == 0 && i < g->nb_rows - 1 &&
           game_get_square(g, i, j) == TENT &&
           (game_get_square(g, i - 1, j) == TENT ||
            game_get_square(g, i + 1, j) == TENT ||
@@ -1321,40 +1317,40 @@ bool game_is_over(cgame g) {
                TENT)) {  // tent j==0 toute bordure i exclue
         return false;
       }
-      if (i == DEFAULT_SIZE - 1 && j == 0 && game_get_square(g, i, j) == TENT &&
+      if (i == g->nb_rows - 1 && j == 0 && game_get_square(g, i, j) == TENT &&
           (game_get_square(g, i - 1, j) == TENT ||
            game_get_square(g, i, j + 1) == TENT ||
            game_get_square(g, i - 1, j + 1) == TENT)) {  // tent en bas a gauche
         return false;
       }
-      if (i == DEFAULT_SIZE - 1 && j > 0 && j < DEFAULT_SIZE - 1 &&
+      if (i == g->nb_rows- 1 && j > 0 && j < g->nb_cols - 1 &&
           game_get_square(g, i, j) == TENT &&
           (game_get_square(g, i - 1, j) == TENT ||
            game_get_square(g, i, j - 1) == TENT ||
            game_get_square(g, i, j + 1) == TENT ||
            game_get_square(g, i - 1, j - 1) == TENT ||
            game_get_square(g, i - 1, j + 1) ==
-               TENT)) {  // tent i==DEFAULT_SIZE-1 bordure j exclue
+               TENT)) {  // tent i==g->nb_rows-1 bordure j exclue
         return false;
       }
-      if (i == DEFAULT_SIZE - 1 && j == DEFAULT_SIZE - 1 &&
+      if (i == g->nb_rows - 1 && j == g->nb_cols - 1 &&
           game_get_square(g, i, j) == TENT &&
           (game_get_square(g, i - 1, j) == TENT ||
            game_get_square(g, i, j - 1) == TENT ||
            game_get_square(g, i - 1, j - 1) == TENT)) {  // tent en bas a droite
         return false;
       }
-      if (i > 0 && j == DEFAULT_SIZE - 1 && i < DEFAULT_SIZE - 1 &&
+      if (i > 0 && j == g->nb_cols - 1 && i < g->nb_rows - 1 &&
           game_get_square(g, i, j) == TENT &&
           (game_get_square(g, i - 1, j) == TENT ||
            game_get_square(g, i + 1, j) == TENT ||
            game_get_square(g, i, j - 1) == TENT ||
            game_get_square(g, i + 1, j - 1) == TENT ||
            game_get_square(g, i - 1, j - 1) ==
-               TENT)) {  // tent j==DEFAULT_SIZE-1 bordure i exclue
+               TENT)) {  // tent j==g->nb_cols-1 bordure i exclue
         return false;
       }
-      if (i == 0 && j == DEFAULT_SIZE - 1 && game_get_square(g, i, j) == TENT &&
+      if (i == 0 && j == g->nb_cols - 1 && game_get_square(g, i, j) == TENT &&
           (game_get_square(g, i + 1, j) == TENT ||
            game_get_square(g, i, j - 1) == TENT ||
            game_get_square(g, i + 1, j - 1) ==
@@ -1365,14 +1361,14 @@ bool game_is_over(cgame g) {
       // fois autour d'une tente
       // donnée-----------------------------------------//
 
-      if (i == 0 && j > 0 && j < DEFAULT_SIZE - 1 &&
+      if (i == 0 && j > 0 && j < g->nb_cols - 1 &&
           game_get_square(g, i, j) == TENT &&
           game_get_square(g, i + 1, j) != TREE &&
           game_get_square(g, i, j - 1) != TREE &&
           game_get_square(g, i, j + 1) != TREE) {  // tent i==0 bordure j exclue
         return false;
       }
-      if (i > 0 && i < DEFAULT_SIZE - 1 && j > 0 && j < DEFAULT_SIZE - 1 &&
+      if (i > 0 && i < g->nb_rows - 1 && j > 0 && j < g->nb_cols - 1 &&
           game_get_square(g, i, j) == TENT &&
           game_get_square(g, i - 1, j) != TREE &&
           game_get_square(g, i + 1, j) != TREE &&
@@ -1385,7 +1381,7 @@ bool game_is_over(cgame g) {
           game_get_square(g, i, j + 1) != TREE) {  // tent en haut a gauche
         return false;
       }
-      if (i > 0 && j == 0 && i < DEFAULT_SIZE - 1 &&
+      if (i > 0 && j == 0 && i < g->nb_rows - 1 &&
           game_get_square(g, i, j) == TENT &&
           game_get_square(g, i - 1, j) != TREE &&
           game_get_square(g, i + 1, j) != TREE &&
@@ -1393,35 +1389,35 @@ bool game_is_over(cgame g) {
               TREE) {  // tent j==0 toute bordure i exclue
         return false;
       }
-      if (i == DEFAULT_SIZE - 1 && j == 0 &&
+      if (i == g->nb_rows - 1 && j == 0 &&
           game_get_square(g, i - 1, j) != TREE &&
           game_get_square(g, i, j) == TENT &&
           game_get_square(g, i, j + 1) != TREE) {  // tent en bas a gauche
         return false;
       }
-      if (i == DEFAULT_SIZE - 1 && j > 0 && j < DEFAULT_SIZE - 1 &&
+      if (i == g->nb_rows - 1 && j > 0 && j < g->nb_cols- 1 &&
           game_get_square(g, i, j) == TENT &&
           game_get_square(g, i - 1, j) != TREE &&
           game_get_square(g, i, j - 1) != TREE &&
           game_get_square(g, i, j + 1) !=
-              TREE) {  // tent i==DEFAULT_SIZE-1 bordure j exclue
+              TREE) {  // tent i==g->nb_rows-1 bordure j exclue
         return false;
       }
-      if (i == DEFAULT_SIZE - 1 && j == DEFAULT_SIZE - 1 &&
+      if (i == g->nb_rows - 1 && j == g->nb_cols - 1 &&
           game_get_square(g, i, j) == TENT &&
           game_get_square(g, i - 1, j) != TREE &&
           game_get_square(g, i, j - 1) != TREE) {  // tent en bas a droite
         return false;
       }
-      if (i > 0 && j == DEFAULT_SIZE - 1 && i < DEFAULT_SIZE - 1 &&
+      if (i > 0 && j == g->nb_cols - 1 && i < g->nb_rows - 1 &&
           game_get_square(g, i, j) == TENT &&
           game_get_square(g, i - 1, j) != TREE &&
           game_get_square(g, i + 1, j) != TREE &&
           game_get_square(g, i, j - 1) !=
-              TREE) {  // tent j==DEFAULT_SIZE-1 bordure i exclue
+              TREE) {  // tent j==g->nb_cols-1 bordure i exclue
         return false;
       }
-      if (i == 0 && j == DEFAULT_SIZE - 1 &&
+      if (i == 0 && j == g->nb_cols - 1 &&
           game_get_square(g, i + 1, j) != TREE &&
           game_get_square(g, i, j) == TENT &&
           game_get_square(g, i, j - 1) != TREE) {  // tent en haut a droite
@@ -1452,11 +1448,11 @@ bool game_is_over(cgame g) {
   return true;
 }
 void game_fill_grass_row(game g, uint i) {
-  if (g == NULL || i >= DEFAULT_SIZE) {
+  if (g == NULL || i >= g->nb_cols) {
     fprintf(stderr, "parameter not valid!\n");
     exit(EXIT_FAILURE);
   }
-  for (uint j = 0; j < DEFAULT_SIZE; j++) {
+  for (uint j = 0; j < g->nb_cols; j++) {
     if (game_get_square(g, i, j) == EMPTY) {
       game_set_square(g, i, j, GRASS);
     }
@@ -1464,11 +1460,11 @@ void game_fill_grass_row(game g, uint i) {
 }
 
 void game_fill_grass_col(game g, uint j) {
-  if (g == NULL || j >= DEFAULT_SIZE) {
+  if (g == NULL || j >= g->nb_cols) {
     fprintf(stderr, "parameter not valid!\n");
     exit(EXIT_FAILURE);
   }
-  for (unsigned int i = 0; i < DEFAULT_SIZE; i++) {
+  for (unsigned int i = 0; i < g->nb_rows; i++) {
     if (game_get_square(g, i, j) == EMPTY) {
       game_set_square(g, i, j, GRASS);
     }
@@ -1480,8 +1476,8 @@ void game_restart(game g) {
     fprintf(stderr, "parameter not valid!\n");
     exit(EXIT_FAILURE);
   }
-  for (unsigned int i = 0; i < DEFAULT_SIZE; i++) {
-    for (unsigned int j = 0; j < DEFAULT_SIZE; j++) {
+  for (unsigned int i = 0; i < g->nb_rows; i++) {
+    for (unsigned int j = 0; j < g->nb_cols; j++) {
       if (game_get_square(g, i, j) != TREE) {
         game_set_square(g, i, j, EMPTY);
       }
