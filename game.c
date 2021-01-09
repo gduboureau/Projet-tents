@@ -1,8 +1,8 @@
+#include "game.h"
 #include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "game.h"
 #include "game_ext.h"
 
 typedef struct game_s {
@@ -244,7 +244,7 @@ void game_set_square(game g, uint i, uint j, square s) {
 /********************* Hugo *********************/
 
 square game_get_square(cgame g, uint i, uint j) {
-  if (g == NULL || i >= g->nb_rows || j >= g->nb_cols|| i < 0 || j < 0) {
+  if (g == NULL || i >= g->nb_rows || j >= g->nb_cols || i < 0 || j < 0) {
     fprintf(stderr, "parameter not valid!\n");
     exit(EXIT_FAILURE);
   }
@@ -368,8 +368,7 @@ int game_check_move(cgame g, uint i, uint j, square s) {
     return LOSING;  // tent i==0 bordure j exclue
   }
 
-  if (i > 0 && i < g->nb_rows - 1 && j > 0 && j < g->nb_cols - 1 &&
-      s == TENT &&
+  if (i > 0 && i < g->nb_rows - 1 && j > 0 && j < g->nb_cols - 1 && s == TENT &&
       (game_get_square(g, i - 1, j) == TENT ||
        game_get_square(g, i + 1, j) == TENT ||
        game_get_square(g, i, j - 1) == TENT ||
@@ -432,7 +431,7 @@ int game_check_move(cgame g, uint i, uint j, square s) {
     return LOSING;
   }
 
-  if (i > 0 && j == g->nb_cols - 1 && i < g->nb_rows- 1 && s == TENT &&
+  if (i > 0 && j == g->nb_cols - 1 && i < g->nb_rows - 1 && s == TENT &&
       (game_get_square(g, i - 1, j) == TENT ||
        game_get_square(g, i + 1, j) == TENT ||
        game_get_square(g, i, j - 1) == TENT ||
@@ -459,8 +458,8 @@ int game_check_move(cgame g, uint i, uint j, square s) {
       game_get_square(g, i, j + 1) != TREE) {  // tent i==0 bordure j exclue
     return LOSING;
   }
-  if (i > 0 && s == TENT && i < g->nb_rows - 1 && j > 0 &&
-      j < g->nb_cols - 1 && game_get_square(g, i - 1, j) != TREE &&
+  if (i > 0 && s == TENT && i < g->nb_rows - 1 && j > 0 && j < g->nb_cols - 1 &&
+      game_get_square(g, i - 1, j) != TREE &&
       game_get_square(g, i + 1, j) != TREE &&
       game_get_square(g, i, j - 1) != TREE &&
       game_get_square(g, i, j + 1) != TREE) {  // tent toute bordure exclue
@@ -809,7 +808,7 @@ int game_check_move(cgame g, uint i, uint j, square s) {
     }
   }
 
-  if (j == 1 && i > 1 && i <g->nb_rows - 2 &&
+  if (j == 1 && i > 1 && i < g->nb_rows - 2 &&
       s == GRASS) {  // grass placé 2eme ligne gauche (j==1), "coin+" exclue
     if (game_get_square(g, i - 1, j) == TREE &&
         (game_get_square(g, i - 1, j - 1) == TREE ||
@@ -847,7 +846,7 @@ int game_check_move(cgame g, uint i, uint j, square s) {
     }
   }
 
-  if (j > 1 && j < g->nb_cols - 2 && i > 1 && i < g->nb_rows- 2 &&
+  if (j > 1 && j < g->nb_cols - 2 && i > 1 && i < g->nb_rows - 2 &&
       s == GRASS) {  // grass placé "centre jeu", "coin+" exclue
     if (game_get_square(g, i - 1, j) == TREE &&
         (game_get_square(g, i - 1, j - 1) == TREE ||
@@ -1323,7 +1322,7 @@ bool game_is_over(cgame g) {
            game_get_square(g, i - 1, j + 1) == TENT)) {  // tent en bas a gauche
         return false;
       }
-      if (i == g->nb_rows- 1 && j > 0 && j < g->nb_cols - 1 &&
+      if (i == g->nb_rows - 1 && j > 0 && j < g->nb_cols - 1 &&
           game_get_square(g, i, j) == TENT &&
           (game_get_square(g, i - 1, j) == TENT ||
            game_get_square(g, i, j - 1) == TENT ||
@@ -1395,7 +1394,7 @@ bool game_is_over(cgame g) {
           game_get_square(g, i, j + 1) != TREE) {  // tent en bas a gauche
         return false;
       }
-      if (i == g->nb_rows - 1 && j > 0 && j < g->nb_cols- 1 &&
+      if (i == g->nb_rows - 1 && j > 0 && j < g->nb_cols - 1 &&
           game_get_square(g, i, j) == TENT &&
           game_get_square(g, i - 1, j) != TREE &&
           game_get_square(g, i, j - 1) != TREE &&

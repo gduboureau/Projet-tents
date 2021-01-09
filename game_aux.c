@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "game.h"
+#include "game_ext.h"
 
 void game_print(cgame g) {
   printf("   ");
@@ -63,7 +64,7 @@ game game_default(void) {
                       EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY,
                       TREE,  EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY};
 
-  game g = game_new(squares, tentes_lig, tentes_col);
+  game g = game_new_ext(8, 8, squares, tentes_lig, tentes_col, false, false);
 
   return g;
 }
@@ -80,7 +81,7 @@ game game_default_solution(void) {
                       TREE, GRASS, GRASS, GRASS, TREE,  GRASS, TREE,  GRASS,
                       TENT, GRASS, GRASS, GRASS, GRASS, GRASS, GRASS, GRASS,
                       TREE, GRASS, GRASS, GRASS, GRASS, GRASS, GRASS, GRASS};
-  game g = game_new(squares, tentes_lig, tentes_col);
+  game g = game_new_ext(8, 8, squares, tentes_lig, tentes_col, false, false);
 
   return g;
 }
