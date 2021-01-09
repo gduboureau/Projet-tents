@@ -31,7 +31,7 @@ bool test_game_is_over(void) {
 
   /* test si un tree est adjacent avec au moins une tent */
 
-  game g1 = game_new_empty();
+  game g1 = game_new_empty_ext(8,8,false,false);
 
   if (game_is_over(g1) == false) {
     game_delete(g1);
@@ -52,7 +52,7 @@ bool test_game_is_over(void) {
 
   /* test avec deux tents adjacentes*/
 
-  game g2 = game_new_empty();
+  game g2 = game_new_empty_ext(8,8,false,false);
 
   game_set_expected_nb_tents_row(g2, 0, 2);
   game_set_expected_nb_tents_col(g2, 2, 1);
