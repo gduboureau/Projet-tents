@@ -263,6 +263,14 @@ void game_delete(game g) {
   g->nb_tents_col = NULL;
   free(g->nb_tents_row);
   g->nb_tents_row = NULL;
+  if (g->pile1 != NULL) {
+    queue_free(g->pile1);
+    g->pile1 = NULL;
+  }
+  if (g->pile2 != NULL) {
+    queue_free(g->pile2);
+    g->pile2 = NULL;
+  }
   free(g);
   g = NULL;
 }
