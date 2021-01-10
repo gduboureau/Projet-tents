@@ -391,7 +391,6 @@ void game_play_move(game g, uint i, uint j, square s) {
   assert(data0);
   *data0 = p0;
   queue_push_head(g->pile1, data0);
-  free(data0);
 
   coup p1;
   p1.s = s;
@@ -401,7 +400,6 @@ void game_play_move(game g, uint i, uint j, square s) {
   assert(data);
   *data = p1;
   queue_push_head(g->pile1, data);
-  free(data);
   game_set_square(g, i, j, s);
 }
 
@@ -1535,7 +1533,6 @@ void game_fill_grass_row(game g, uint i) {
       coup *data0 = (coup *)malloc(sizeof(coup));
       *data0 = p0;
       queue_push_head(g->pile1, data0);
-      free(data0);
       struct coup p1;
       p1.s = GRASS;
       p1.i = i;
@@ -1543,7 +1540,6 @@ void game_fill_grass_row(game g, uint i) {
       coup *data = (coup *)malloc(sizeof(coup));
       *data = p1;
       queue_push_head(g->pile1, data);
-      free(data);
       game_set_square(g, i, j, GRASS);
     }
   }
@@ -1589,10 +1585,8 @@ void game_restart(game g) {
   }
   while (!queue_is_empty(g->pile1)) {
     coup *data = (coup *)queue_pop_head(g->pile1);
-    free(data);
   }
   while (!queue_is_empty(g->pile2)) {
     coup *data1 = (coup *)queue_pop_head(g->pile2);
-    free(data1);
   }
 }
