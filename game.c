@@ -390,7 +390,7 @@ void game_play_move(game g, uint i, uint j, square s) {
       game_get_square(g, i, j) == TREE) {
     exit(EXIT_FAILURE);
   }
-  /*queue_clear(g->pile2);
+  g->pile2 = queue_new();
   struct coup p0;
   p0.s = game_get_square(g, i, j);
   p0.i = i;
@@ -407,7 +407,7 @@ void game_play_move(game g, uint i, uint j, square s) {
   coup *data = (coup *)malloc(sizeof(coup));
   assert(data);
   *data = p1;
-  queue_push_head(g->pile1, data);*/
+  queue_push_head(g->pile1, data);
   game_set_square(g, i, j, s);
 }
 
