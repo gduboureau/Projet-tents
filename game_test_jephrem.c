@@ -94,39 +94,45 @@ bool test_game_equal(void) {
   game g3 = game_new_empty_ext(8, 8, true, true);
   game g4 = game_copy(g3);
 
-  if (game_equal(g3, g4) == false ||
-      game_is_diagadj(g3) != game_is_diagadj(g4) ||
-      game_is_wrapping(g3) != game_is_wrapping(g4) ||
-      game_nb_rows(g3) != game_nb_rows(g4) ||
-      game_nb_cols(g3) != game_nb_cols(g4)) {
+  if (game_equal(g3, g4) == false) {
     game_delete(g1);
     game_delete(g2);
     game_delete(g3);
     game_delete(g4);
     return false;
   }
-  game g5 = game_new_empty_ext(8, 7, false, true);
-  game g6 = game_new_empty_ext(4, 8, true, false);
+  game g5 = game_new_ext(8, 8, squares, tentes_lig, tentes_col, false, true);
+  game g6 = game_new_ext(8, 8, squares, tentes_lig, tentes_col, false, false);
+  game g7 = game_new_ext(8, 8, squares, tentes_lig, tentes_col, true, false);
 
-  if (game_equal(g5, g6) == true ||
-      game_is_diagadj(g5) == game_is_diagadj(g6) ||
-      game_is_wrapping(g5) == game_is_wrapping(g6) ||
-      game_nb_rows(g5) == game_nb_rows(g6) ||
-      game_nb_cols(g5) == game_nb_cols(g6)) {
+  if (game_equal(g5, g6) == true) {
     game_delete(g1);
     game_delete(g2);
     game_delete(g3);
     game_delete(g4);
     game_delete(g5);
     game_delete(g6);
+    game_delete(g7);
     return false;
   }
+  if (game_equal(g5, g7) == true) {
+    game_delete(g1);
+    game_delete(g2);
+    game_delete(g3);
+    game_delete(g4);
+    game_delete(g5);
+    game_delete(g6);
+    game_delete(g7);
+    return false;
+  }
+
   game_delete(g1);
   game_delete(g2);
   game_delete(g3);
   game_delete(g4);
   game_delete(g5);
   game_delete(g6);
+  game_delete(g7);
   return true;
 }
 /* *********************************************************** */
