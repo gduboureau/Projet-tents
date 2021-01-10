@@ -3,6 +3,8 @@
 #include "game.h"
 #include "game_aux.c"
 #include "game_aux.h"
+#include "game.c"
+#include "game_ext.h"
 
 int main(void) {
   game g = game_default();
