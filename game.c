@@ -1585,8 +1585,10 @@ void game_restart(game g) {
   }
   while (!queue_is_empty(g->pile1)) {
     coup *data = (coup *)queue_pop_head(g->pile1);
+    free(data);
   }
   while (!queue_is_empty(g->pile2)) {
     coup *data1 = (coup *)queue_pop_head(g->pile2);
+    free(data1);
   }
 }
