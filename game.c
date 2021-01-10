@@ -135,19 +135,19 @@ bool game_is_diagadj(cgame g) {
 
 /********************* Jennifer *********************/
 void game_undo(game g) {
-  /*if (!queue_is_empty(g->pile1)) {
+  if (!queue_is_empty(g->pile1)) {
     coup *data = (coup *)queue_pop_head(g->pile1);
     queue_push_head(g->pile2, data);
     coup *data0 = (coup *)queue_pop_head(g->pile1);
     game_set_square(g, data0->i, data0->j, data0->s);
-  }*/
+  }
 }
 
 void game_redo(game g) {
-  /*if (!queue_is_empty(g->pile2)) {
+  if (!queue_is_empty(g->pile2)) {
     coup *data = (coup *)queue_pop_head(g->pile2);
     game_set_square(g, data->i, data->j, data->s);
-  }*/
+  }
 }
 
 /********game********/
@@ -390,7 +390,7 @@ void game_play_move(game g, uint i, uint j, square s) {
       game_get_square(g, i, j) == TREE) {
     exit(EXIT_FAILURE);
   }
-  struct coup p0;
+  /*struct coup p0;
   p0.s = game_get_square(g, i, j);
   p0.i = i;
   p0.j = j;
@@ -406,7 +406,7 @@ void game_play_move(game g, uint i, uint j, square s) {
   coup *data = (coup *)malloc(sizeof(coup));
   assert(data);
   *data = p1;
-  queue_push_head(g->pile1, data);
+  queue_push_head(g->pile1, data);*/
   game_set_square(g, i, j, s);
 }
 
