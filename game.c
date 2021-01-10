@@ -388,7 +388,11 @@ void game_play_move(game g, uint i, uint j, square s) {
       game_get_square(g, i, j) == TREE) {
     exit(EXIT_FAILURE);
   }
-  /*struct coup p0;
+  while (!queue_is_empty(g->pile2)) {
+    coup *data1 = (coup *)queue_pop_head(g->pile2);
+    free(data1);
+  }
+  struct coup p0;
   p0.s = game_get_square(g, i, j);
   p0.i = i;
   p0.j = j;
@@ -404,7 +408,7 @@ void game_play_move(game g, uint i, uint j, square s) {
   coup *data = (coup *)malloc(sizeof(coup));
   assert(data);
   *data = p1;
-  queue_push_head(g->pile1, data);*/
+  queue_push_head(g->pile1, data);
   game_set_square(g, i, j, s);
 }
 
@@ -1588,6 +1592,12 @@ void game_restart(game g) {
       }
     }
   }
-  g->pile1 = queue_new();
-  g->pile2 = queue_new();
+  while (!queue_is_empty(g->pile1)) {
+    coup *data = (coup *)queue_pop_head(g->pile1);
+    free(data);
+  }
+  while (!queue_is_empty(g->pile2)) {
+    coup *data1 = (coup *)queue_pop_head(g->pile2);
+    free(data1);
+  }
 }
