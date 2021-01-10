@@ -32,7 +32,7 @@ bool test_game_new_ext(void) {
                         tentes_col, false, false);
   
   for (uint i = 0; i < g->nb_rows; i++) {
-    if (g->nb_tents_row[i] > 5 || g->nb_tents_row[i] < -1 || g->nb_tents_col[i] > 5 || g->nb_tents_col[i] < -1){
+    if (g->nb_tents_row[i] >= 5 || g->nb_tents_col[i] >= 5){
       fprintf(stderr, "Error : the game is not correct!\n");
       game_delete(g);
       return false;
