@@ -61,6 +61,7 @@ game game_new_empty_ext(uint nb_rows, uint nb_cols, bool wrapping,
     fprintf(stderr, "Not enough memory!\n");
     exit(EXIT_FAILURE);
   }
+  g->pile1 = queue_new();
   g->nb_rows = nb_rows;
   g->nb_cols = nb_cols;
   g->wrapping = wrapping;
@@ -135,6 +136,7 @@ void game_undo(game g) {
   if (!queue_is_empty(g->pile1)) {
     coup *data = (coup *)queue_pop_head(g->pile1);
     game_set_square(g, data->i, data->j, EMPTY);
+    g->pile2 = queue_new();
     queue_push_head(g->pile2, data);
   }
 }
@@ -368,8 +370,6 @@ void game_play_move(game g, uint i, uint j, square s) {
       game_get_square(g, i, j) == TREE) {
     exit(EXIT_FAILURE);
   }
-  g->pile1 = queue_new();
-  g->pile2 = queue_new();
   struct coup p1;
   p1.s = s;
   p1.i = i;
@@ -1504,6 +1504,13 @@ void game_fill_grass_row(game g, uint i) {
   for (uint j = 0; j < g->nb_cols; j++) {
     if (game_get_square(g, i, j) == EMPTY) {
       game_set_square(g, i, j, GRASS);
+      struct coup p1;
+      p1.s = GRASS;
+      p1.i = i;
+      p1.j = j;
+      coup *data = (coup *)malloc(sizeof(coup));
+      *data = p1;
+      queue_push_head(g->pile1, data);
     }
   }
 }
@@ -1516,6 +1523,13 @@ void game_fill_grass_col(game g, uint j) {
   for (unsigned int i = 0; i < g->nb_rows; i++) {
     if (game_get_square(g, i, j) == EMPTY) {
       game_set_square(g, i, j, GRASS);
+      struct coup p1;
+      p1.s = GRASS;
+      p1.i = i;
+      p1.j = j;
+      coup *data = (coup *)malloc(sizeof(coup));
+      *data = p1;
+      queue_push_head(g->pile1, data);
     }
   }
 }
