@@ -5,6 +5,7 @@
 #include <string.h>
 #include "game_ext.h"
 #include "queue.h"
+#include <assert.h>
 
 typedef struct game_s {
   square *squares;
