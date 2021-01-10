@@ -79,7 +79,7 @@ bool test_game_equal(void) {
     return false;
   }
 
-  game g3 = game_new_empty_ext(8, 8, false, false);
+  game g3 = game_new_empty_ext(8, 8, true, true);
   game g4 = game_copy(g3);
 
   if (game_equal(g3, g4) == false) {
@@ -89,11 +89,23 @@ bool test_game_equal(void) {
     game_delete(g4);
     return false;
   }
-
+  game g5 = game_new_empty_ext(8,8,false,true);
+  game g6 = game_new_empty_ext(8,8,true,false);
+  if (game_equal(g5, g6) == true) {
+    game_delete(g1);
+    game_delete(g2);
+    game_delete(g3);
+    game_delete(g4);
+    game_delete(g5);
+    game_delete(g6);
+    return false;
+  }
   game_delete(g1);
   game_delete(g2);
   game_delete(g3);
   game_delete(g4);
+  game_delete(g5);
+  game_delete(g6);
   return true;
 }
 /* *********************************************************** */
