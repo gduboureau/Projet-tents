@@ -28,7 +28,7 @@ bool test_game_new_ext(void) {
                       EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY,
                       TREE,  EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY};
 
-  game g = game_new_ext(DEFAULT_SIZE, DEFAULT_SIZE, squares, tentes_lig, tentes_col, false, false);
+  game g = game_new_ext(8, 8, squares, tentes_lig, tentes_col, false, false);
   game_delete(g);
   return true;
 }
@@ -36,7 +36,7 @@ bool test_game_new_ext(void) {
 /* *********************************************************** */
 
 bool test_game_new_empty_ext(void) {
-  game g = game_new_empty_ext(9, 9, true, true);
+  game g = game_new_empty_ext(8, 8, false, false);
   for (uint i = 0; i < g->nb_rows; i++) {
     if (g->nb_tents_row[i] != 0) {
       fprintf(stderr, "Error : the game is not empty!\n");
