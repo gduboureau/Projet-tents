@@ -1,11 +1,11 @@
 #include "game.h"
+#include <assert.h>
 #include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include "game_ext.h"
-#include "queue.h"
-#include <assert.h>
+#include "queue.c"
 
 typedef struct game_s {
   square *squares;
@@ -181,6 +181,8 @@ game game_new_empty(void) {
   g->nb_rows = 8;
   g->wrapping = false;
   g->diagadj = false;
+  g->pile1 = NULL;
+  g->pile2 = NULL;
   g->nb_tents_row = malloc(sizeof(uint) * g->nb_rows);
   if (g->nb_tents_row == NULL) {
     fprintf(stderr, "not enough memory!\n");
@@ -372,18 +374,22 @@ void game_play_move(game g, uint i, uint j, square s) {
       game_get_square(g, i, j) == TREE) {
     exit(EXIT_FAILURE);
   }
+  queue_clear(g->pile2);
   struct coup p0;
   p0.s = game_get_square(g, i, j);
   p0.i = i;
   p0.j = j;
   coup *data0 = (coup *)malloc(sizeof(coup));
+  assert(data0);
   *data0 = p0;
   queue_push_head(g->pile1, data0);
+
   struct coup p1;
   p1.s = s;
   p1.i = i;
   p1.j = j;
   coup *data = (coup *)malloc(sizeof(coup));
+  assert(data);
   *data = p1;
   queue_push_head(g->pile1, data);
   game_set_square(g, i, j, s);
@@ -1569,4 +1575,6 @@ void game_restart(game g) {
       }
     }
   }
+  queue_clear(g->pile1);
+  queue_clear(g->pile2);
 }
