@@ -1512,6 +1512,13 @@ void game_fill_grass_row(game g, uint i) {
   for (uint j = 0; j < g->nb_cols; j++) {
     if (game_get_square(g, i, j) == EMPTY) {
       game_set_square(g, i, j, GRASS);
+      struct coup p0;
+      p0.s = game_get_square(g, i, j);
+      p0.i = i;
+      p0.j = j;
+      coup *data0 = (coup *)malloc(sizeof(coup));
+      *data0 = p0;
+      queue_push_head(g->pile1, data0);
       struct coup p1;
       p1.s = GRASS;
       p1.i = i;
@@ -1531,6 +1538,13 @@ void game_fill_grass_col(game g, uint j) {
   for (unsigned int i = 0; i < g->nb_rows; i++) {
     if (game_get_square(g, i, j) == EMPTY) {
       game_set_square(g, i, j, GRASS);
+      struct coup p0;
+      p0.s = game_get_square(g, i, j);
+      p0.i = i;
+      p0.j = j;
+      coup *data0 = (coup *)malloc(sizeof(coup));
+      *data0 = p0;
+      queue_push_head(g->pile1, data0);
       struct coup p1;
       p1.s = GRASS;
       p1.i = i;
