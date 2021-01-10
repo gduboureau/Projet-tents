@@ -94,7 +94,7 @@ bool test_game_equal(void) {
   }
   game g5 = game_new_empty_ext(8, 7, false, true);
   game g6 = game_new_empty_ext(4, 8, true, false);
-  
+
   if (game_equal(g5, g6) == true ||
       game_is_diagadj(g5) == game_is_diagadj(g6) ||
       game_is_wrapping(g5) == game_is_wrapping(g6) ||
