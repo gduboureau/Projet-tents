@@ -183,16 +183,16 @@ bool test_game_set_square() {
 
 /* *********************************************************** */
 
-bool test_game_undo() {
+/*bool test_game_undo() {
   game g = game_default();
   game_play_move(g, 0, 0, TENT);
   game_undo(g);
   return true;
-}
+}*/
 
 /* *********************************************************** */
 
-bool test_game_redo() { return true; }
+//bool test_game_redo() { return true; }
 
 /* *********************************************************** */
 
@@ -216,11 +216,11 @@ int main(int argc, char *argv[]) {
     ok = test_game_new();
   } else if (strcmp("game_set_square", argv[1]) == 0) {
     ok = test_game_set_square();
-  } else if (strcmp("game_undo", argv[1]) == 0) {
+  } /*else if (strcmp("game_undo", argv[1]) == 0) {
     ok = test_game_undo();
   } else if (strcmp("game_redo", argv[1]) == 0) {
     ok = test_game_redo();
-  } else {
+  } */else {
     fprintf(stderr, "Error: test \"%s\" not found!\n", argv[1]);
     exit(EXIT_FAILURE);
   }

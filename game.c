@@ -1547,8 +1547,4 @@ void game_restart(game g) {
       }
     }
   }
-  free(g->pile1);
-  g->pile1 = NULL;
-  free(g->pile2);
-  g->pile2 = NULL;
 }
