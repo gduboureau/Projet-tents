@@ -489,21 +489,21 @@ int game_check_move(cgame g, uint i, uint j, square s) {
   }
 
   if (i == g->nb_rows - 1 && j == 0 && s == TENT &&
-          (game_get_square(g, i - 1, j) == TENT ||
-           game_get_square(g, i, j + 1) == TENT ||
-           (game_get_square(g, i - 1, j + 1) == TENT &&
-            game_is_diagadj(g) == false)) ||
-      (game_get_square(g, i - game_nb_rows(g) - 1, j) == TENT &&
-       game_is_wrapping(g)) ||
-      (game_get_square(g, i - game_nb_rows(g) - 1, j + 1) == TENT &&
-       game_is_wrapping(g) && !game_is_diagadj(g)) ||
-      (game_get_square(g, i - game_nb_rows(g) - 1, j + game_nb_cols(g) - 1) ==
-           TENT &&
-       game_is_wrapping(g) && !game_is_diagadj(g)) ||
-      (game_get_square(g, i, j + game_nb_cols(g) - 1) == TENT &&
-       game_is_wrapping(g)) ||
-      (game_get_square(g, i - 1, j + game_nb_cols(g) - 1) == TENT &&
-       game_is_wrapping(g) && !game_is_diagadj(g))) {  // tent en bas a gauche
+      ((game_get_square(g, i - 1, j) == TENT ||
+        game_get_square(g, i, j + 1) == TENT ||
+        (game_get_square(g, i - 1, j + 1) == TENT &&
+         game_is_diagadj(g) == false)) ||
+       (game_get_square(g, i - game_nb_rows(g) - 1, j) == TENT &&
+        game_is_wrapping(g)) ||
+       (game_get_square(g, i - game_nb_rows(g) - 1, j + 1) == TENT &&
+        game_is_wrapping(g) && !game_is_diagadj(g)) ||
+       (game_get_square(g, i - game_nb_rows(g) - 1, j + game_nb_cols(g) - 1) ==
+            TENT &&
+        game_is_wrapping(g) && !game_is_diagadj(g)) ||
+       (game_get_square(g, i, j + game_nb_cols(g) - 1) == TENT &&
+        game_is_wrapping(g)) ||
+       (game_get_square(g, i - 1, j + game_nb_cols(g) - 1) == TENT &&
+        game_is_wrapping(g) && !game_is_diagadj(g)))) {  // tent en bas a gauche
     return LOSING;
   }
 
@@ -557,8 +557,8 @@ int game_check_move(cgame g, uint i, uint j, square s) {
        (game_get_square(g, i, j - game_nb_cols(g) - 1) == TENT &&
         game_is_wrapping(g)) ||
        (game_get_square(g, i + 1, j - game_nb_cols(g) - 1) == TENT &&
-        game_is_wrapping(g) && !game_is_diagadj(g)) *
-           /)) {  // tent j==g->nb_cols-1 bordure i exclue
+        game_is_wrapping(g) &&
+        !game_is_diagadj(g)))) {  // tent j==g->nb_cols-1 bordure i exclue
     return LOSING;
   }
 
