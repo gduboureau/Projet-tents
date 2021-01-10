@@ -41,31 +41,6 @@ bool test_game_copy(void) {
 bool test_game_equal(void) {
   game g1 = game_default();
   game g2 = game_copy(g1);
-  for (uint i = 0; i < game_nb_rows(g1); i++) {
-    if (game_get_expected_nb_tents_row(g1, i) !=
-      game_get_expected_nb_tents_row(g2, i)) {
-      game_delete(g1);
-      game_delete(g2);
-      return false;
-    }
-  }
-  for (uint j = 0; j < game_nb_rows(g1); j++) {
-    if (game_get_expected_nb_tents_col(g1, j) !=
-      game_get_expected_nb_tents_col(g2, j)) {
-      game_delete(g1);
-      game_delete(g2);
-      return false;
-    }
-  }
-  for (uint i = 0; i < game_nb_rows(g1); i++) {
-    for (uint j = 0; j < game_nb_cols(g1); j++) {
-      if (game_get_square(g1, i, j) != game_get_square(g2, i, j)) {
-        game_delete(g1);
-        game_delete(g2);
-        return false;
-      }
-    }
-  }
   if (game_is_wrapping(g1) != game_is_wrapping(g2) ||
       game_is_diagadj(g1) != game_is_diagadj(g2) ||
       game_nb_cols(g1) != game_nb_cols(g2) ||
@@ -106,16 +81,25 @@ bool test_game_equal(void) {
   game g3 = game_new_empty_ext(8, 8, true, true);
   game g4 = game_copy(g3);
 
-  if (game_equal(g3, g4) == false) {
+  if (game_equal(g3, g4) == false ||
+      game_is_diagadj(g3) != game_is_diagadj(g4) ||
+      game_is_wrapping(g3) != game_is_wrapping(g4) ||
+      game_nb_rows(g3) != game_nb_rows(g4) ||
+      game_nb_cols(g3) != game_nb_cols(g4)) {
     game_delete(g1);
     game_delete(g2);
     game_delete(g3);
     game_delete(g4);
     return false;
   }
-  game g5 = game_new_empty_ext(8, 8, false, true);
-  game g6 = game_new_empty_ext(8, 8, true, false);
-  if (game_equal(g5, g6) == true) {
+  game g5 = game_new_empty_ext(8, 7, false, true);
+  game g6 = game_new_empty_ext(4, 8, true, false);
+  
+  if (game_equal(g5, g6) == true ||
+      game_is_diagadj(g5) == game_is_diagadj(g6) ||
+      game_is_wrapping(g5) == game_is_wrapping(g6) ||
+      game_nb_rows(g5) == game_nb_rows(g6) ||
+      game_nb_cols(g5) == game_nb_cols(g6)) {
     game_delete(g1);
     game_delete(g2);
     game_delete(g3);
