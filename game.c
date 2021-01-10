@@ -390,7 +390,6 @@ void game_play_move(game g, uint i, uint j, square s) {
       game_get_square(g, i, j) == TREE) {
     exit(EXIT_FAILURE);
   }
-  g->pile2 = queue_new();
   struct coup p0;
   p0.s = game_get_square(g, i, j);
   p0.i = i;
