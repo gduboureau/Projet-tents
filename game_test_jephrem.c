@@ -197,10 +197,10 @@ bool test_game_set_square() {
 /* *********************************************************** */
 
 bool test_game_undo() {
-  game g = game_new_empty_ext(8,8,false,false);
+  game g = game_new_ext(8, 8, squares, tentes_lig, tentes_col, false, false);
   game_play_move(g, 0, 0, TENT);
   game_undo(g);
-  if (game_get_square(g,0,0)!=EMPTY){
+  if (game_get_square(g, 0, 0) != EMPTY) {
     game_delete(g);
     return false;
   }
@@ -211,11 +211,11 @@ bool test_game_undo() {
 /* *********************************************************** */
 
 bool test_game_redo() {
-  game g = game_new_empty_ext(8,8,false,false);
+  game g = game_new_empty_ext(8, 8, false, false);
   game_play_move(g, 0, 0, TENT);
   game_undo(g);
   game_redo(g);
-  if (game_get_square(g,0,0)!=TENT){
+  if (game_get_square(g, 0, 0) != TENT) {
     game_delete(g);
     return false;
   }
@@ -249,8 +249,7 @@ int main(int argc, char *argv[]) {
     ok = test_game_undo();
   } else if (strcmp("game_redo", argv[1]) == 0) {
     ok = test_game_redo();
-  }
-  else {
+  } else {
     fprintf(stderr, "Error: test \"%s\" not found!\n", argv[1]);
     exit(EXIT_FAILURE);
   }
