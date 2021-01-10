@@ -28,7 +28,14 @@ bool test_game_new_ext(void) {
                       EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY,
                       TREE,  EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY};
 
-  game g = game_new_ext(8, 8, squares, tentes_lig, tentes_col, false, false);
+  game g = game_new_ext(DEFAULT_SIZE, DEFAULT_SIZE, squares, tentes_lig,
+                        tentes_col, false, false);
+  if (g->wrapping != false || g->diagadj != false) {
+    return false;
+  }
+  if (game_get_square(g, 0, 4) != TREE) {
+    return false;
+  }
   game_delete(g);
   return true;
 }
