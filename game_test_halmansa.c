@@ -28,14 +28,28 @@ bool test_game_new_ext(void) {
                       EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY,
                       TREE,  EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY};
 
-  game g = game_new_ext(DEFAULT_SIZE, DEFAULT_SIZE, squares, tentes_lig,
+  game g = game_new_ext(8, 8, squares, tentes_lig,
                         tentes_col, false, false);
-  if (g->wrapping != false || g->diagadj != false) {
+  
+  for (uint i = 0; i < g->nb_rows; i++) {
+    if (g->nb_tents_row[i] > 5 || g->nb_tents_row[i] < -1 || g->nb_tents_col[i] > 5 || g->nb_tents_col[i] < -1){
+      fprintf(stderr, "Error : the game is not correct!\n");
+      game_delete(g);
+      return false;
+    }
+
+    if (g->squares[i] == GRASS || g->squares[i] == TENT) {
+      fprintf(stderr, "Error : the game is not correct!\n");
+      game_delete(g);
+      return false;
+    }
+  }
+  
+  if (g->wrapping == true || g->diagadj == true) {
+    game_delete(g);
     return false;
   }
-  if (game_get_square(g, 0, 4) != TREE) {
-    return false;
-  }
+
   game_delete(g);
   return true;
 }
