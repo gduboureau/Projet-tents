@@ -262,20 +262,18 @@ void game_delete(game g) {
   free(g->nb_tents_row);
   g->nb_tents_row = NULL;
   if (g->pile1 != NULL) {
-    while (!queue_is_empty(g->pile1)) {
+    /*while (!queue_is_empty(g->pile1)) {
       coup *data = (coup *)queue_pop_head(g->pile1);
       free(data);
-    }
+    }*/
     queue_free(g->pile1);
-    g->pile1 = NULL;
   }
   if (g->pile2 != NULL) {
-    while (!queue_is_empty(g->pile2)) {
+    /*while (!queue_is_empty(g->pile2)) {
       coup *data1 = (coup *)queue_pop_head(g->pile2);
       free(data1);
-    }
+    }*/
     queue_free(g->pile2);
-    g->pile2 = NULL;
   }
   free(g);
   g = NULL;
@@ -392,7 +390,8 @@ void game_play_move(game g, uint i, uint j, square s) {
     coup *data1 = (coup *)queue_pop_head(g->pile2);
     free(data1);
   }*/
-  struct coup p0;
+  queue_clear(g->pile2);
+  coup p0;
   p0.s = game_get_square(g, i, j);
   p0.i = i;
   p0.j = j;
@@ -401,7 +400,7 @@ void game_play_move(game g, uint i, uint j, square s) {
   *data0 = p0;
   queue_push_head(g->pile1, data0);
 
-  struct coup p1;
+  coup p1;
   p1.s = s;
   p1.i = i;
   p1.j = j;
@@ -1600,4 +1599,5 @@ void game_restart(game g) {
     coup *data1 = (coup *)queue_pop_head(g->pile2);
     free(data1);
   }*/
+  queue_clear(g->pile1);
 }
