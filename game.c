@@ -4,6 +4,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include "game_ext.h"
+#include "queue.h"
 
 typedef struct game_s {
   square *squares;
@@ -13,7 +14,15 @@ typedef struct game_s {
   uint nb_cols;
   bool wrapping;
   bool diagadj;
+  queue *pile1;
+  queue *pile2;
 } game_s;
+
+typedef struct coup {
+  square s;
+  uint i;
+  uint j;
+} coup;
 
 typedef struct game_s *game;
 
@@ -122,9 +131,20 @@ bool game_is_diagadj(cgame g) {
 }
 
 /********************* Jennifer *********************/
-void game_undo(game g) { return; }
+void game_undo(game g) {
+  if (!queue_is_empty(g->pile1)) {
+    coup *data = (coup *)queue_pop_head(g->pile1);
+    game_set_square(g, data->i, data->j, EMPTY);
+    queue_push_head(g->pile2, data);
+  }
+}
 
-void game_redo(game g) { return; }
+void game_redo(game g) {
+  if (!queue_is_empty(g->pile2)) {
+    coup *data = (coup *)queue_pop_head(g->pile2);
+    game_set_square(g, data->i, data->j, data->s);
+  }
+}
 
 /********game********/
 
@@ -348,6 +368,15 @@ void game_play_move(game g, uint i, uint j, square s) {
       game_get_square(g, i, j) == TREE) {
     exit(EXIT_FAILURE);
   }
+  g->pile1 = queue_new();
+  g->pile2 = queue_new();
+  struct coup p1;
+  p1.s = s;
+  p1.i = i;
+  p1.j = j;
+  coup *data = (coup *)malloc(sizeof(coup));
+  *data = p1;
+  queue_push_head(g->pile1, data);
   game_set_square(g, i, j, s);
 }
 
@@ -1496,6 +1525,8 @@ void game_restart(game g) {
     fprintf(stderr, "parameter not valid!\n");
     exit(EXIT_FAILURE);
   }
+  queue_free(g->pile1);
+  queue_free(g->pile2);
   for (unsigned int i = 0; i < g->nb_rows; i++) {
     for (unsigned int j = 0; j < g->nb_cols; j++) {
       if (game_get_square(g, i, j) != TREE) {
