@@ -1525,13 +1525,19 @@ void game_restart(game g) {
     fprintf(stderr, "parameter not valid!\n");
     exit(EXIT_FAILURE);
   }
-  queue_free(g->pile1);
-  queue_free(g->pile2);
   for (unsigned int i = 0; i < g->nb_rows; i++) {
     for (unsigned int j = 0; j < g->nb_cols; j++) {
       if (game_get_square(g, i, j) != TREE) {
         game_set_square(g, i, j, EMPTY);
       }
     }
+  }
+  if (g->pile1 != NULL) {
+    queue_free(g->pile1);
+    g->pile1 = NULL;
+  }
+  if (g->pile2 != NULL) {
+    queue_free(g->pile2);
+    g->pile2 = NULL;
   }
 }
