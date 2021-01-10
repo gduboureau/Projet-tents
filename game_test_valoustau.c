@@ -23,8 +23,6 @@ square squares[] = {
 bool test_game_is_wrapping(void) {
   game g = game_new_ext(8, 8, squares, tentes_lig, tentes_col, true, true);
   game g1 = game_new_ext(8, 8, squares, tentes_lig, tentes_col, false, true);
-  uint nb_cols = g->nb_cols;
-  uint nb_rows = g->nb_rows;
 
   if (game_check_move(g, 3, 7, TENT) != REGULAR) {
     game_delete(g);
