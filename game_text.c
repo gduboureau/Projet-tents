@@ -1,13 +1,24 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include "game.c"
 #include "game.h"
 #include "game_aux.c"
 #include "game_aux.h"
-#include "game.c"
 #include "game_ext.h"
 
+uint tentes_lig[] = {3, 0, 4, 0, 4, 0, 1, 0};
+uint tentes_col[] = {4, 0, 1, 2, 1, 1, 2, 1};
+
+square squares[] = {
+    EMPTY, EMPTY, EMPTY, EMPTY, TREE,  TREE,  EMPTY, EMPTY, TREE,  EMPTY, EMPTY,
+    EMPTY, EMPTY, EMPTY, EMPTY, TREE,  EMPTY, EMPTY, EMPTY, EMPTY, TREE,  EMPTY,
+    EMPTY, EMPTY, TREE,  EMPTY, EMPTY, EMPTY, EMPTY, TREE,  EMPTY, EMPTY, EMPTY,
+    TREE,  EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, TREE,  EMPTY, EMPTY, EMPTY,
+    TREE,  EMPTY, TREE,  EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY,
+    EMPTY, TREE,  EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY};
+
 int main(void) {
-  game g = game_default();
+  game g = game_new_ext(8, 8, squares, tentes_lig, tentes_col, false, false);
   while (game_is_over(g) == false) {
     game_print(g);
     printf("> ? [h for help]\n");
