@@ -380,7 +380,7 @@ void game_play_move(game g, uint i, uint j, square s) {
       game_get_square(g, i, j) == TREE) {
     exit(EXIT_FAILURE);
   }
-  if (!queue_is_empty(g->pile2)) {
+  /*if (!queue_is_empty(g->pile2)) {
     queue_clear(g->pile2);
   }
   struct coup p0;
@@ -400,7 +400,7 @@ void game_play_move(game g, uint i, uint j, square s) {
   assert(data);
   *data = p1;
   queue_push_head(g->pile1, data);
-  game_set_square(g, i, j, s);
+  game_set_square(g, i, j, s);*/
 }
 
 /********************* Guillaume *********************/
@@ -1526,7 +1526,7 @@ void game_fill_grass_row(game g, uint i) {
   }
   for (uint j = 0; j < g->nb_cols; j++) {
     if (game_get_square(g, i, j) == EMPTY) {
-      struct coup p0;
+      /*struct coup p0;
       p0.s = game_get_square(g, i, j);
       p0.i = i;
       p0.j = j;
@@ -1539,7 +1539,7 @@ void game_fill_grass_row(game g, uint i) {
       p1.j = j;
       coup *data = (coup *)malloc(sizeof(coup));
       *data = p1;
-      queue_push_head(g->pile1, data);
+      queue_push_head(g->pile1, data);*/
       game_set_square(g, i, j, GRASS);
     }
   }
@@ -1552,7 +1552,7 @@ void game_fill_grass_col(game g, uint j) {
   }
   for (unsigned int i = 0; i < g->nb_rows; i++) {
     if (game_get_square(g, i, j) == EMPTY) {
-      struct coup p0;
+      /*struct coup p0;
       p0.s = game_get_square(g, i, j);
       p0.i = i;
       p0.j = j;
@@ -1565,7 +1565,7 @@ void game_fill_grass_col(game g, uint j) {
       p1.j = j;
       coup *data = (coup *)malloc(sizeof(coup));
       *data = p1;
-      queue_push_head(g->pile1, data);
+      queue_push_head(g->pile1, data);*/
       game_set_square(g, i, j, GRASS);
     }
   }
@@ -1583,12 +1583,12 @@ void game_restart(game g) {
       }
     }
   }
-  while (!queue_is_empty(g->pile1)) {
+  /*while (!queue_is_empty(g->pile1)) {
     coup *data = (coup *)queue_pop_head(g->pile1);
     free(data);
   }
   while (!queue_is_empty(g->pile2)) {
     coup *data1 = (coup *)queue_pop_head(g->pile2);
     free(data1);
-  }
+  }*/
 }
