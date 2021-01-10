@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include "game.c"
 #include "game.h"
 #include "game_aux.h"
 #include "game_ext.h"
@@ -142,6 +143,9 @@ bool test_game_restart() {
         return false;
       }
     }
+  }
+  if (g->pile1 != NULL || g->pile2 != NULL) {
+    return false;
   }
   game g1 = game_default();
   if (game_equal(g, g1) == false) {

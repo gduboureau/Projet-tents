@@ -138,6 +138,7 @@ void game_undo(game g) {
     coup *data = (coup *)queue_pop_head(g->pile1);
     game_set_square(g, data->i, data->j, EMPTY);
     queue_push_head(g->pile2, data);
+    free(data);
   }
 }
 
@@ -145,6 +146,7 @@ void game_redo(game g) {
   if (!queue_is_empty(g->pile2)) {
     coup *data = (coup *)queue_pop_head(g->pile2);
     game_set_square(g, data->i, data->j, data->s);
+    free(data);
   }
 }
 
@@ -1546,12 +1548,12 @@ void game_restart(game g) {
       }
     }
   }
-  if (g->pile1 != NULL) {
-    queue_free(g->pile1);
+  if (!queue_is_empty(g->pile1)) {
+    free(g->pile1);
     g->pile1 = NULL;
   }
-  if (g->pile2 != NULL) {
-    queue_free(g->pile2);
+  if (!queue_is_empty(g->pile2)) {
+    free(g->pile2);
     g->pile2 = NULL;
   }
 }
