@@ -15,15 +15,15 @@ typedef struct game_s {
   uint nb_cols;
   bool wrapping;
   bool diagadj;
-  /*queue *pile1;
-  queue *pile2;*/
+  queue *pile1;
+  queue *pile2;
 } game_s;
 
-/*typedef struct coup {
+typedef struct coup {
   square s;
   uint i;
   uint j;
-} coup;*/
+} coup;
 
 typedef struct game_s *game;
 
@@ -66,8 +66,8 @@ game game_new_empty_ext(uint nb_rows, uint nb_cols, bool wrapping,
   g->nb_cols = nb_cols;
   g->wrapping = wrapping;
   g->diagadj = diagadj;
-  /*g->pile1 = queue_new();
-  g->pile2 = queue_new();*/
+  g->pile1 = queue_new();
+  g->pile2 = queue_new();
   g->nb_tents_row = malloc(sizeof(uint) * nb_rows);
   if (g->nb_tents_row == NULL) {
     fprintf(stderr, "not enough memory!\n");
@@ -263,7 +263,7 @@ void game_delete(game g) {
   g->nb_tents_col = NULL;
   free(g->nb_tents_row);
   g->nb_tents_row = NULL;
-  /*if (g->pile1 != NULL) {
+  if (g->pile1 != NULL) {
     while (!queue_is_empty(g->pile1)) {
       coup *data = (coup *)queue_pop_head(g->pile1);
       free(data);
@@ -278,7 +278,7 @@ void game_delete(game g) {
     }
     queue_free(g->pile2);
     g->pile2 = NULL;
-  }*/
+  }
   free(g);
   g = NULL;
 }
