@@ -261,7 +261,7 @@ void game_delete(game g) {
   g->nb_tents_col = NULL;
   free(g->nb_tents_row);
   g->nb_tents_row = NULL;
-  /*if (g->pile1 != NULL) {
+  /*if (!queue_is_empty(g->pile1)) {
     while (!queue_is_empty(g->pile1)) {
       coup *data = (coup *)queue_pop_head(g->pile1);
       free(data);
@@ -269,7 +269,7 @@ void game_delete(game g) {
     queue_free(g->pile1);
     g->pile1 = NULL;
   }
-  if (g->pile2 != NULL) {
+  if (!queue_is_empty(g->pile2)) {
     while (!queue_is_empty(g->pile2)) {
       coup *data1 = (coup *)queue_pop_head(g->pile2);
       free(data1);
@@ -1599,11 +1599,5 @@ void game_restart(game g) {
     free(data);
   }
   free(g->pile1);
-  g->pile1 = NULL;
-  while (!queue_is_empty(g->pile2)) {
-    coup *data1 = (coup *)queue_pop_head(g->pile2);
-    free(data1);
-  }
-  free(g->pile2);
-  g->pile2 = NULL;*/
+  g->pile1 = NULL;*/
 }
