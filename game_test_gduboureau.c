@@ -14,6 +14,19 @@ void usage(int argc, char* argv[]) {
 
 /* *********************************************************** */
 
+uint tentes_lig[] = {3, 0, 4, 0, 4, 0, 1, 0};
+uint tentes_col[] = {4, 0, 1, 2, 1, 1, 2, 1};
+
+square squares[] = {
+    EMPTY, EMPTY, EMPTY, EMPTY, TREE,  TREE,  EMPTY, EMPTY, TREE,  EMPTY, EMPTY,
+    EMPTY, EMPTY, EMPTY, EMPTY, TREE,  EMPTY, EMPTY, EMPTY, EMPTY, TREE,  EMPTY,
+    EMPTY, EMPTY, TREE,  EMPTY, EMPTY, EMPTY, EMPTY, TREE,  EMPTY, EMPTY, EMPTY,
+    TREE,  EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, TREE,  EMPTY, EMPTY, EMPTY,
+    TREE,  EMPTY, TREE,  EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY,
+    EMPTY, TREE,  EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY};
+
+/* *********************************************************** */
+
 bool test_game_is_over(void) {
   game g = game_default_solution();
 
@@ -79,8 +92,8 @@ bool test_game_is_over(void) {
 /* *********************************************************** */
 
 bool test_game_fill_grass_row() {
-  game g = game_default();
-  game g1 = game_default();
+  game g = game_new_ext(8, 8, squares, tentes_lig, tentes_col, false, false);
+  game g1 = game_new_ext(8, 8, squares, tentes_lig, tentes_col, false, false);
   for (unsigned int i = 0; i < game_nb_rows(g); i++) {
     game_fill_grass_row(g, i);
   }
@@ -104,8 +117,8 @@ bool test_game_fill_grass_row() {
 /* *********************************************************** */
 
 bool test_game_fill_grass_col() {
-  game g = game_default();
-  game g1 = game_default();
+  game g = game_new_ext(8, 8, squares, tentes_lig, tentes_col, false, false);
+  game g1 = game_new_ext(8, 8, squares, tentes_lig, tentes_col, false, false);
   for (unsigned int j = 0; j < game_nb_cols(g); j++) {
     game_fill_grass_col(g, j);
   }
@@ -147,7 +160,7 @@ bool test_game_restart() {
   /*if (g->pile1 != NULL || g->pile2 != NULL) {
     return false;
   }*/
-  game g1 = game_default();
+  game g1 = game_new_ext(8, 8, squares, tentes_lig, tentes_col, false, false);
   if (game_equal(g, g1) == false) {
     game_delete(g);
     game_delete(g1);
@@ -161,7 +174,7 @@ bool test_game_restart() {
 /* *********************************************************** */
 
 bool test_game_print() {
-  game g = game_default();
+  game g = game_new_ext(8, 8, squares, tentes_lig, tentes_col, false, false);
   game_print(g);
   game_delete(g);
   return true;
@@ -170,7 +183,7 @@ bool test_game_print() {
 /* *********************************************************** */
 
 bool test_game_default() {
-  game g = game_default();
+  game g = game_new_ext(8, 8, squares, tentes_lig, tentes_col, false, false);
   uint tentes_lig[] = {3, 0, 4, 0, 4, 0, 1, 0};
   uint tentes_col[] = {4, 0, 1, 2, 1, 1, 2, 1};
 

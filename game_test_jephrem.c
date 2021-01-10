@@ -14,8 +14,21 @@ void usage(int argc, char *argv[]) {
 
 /* *********************************************************** */
 
+uint tentes_lig[] = {3, 0, 4, 0, 4, 0, 1, 0};
+uint tentes_col[] = {4, 0, 1, 2, 1, 1, 2, 1};
+
+square squares[] = {
+    EMPTY, EMPTY, EMPTY, EMPTY, TREE,  TREE,  EMPTY, EMPTY, TREE,  EMPTY, EMPTY,
+    EMPTY, EMPTY, EMPTY, EMPTY, TREE,  EMPTY, EMPTY, EMPTY, EMPTY, TREE,  EMPTY,
+    EMPTY, EMPTY, TREE,  EMPTY, EMPTY, EMPTY, EMPTY, TREE,  EMPTY, EMPTY, EMPTY,
+    TREE,  EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, TREE,  EMPTY, EMPTY, EMPTY,
+    TREE,  EMPTY, TREE,  EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY,
+    EMPTY, TREE,  EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY};
+
+/* *********************************************************** */
+
 bool test_game_delete(void) {
-  game g = game_default();
+  game g = game_new_ext(8, 8, squares, tentes_lig, tentes_col, false, false);
   game_delete(g);
   return true;
 }
@@ -23,7 +36,7 @@ bool test_game_delete(void) {
 /* *********************************************************** */
 
 bool test_game_copy(void) {
-  game g = game_default();
+  game g = game_new_ext(8, 8, squares, tentes_lig, tentes_col, false, false);
   game g1 = game_copy(g);
   if (game_equal(g, g1) == false) {
     fprintf(stderr, "Error : g is different from the copied game!\n");
@@ -39,7 +52,7 @@ bool test_game_copy(void) {
 /* *********************************************************** */
 
 bool test_game_equal(void) {
-  game g1 = game_default();
+  game g1 = game_new_ext(8, 8, squares, tentes_lig, tentes_col, false, false);
   game g2 = game_copy(g1);
   if (game_is_wrapping(g1) != game_is_wrapping(g2) ||
       game_is_diagadj(g1) != game_is_diagadj(g2) ||
@@ -184,7 +197,7 @@ bool test_game_set_square() {
 /* *********************************************************** */
 
 /*bool test_game_undo() {
-  game g = game_default();
+  game g = game_new_ext(8,8,squares,tentes_lig,tentes_col,false,false);
   game_play_move(g, 0, 0, TENT);
   game_undo(g);
   return true;
@@ -192,7 +205,7 @@ bool test_game_set_square() {
 
 /* *********************************************************** */
 
-//bool test_game_redo() { return true; }
+// bool test_game_redo() { return true; }
 
 /* *********************************************************** */
 
@@ -220,7 +233,8 @@ int main(int argc, char *argv[]) {
     ok = test_game_undo();
   } else if (strcmp("game_redo", argv[1]) == 0) {
     ok = test_game_redo();
-  } */else {
+  } */
+  else {
     fprintf(stderr, "Error: test \"%s\" not found!\n", argv[1]);
     exit(EXIT_FAILURE);
   }

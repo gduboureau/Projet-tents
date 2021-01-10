@@ -8,17 +8,7 @@
 #include "game_ext.h"
 typedef unsigned int uint;
 
-/* ********** TEST GAME IS WRAPPING ********** */
-bool test_game_is_wrapping(void) {
-  // cgame g = game_default();
-  // uint nb_cols = g->nb_cols;
-  // uint nb_rows = g->nb_rows;
-  return 0;
-}
-
-/* ********** TEST GAME IS DIAGADJ ********** */
-bool test_game_is_diagadj(void) {
-  uint tentes_lig[] = {3, 0, 4, 0, 4, 0, 1, 0};
+uint tentes_lig[] = {3, 0, 4, 0, 4, 0, 1, 0};
   uint tentes_col[] = {4, 0, 1, 2, 1, 1, 2, 1};
 
   square squares[] = {EMPTY, EMPTY, EMPTY, EMPTY, TREE,  TREE,  EMPTY, EMPTY,
@@ -30,6 +20,16 @@ bool test_game_is_diagadj(void) {
                       EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY,
                       TREE,  EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY};
 
+/* ********** TEST GAME IS WRAPPING ********** */
+bool test_game_is_wrapping(void) {
+  // cgame g = game_new_ext(8,8,squares,tentes_lig,tentes_col,false,false);
+  // uint nb_cols = g->nb_cols;
+  // uint nb_rows = g->nb_rows;
+  return 0;
+}
+
+/* ********** TEST GAME IS DIAGADJ ********** */
+bool test_game_is_diagadj(void) {
   game g = game_new_ext(8, 8, squares, tentes_lig, tentes_col, true, true);
   game g1 = game_new_ext(8, 8, squares, tentes_lig, tentes_col, true, false);
   uint nb_cols = g->nb_cols;
@@ -220,7 +220,7 @@ bool test_game_is_diagadj(void) {
 /* ********** TEST GAME GET CURRENT NB TENTS ROW ********** */
 
 bool test_game_get_current_nb_tents_row(void) {
-  game g = game_default();
+  game g = game_new_ext(8,8,squares,tentes_lig,tentes_col,false,false);
   game g1 = game_default_solution();
   uint c = 0;
   for (uint i = 0; i < game_nb_rows(g1); i++) {
@@ -244,7 +244,7 @@ bool test_game_get_current_nb_tents_row(void) {
 /* ********** TEST GAME GET CURRENT NB TENTS COL ********** */
 
 bool test_game_get_current_nb_tents_col(void) {
-  game g = game_default();
+  game g = game_new_ext(8,8,squares,tentes_lig,tentes_col,false,false);
   game g1 = game_default_solution();
   uint c = 0;
   for (uint j = 0; j < game_nb_cols(g1); j++) {
@@ -268,7 +268,7 @@ bool test_game_get_current_nb_tents_col(void) {
 /* ********** TEST GAME GET CURRENT NB TENTS ALL ********** */
 
 bool test_game_get_current_nb_tents_all(void) {
-  game g = game_default();
+  game g = game_new_ext(8,8,squares,tentes_lig,tentes_col,false,false);
   uint c = 0;
   for (uint v = 0; v < game_nb_cols(g); v++) {
     c += game_get_current_nb_tents_col(g, v);
@@ -285,7 +285,7 @@ bool test_game_get_current_nb_tents_all(void) {
 /* ********** GAME PLAY MOVE ********** */
 
 bool test_game_play_move(void) {
-  game g = game_default();
+  game g = game_new_ext(8,8,squares,tentes_lig,tentes_col,false,false);
   uint c = 0;
   for (uint i = 0; i < game_nb_rows(g); i++) {
     for (uint j = 0; j < game_nb_cols(g); j++) {
@@ -308,7 +308,7 @@ bool test_game_play_move(void) {
 /* ********** GAME CHECK MOVE ********** */
 
 bool test_game_check_move(void) {
-  game g = game_default();
+  game g = game_new_ext(8,8,squares,tentes_lig,tentes_col,false,false);
   for (uint i = 0; i < game_nb_rows(g); i++) {
     for (uint j = 0; j < game_nb_cols(g); j++) {
       // ILLEGAL MOVE
