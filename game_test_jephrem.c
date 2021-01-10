@@ -143,7 +143,7 @@ bool test_game_new() {
                       EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY,
                       TREE,  EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY};
 
-  game g = game_new_ext(8, 8, squares, tentes_lig, tentes_col, false, false);
+  game g = game_new(squares, tentes_lig, tentes_col);
   game_delete(g);
   return true;
 }
