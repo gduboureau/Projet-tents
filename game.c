@@ -39,6 +39,8 @@ game game_new_ext(uint nb_rows, uint nb_cols, square *squares,
     exit(EXIT_FAILURE);
   }
   game g = game_new_empty_ext(nb_rows, nb_cols, wrapping, diagadj);
+  g->pile1 = queue_new();
+  g->pile2 = queue_new();
   g->nb_rows = nb_rows;
   g->nb_cols = nb_cols;
   g->wrapping = wrapping;
@@ -61,7 +63,6 @@ game game_new_empty_ext(uint nb_rows, uint nb_cols, bool wrapping,
     fprintf(stderr, "Not enough memory!\n");
     exit(EXIT_FAILURE);
   }
-  g->pile1 = queue_new();
   g->nb_rows = nb_rows;
   g->nb_cols = nb_cols;
   g->wrapping = wrapping;
