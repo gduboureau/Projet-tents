@@ -133,10 +133,10 @@ bool game_is_diagadj(cgame g) {
 
 /********************* Jennifer *********************/
 void game_undo(game g) {
+  g->pile2 = queue_new();
   if (!queue_is_empty(g->pile1)) {
     coup *data = (coup *)queue_pop_head(g->pile1);
     game_set_square(g, data->i, data->j, EMPTY);
-    g->pile2 = queue_new();
     queue_push_head(g->pile2, data);
   }
 }
