@@ -39,8 +39,6 @@ game game_new_ext(uint nb_rows, uint nb_cols, square *squares,
     exit(EXIT_FAILURE);
   }
   game g = game_new_empty_ext(nb_rows, nb_cols, wrapping, diagadj);
-  g->pile1 = queue_new();
-  g->pile2 = queue_new();
   g->nb_rows = nb_rows;
   g->nb_cols = nb_cols;
   g->wrapping = wrapping;
@@ -67,6 +65,8 @@ game game_new_empty_ext(uint nb_rows, uint nb_cols, bool wrapping,
   g->nb_cols = nb_cols;
   g->wrapping = wrapping;
   g->diagadj = diagadj;
+  g->pile1 = queue_new();
+  g->pile2 = queue_new();
   g->nb_tents_row = malloc(sizeof(uint) * nb_rows);
   if (g->nb_tents_row == NULL) {
     fprintf(stderr, "not enough memory!\n");
@@ -134,11 +134,11 @@ bool game_is_diagadj(cgame g) {
 
 /********************* Jennifer *********************/
 void game_undo(game g) {
-  g->pile2 = queue_new();
   if (!queue_is_empty(g->pile1)) {
     coup *data = (coup *)queue_pop_head(g->pile1);
-    game_set_square(g, data->i, data->j, EMPTY);
     queue_push_head(g->pile2, data);
+    coup *data0 = (coup *)queue_pop_head(g->pile1);
+    game_set_square(g, data0->i, data0->j, data0->s);
   }
 }
 
@@ -371,6 +371,13 @@ void game_play_move(game g, uint i, uint j, square s) {
       game_get_square(g, i, j) == TREE) {
     exit(EXIT_FAILURE);
   }
+  struct coup p0;
+  p0.s = game_get_square(g, i, j);
+  p0.i = i;
+  p0.j = j;
+  coup *data0 = (coup *)malloc(sizeof(coup));
+  *data0 = p0;
+  queue_push_head(g->pile1, data0);
   struct coup p1;
   p1.s = s;
   p1.i = i;
