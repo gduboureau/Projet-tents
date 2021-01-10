@@ -31,12 +31,12 @@ int main(void) {
       printf("> action: quit\nWhat a shame, you gave up :-(\n");
       return EXIT_SUCCESS;
     }
-    if (command == 'z') {
+    /*if (command == 'z') {
       game_undo(g);
     }
     if (command == 'y') {
       game_redo(g);
-    }
+    }*/
     scanf("%d %d", &row, &column);
     if (command == 't') {
       if (game_check_move(g, row, column, TENT) == REGULAR) {
