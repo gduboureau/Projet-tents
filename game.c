@@ -1583,14 +1583,12 @@ void game_restart(game g) {
       }
     }
   }
-  while (!queue_is_empty(g->pile1)) {
-    coup *data = (coup *)queue_pop_head(g->pile1);
-    free(data);
+  if (g->pile1 != NULL) {
+    queue_free(g->pile1);
+    g->pile1 = NULL;
   }
-  queue_free(g->pile1);
-  while (!queue_is_empty(g->pile2)) {
-    coup *data1 = (coup *)queue_pop_head(g->pile2);
-    free(data1);
+  if (g->pile2 != NULL) {
+    free(g->pile2);
+    g->pile2 = NULL;
   }
-  queue_free(g->pile2);
 }
