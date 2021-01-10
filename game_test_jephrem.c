@@ -196,12 +196,17 @@ bool test_game_set_square() {
 
 /* *********************************************************** */
 
-/*bool test_game_undo() {
-  game g = game_new_ext(8,8,squares,tentes_lig,tentes_col,false,false);
+bool test_game_undo() {
+  game g = game_new_empty_ext(8,8,false,false);
   game_play_move(g, 0, 0, TENT);
   game_undo(g);
+  if (game_get_square(g,0,0)!=EMPTY){
+    game_delete(g);
+    return false;
+  }
+  game_delete(g);
   return true;
-}*/
+}
 
 /* *********************************************************** */
 
@@ -229,9 +234,9 @@ int main(int argc, char *argv[]) {
     ok = test_game_new();
   } else if (strcmp("game_set_square", argv[1]) == 0) {
     ok = test_game_set_square();
-  } /*else if (strcmp("game_undo", argv[1]) == 0) {
+  } else if (strcmp("game_undo", argv[1]) == 0) {
     ok = test_game_undo();
-  } else if (strcmp("game_redo", argv[1]) == 0) {
+  } /*else if (strcmp("game_redo", argv[1]) == 0) {
     ok = test_game_redo();
   } */
   else {
