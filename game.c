@@ -263,14 +263,10 @@ void game_delete(game g) {
   g->nb_tents_col = NULL;
   free(g->nb_tents_row);
   g->nb_tents_row = NULL;
-  if (!queue_is_empty(g->pile1)) {
-    queue_free_full(g->pile1, &free);
-    g->pile1 = NULL;
-  }
-  if (!queue_is_empty(g->pile2)) {
-    queue_free_full(g->pile2, &free);
-    g->pile2 = NULL;
-  }
+  queue_free_full(g->pile1, &free);
+  g->pile1 = NULL;
+  queue_free_full(g->pile2, &free);
+  g->pile2 = NULL;
   free(g);
   g = NULL;
 }
@@ -393,7 +389,6 @@ void game_play_move(game g, uint i, uint j, square s) {
   assert(data0);
   *data0 = p0;
   queue_push_head(g->pile1, data0);
-
   coup p1;
   p1.s = s;
   p1.i = i;
