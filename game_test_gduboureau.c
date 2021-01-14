@@ -6,6 +6,7 @@
 #include "game.h"
 #include "game_aux.h"
 #include "game_ext.h"
+#include "queue.h"
 
 void usage(int argc, char* argv[]) {
   fprintf(stderr, "Usage: %s <testname> (trop ou pas assez d'arguments)\n",
@@ -167,7 +168,7 @@ bool test_game_restart() {
       }
     }
   }
-  if (g->pile1 != NULL || g->pile2 != NULL) {
+  if (!queue_is_empty(g->pile1) || !queue_is_empty(g->pile2)) {
     return false;
   }
   game g1 = game_new_ext(8, 8, squares, tentes_lig, tentes_col, false, false);

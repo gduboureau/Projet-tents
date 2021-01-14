@@ -19,14 +19,13 @@ square squares[] = {
     TREE,  EMPTY, TREE,  EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY,
     EMPTY, TREE,  EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY};
 
-square squares2[] = {TENT, GRASS, GRASS, TENT,  TREE,  TREE,  TENT,  GRASS,
-                       TREE, GRASS, GRASS, GRASS, GRASS, GRASS, GRASS, TREE,
-                       TENT, GRASS, GRASS, TENT,  TREE,  TENT,  GRASS, TENT,
-                       TREE, GRASS, GRASS, GRASS, GRASS, TREE,  GRASS, GRASS,
-                       TENT, TREE,  TENT,  GRASS, TENT,  GRASS, TENT,  GRASS,
-                       TREE, GRASS, GRASS, GRASS, TREE,  GRASS, TREE,  GRASS,
-                       TENT, GRASS, GRASS, GRASS, GRASS, GRASS, GRASS, GRASS,
-                       TREE, GRASS, GRASS, GRASS, GRASS, GRASS, GRASS, GRASS};
+square squares2[] = {
+    TENT,  GRASS, GRASS, TENT,  TREE,  TREE,  TENT,  GRASS, TREE,  GRASS, GRASS,
+    GRASS, GRASS, GRASS, GRASS, TREE,  TENT,  GRASS, GRASS, TENT,  TREE,  TENT,
+    GRASS, TENT,  TREE,  GRASS, GRASS, GRASS, GRASS, TREE,  GRASS, GRASS, TENT,
+    TREE,  TENT,  GRASS, TENT,  GRASS, TENT,  GRASS, TREE,  GRASS, GRASS, GRASS,
+    TREE,  GRASS, TREE,  GRASS, TENT,  GRASS, GRASS, GRASS, GRASS, GRASS, GRASS,
+    GRASS, TREE,  GRASS, GRASS, GRASS, GRASS, GRASS, GRASS, GRASS};
 
 /* ********** TEST GAME IS WRAPPING ********** */
 bool test_game_is_wrapping(void) {
@@ -729,14 +728,14 @@ bool test_game_check_move(void) {
       }
     }
   }
-  game g1 = game_new_ext(8,8, squares2, tentes_lig, tentes_col, false, false);
+  game g1 = game_new_ext(8, 8, squares2, tentes_lig, tentes_col, false, false);
   if (game_get_expected_nb_tents_all(g1) < game_get_current_nb_tents_all(g)) {
     game_delete(g);
     game_delete(g1);
     return false;
   }
 
-  game g2 = game_new_empty_ext(8,8,false, false);
+  game g2 = game_new_empty_ext(8, 8, false, false);
   game_set_expected_nb_tents_row(g2, 0, 2);
   game_set_expected_nb_tents_col(g2, 2, 1);
   game_set_expected_nb_tents_col(g2, 3, 1);
