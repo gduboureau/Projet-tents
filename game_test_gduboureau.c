@@ -29,15 +29,15 @@ square squares[] = {
 
 bool test_game_is_over(void) {
   square squares2[] = {TENT, GRASS, GRASS, TENT,  TREE,  TREE,  TENT,  GRASS,
-                      TREE, GRASS, GRASS, GRASS, GRASS, GRASS, GRASS, TREE,
-                      TENT, GRASS, GRASS, TENT,  TREE,  TENT,  GRASS, TENT,
-                      TREE, GRASS, GRASS, GRASS, GRASS, TREE,  GRASS, GRASS,
-                      TENT, TREE,  TENT,  GRASS, TENT,  GRASS, TENT,  GRASS,
-                      TREE, GRASS, GRASS, GRASS, TREE,  GRASS, TREE,  GRASS,
-                      TENT, GRASS, GRASS, GRASS, GRASS, GRASS, GRASS, GRASS,
-                      TREE, GRASS, GRASS, GRASS, GRASS, GRASS, GRASS, GRASS};
-                      
-  game g = game_new_ext(8,8, squares2, tentes_lig, tentes_col, false, false);
+                       TREE, GRASS, GRASS, GRASS, GRASS, GRASS, GRASS, TREE,
+                       TENT, GRASS, GRASS, TENT,  TREE,  TENT,  GRASS, TENT,
+                       TREE, GRASS, GRASS, GRASS, GRASS, TREE,  GRASS, GRASS,
+                       TENT, TREE,  TENT,  GRASS, TENT,  GRASS, TENT,  GRASS,
+                       TREE, GRASS, GRASS, GRASS, TREE,  GRASS, TREE,  GRASS,
+                       TENT, GRASS, GRASS, GRASS, GRASS, GRASS, GRASS, GRASS,
+                       TREE, GRASS, GRASS, GRASS, GRASS, GRASS, GRASS, GRASS};
+
+  game g = game_new_ext(8, 8, squares2, tentes_lig, tentes_col, false, false);
 
   if (game_is_over(g) == false) {
     game_delete(g);

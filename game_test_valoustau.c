@@ -233,8 +233,17 @@ bool test_game_is_diagadj(void) {
 /* ********** TEST GAME GET CURRENT NB TENTS ROW ********** */
 
 bool test_game_get_current_nb_tents_row(void) {
+  square squares2[] = {TENT, GRASS, GRASS, TENT,  TREE,  TREE,  TENT,  GRASS,
+                       TREE, GRASS, GRASS, GRASS, GRASS, GRASS, GRASS, TREE,
+                       TENT, GRASS, GRASS, TENT,  TREE,  TENT,  GRASS, TENT,
+                       TREE, GRASS, GRASS, GRASS, GRASS, TREE,  GRASS, GRASS,
+                       TENT, TREE,  TENT,  GRASS, TENT,  GRASS, TENT,  GRASS,
+                       TREE, GRASS, GRASS, GRASS, TREE,  GRASS, TREE,  GRASS,
+                       TENT, GRASS, GRASS, GRASS, GRASS, GRASS, GRASS, GRASS,
+                       TREE, GRASS, GRASS, GRASS, GRASS, GRASS, GRASS, GRASS};
+
   game g = game_new_ext(8, 8, squares, tentes_lig, tentes_col, false, false);
-  game g1 = game_default_solution();
+  game g1 = game_new_ext(8, 8, squares2, tentes_lig, tentes_col, false, false);
   uint c = 0;
   for (uint i = 0; i < game_nb_rows(g1); i++) {
     c = c + game_get_current_nb_tents_row(g1, i);
@@ -257,8 +266,17 @@ bool test_game_get_current_nb_tents_row(void) {
 /* ********** TEST GAME GET CURRENT NB TENTS COL ********** */
 
 bool test_game_get_current_nb_tents_col(void) {
+  square squares2[] = {TENT, GRASS, GRASS, TENT,  TREE,  TREE,  TENT,  GRASS,
+                       TREE, GRASS, GRASS, GRASS, GRASS, GRASS, GRASS, TREE,
+                       TENT, GRASS, GRASS, TENT,  TREE,  TENT,  GRASS, TENT,
+                       TREE, GRASS, GRASS, GRASS, GRASS, TREE,  GRASS, GRASS,
+                       TENT, TREE,  TENT,  GRASS, TENT,  GRASS, TENT,  GRASS,
+                       TREE, GRASS, GRASS, GRASS, TREE,  GRASS, TREE,  GRASS,
+                       TENT, GRASS, GRASS, GRASS, GRASS, GRASS, GRASS, GRASS,
+                       TREE, GRASS, GRASS, GRASS, GRASS, GRASS, GRASS, GRASS};
+
   game g = game_new_ext(8, 8, squares, tentes_lig, tentes_col, false, false);
-  game g1 = game_default_solution();
+  game g1 = game_new_ext(8, 8, squares2, tentes_lig, tentes_col, false, false);
   uint c = 0;
   for (uint j = 0; j < game_nb_cols(g1); j++) {
     c = c + game_get_current_nb_tents_col(g1, j);

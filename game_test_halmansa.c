@@ -109,7 +109,16 @@ bool test_game_play_move(void) {
 /* *********************************************************** */
 
 bool test_game_get_square(void) {
-  game g = game_default_solution();
+  square squares2[] = {TENT, GRASS, GRASS, TENT,  TREE,  TREE,  TENT,  GRASS,
+                       TREE, GRASS, GRASS, GRASS, GRASS, GRASS, GRASS, TREE,
+                       TENT, GRASS, GRASS, TENT,  TREE,  TENT,  GRASS, TENT,
+                       TREE, GRASS, GRASS, GRASS, GRASS, TREE,  GRASS, GRASS,
+                       TENT, TREE,  TENT,  GRASS, TENT,  GRASS, TENT,  GRASS,
+                       TREE, GRASS, GRASS, GRASS, TREE,  GRASS, TREE,  GRASS,
+                       TENT, GRASS, GRASS, GRASS, GRASS, GRASS, GRASS, GRASS,
+                       TREE, GRASS, GRASS, GRASS, GRASS, GRASS, GRASS, GRASS};
+
+  game g = game_new_ext(8, 8, squares2, tentes_lig, tentes_col, false, false);
   if (game_get_expected_nb_tents_row(g, 0) != 3) {
     game_delete(g);
     return false;
