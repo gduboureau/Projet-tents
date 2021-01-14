@@ -153,7 +153,7 @@ bool test_game_get_square(void) {
 /* *********************************************************** */
 
 bool test_game_set_expected_nb_tents_row(void) {
-  game g = game_new(squares, tentes_lig, tentes_col);
+  game g = game_new_ext(8, 8, squares, tentes_lig, tentes_col, false, false);
   for (uint i = 0; i < game_nb_rows(g); i++) {
     game_set_expected_nb_tents_row(g, i, game_get_expected_nb_tents_row(g, i));
   }
@@ -164,7 +164,7 @@ bool test_game_set_expected_nb_tents_row(void) {
 /* *********************************************************** */
 
 bool test_game_set_expected_nb_tents_col(void) {
-  game g = game_new(squares, tentes_lig, tentes_col);
+  game g = game_new_ext(8, 8, squares, tentes_lig, tentes_col, false, false);
   for (uint j = 0; j < game_nb_cols(g); j++) {
     game_set_expected_nb_tents_col(g, j, game_get_expected_nb_tents_col(g, j));
   }
@@ -175,7 +175,7 @@ bool test_game_set_expected_nb_tents_col(void) {
 /* *********************************************************** */
 
 bool test_game_get_expected_nb_tents_row(void) {
-  game g = game_new(squares, tentes_lig, tentes_col);
+  game g = game_new_ext(8, 8, squares, tentes_lig, tentes_col, false, false);
   for (uint i = 0; i < game_nb_rows(g); i++) {
     if (game_get_expected_nb_tents_row(g, i) < 0 ||
         game_get_expected_nb_tents_row(g, i) > 4) {
@@ -191,7 +191,7 @@ bool test_game_get_expected_nb_tents_row(void) {
 /* *********************************************************** */
 
 bool test_game_get_expected_nb_tents_col(void) {
-  game g = game_new(squares, tentes_lig, tentes_col);
+  game g = game_new_ext(8, 8, squares, tentes_lig, tentes_col, false, false);
   for (uint j = 0; j < game_nb_cols(g); j++) {
     if (game_get_expected_nb_tents_col(g, j) < 0 ||
         game_get_expected_nb_tents_col(g, j) > 4) {
@@ -207,7 +207,7 @@ bool test_game_get_expected_nb_tents_col(void) {
 /* *********************************************************** */
 
 bool test_game_get_expected_nb_tents_all(void) {
-  game g = game_new(squares, tentes_lig, tentes_col);
+  game g = game_new_ext(8, 8, squares, tentes_lig, tentes_col, false, false);
   uint c = 0;
   for (uint j = 0; j < game_nb_cols(g); j++) {
     c = c + game_get_expected_nb_tents_col(g, j);
