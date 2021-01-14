@@ -179,6 +179,8 @@ game game_new_empty(void) {
     fprintf(stderr, "not enough memory!\n");
     exit(EXIT_FAILURE);
   }
+  g->nb_cols = DEFAULT_SIZE;
+  g->nb_rows = DEFAULT_SIZE;
   g->nb_tents_row = malloc(sizeof(uint) * DEFAULT_SIZE);
   if (g->nb_tents_row == NULL) {
     fprintf(stderr, "not enough memory!\n");
