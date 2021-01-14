@@ -30,6 +30,8 @@ square squares[] = {
 bool test_game_delete(void) {
   game g = game_new_ext(8, 8, squares, tentes_lig, tentes_col, false, false);
   game_delete(g);
+  game g1 = game_default();
+  game_delete(g1);
   return true;
 }
 
