@@ -282,7 +282,7 @@ void game_set_square(game g, uint i, uint j, square s) {
     fprintf(stderr, "parameter not valid!\n");
     exit(EXIT_FAILURE);
   }
-  g->squares[i * g->nb_cols + j] = s;
+  g->squares[(i * g->nb_cols) + j] = s;
 }
 
 /********************* Hugo *********************/
