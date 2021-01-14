@@ -66,8 +66,8 @@ game game_new_empty_ext(uint nb_rows, uint nb_cols, bool wrapping,
   g->nb_cols = nb_cols;
   g->wrapping = wrapping;
   g->diagadj = diagadj;
-  /*g->pile1 = queue_new();
-  g->pile2 = queue_new();*/
+  g->pile1 = queue_new();
+  g->pile2 = queue_new();
   g->nb_tents_row = malloc(sizeof(uint) * nb_rows);
   if (g->nb_tents_row == NULL) {
     fprintf(stderr, "not enough memory!\n");
@@ -135,19 +135,19 @@ bool game_is_diagadj(cgame g) {
 
 /********************* Jennifer *********************/
 void game_undo(game g) {
-  /*if (!queue_is_empty(g->pile1)) {
+  if (!queue_is_empty(g->pile1)) {
     coup *data = (coup *)queue_pop_head(g->pile1);
     queue_push_head(g->pile2, data);
     coup *data0 = (coup *)queue_pop_head(g->pile1);
     game_set_square(g, data0->i, data0->j, data0->s);
-  }*/
+  }
 }
 
 void game_redo(game g) {
-  /*if (!queue_is_empty(g->pile2)) {
+  if (!queue_is_empty(g->pile2)) {
     coup *data = (coup *)queue_pop_head(g->pile2);
     game_set_square(g, data->i, data->j, data->s);
-  }*/
+  }
 }
 
 /********game********/
@@ -380,7 +380,7 @@ void game_play_move(game g, uint i, uint j, square s) {
       game_get_square(g, i, j) == TREE) {
     exit(EXIT_FAILURE);
   }
-  /*if (!queue_is_empty(g->pile2)) {
+  if (!queue_is_empty(g->pile2)) {
     queue_clear(g->pile2);
   }
   struct coup p0;
@@ -399,7 +399,7 @@ void game_play_move(game g, uint i, uint j, square s) {
   coup *data = (coup *)malloc(sizeof(coup));
   assert(data);
   *data = p1;
-  queue_push_head(g->pile1, data);*/
+  queue_push_head(g->pile1, data);
   game_set_square(g, i, j, s);
 }
 
@@ -1526,7 +1526,7 @@ void game_fill_grass_row(game g, uint i) {
   }
   for (uint j = 0; j < g->nb_cols; j++) {
     if (game_get_square(g, i, j) == EMPTY) {
-      /*coup p0;
+      coup p0;
       p0.s = game_get_square(g, i, j);
       p0.i = i;
       p0.j = j;
@@ -1539,7 +1539,7 @@ void game_fill_grass_row(game g, uint i) {
       p1.j = j;
       coup *data = (coup *)malloc(sizeof(coup));
       *data = p1;
-      queue_push_head(g->pile1, data);*/
+      queue_push_head(g->pile1, data);
       game_set_square(g, i, j, GRASS);
     }
   }
@@ -1552,7 +1552,7 @@ void game_fill_grass_col(game g, uint j) {
   }
   for (unsigned int i = 0; i < g->nb_rows; i++) {
     if (game_get_square(g, i, j) == EMPTY) {
-      /*coup p0;
+      coup p0;
       p0.s = game_get_square(g, i, j);
       p0.i = i;
       p0.j = j;
@@ -1565,7 +1565,7 @@ void game_fill_grass_col(game g, uint j) {
       p1.j = j;
       coup *data = (coup *)malloc(sizeof(coup));
       *data = p1;
-      queue_push_head(g->pile1, data);*/
+      queue_push_head(g->pile1, data);
       game_set_square(g, i, j, GRASS);
     }
   }
@@ -1583,12 +1583,12 @@ void game_restart(game g) {
       }
     }
   }
-  /*if (g->pile1 != NULL) {
+  if (g->pile1 != NULL) {
     queue_free(g->pile1);
     g->pile1 = NULL;
   }
   if (g->pile2 != NULL) {
     free(g->pile2);
     g->pile2 = NULL;
-  }*/
+  }
 }

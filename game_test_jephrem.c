@@ -28,7 +28,7 @@ square squares[] = {
 /* *********************************************************** */
 
 bool test_game_delete(void) {
-  game g = game_new_ext(8, 8, squares, tentes_lig, tentes_col, false, false);
+  game g = game_new(squares, tentes_lig, tentes_col);
   game_delete(g);
   return true;
 }
@@ -36,7 +36,7 @@ bool test_game_delete(void) {
 /* *********************************************************** */
 
 bool test_game_copy(void) {
-  game g = game_new_ext(8, 8, squares, tentes_lig, tentes_col, false, false);
+  game g = game_new(squares, tentes_lig, tentes_col);
   game g1 = game_copy(g);
   if (game_equal(g, g1) == false) {
     fprintf(stderr, "Error : g is different from the copied game!\n");
@@ -102,7 +102,7 @@ bool test_game_equal(void) {
     return false;
   }
   game g5 = game_new_ext(8, 8, squares, tentes_lig, tentes_col, false, true);
-  game g6 = game_new_ext(8, 8, squares, tentes_lig, tentes_col, false, false);
+  game g6 = game_new(squares, tentes_lig, tentes_col);
   game g7 = game_new_ext(8, 8, squares, tentes_lig, tentes_col, true, false);
 
   if (game_equal(g5, g6) == true) {
@@ -170,7 +170,7 @@ bool test_game_new_empty(void) {
 /* *********************************************************** */
 
 bool test_game_new() {
-  /*uint tentes_lig[] = {3, 0, 4, 0, 4, 0, 1, 0};
+  uint tentes_lig[] = {3, 0, 4, 0, 4, 0, 1, 0};
   uint tentes_col[] = {4, 0, 1, 2, 1, 1, 2, 1};
 
   square squares[] = {EMPTY, EMPTY, EMPTY, EMPTY, TREE,  TREE,  EMPTY, EMPTY,
@@ -183,7 +183,7 @@ bool test_game_new() {
                       TREE,  EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY};
 
   game g = game_new(squares, tentes_lig, tentes_col);
-  game_delete(g);*/
+  game_delete(g);
   return true;
 }
 
@@ -203,7 +203,7 @@ bool test_game_set_square() {
 /* *********************************************************** */
 
 bool test_game_undo() {
-  game g = game_new_ext(8, 8, squares, tentes_lig, tentes_col, false, false);
+  game g = game_new(squares, tentes_lig, tentes_col);
   game_play_move(g, 0, 0, TENT);
   game_undo(g);
   if (game_get_square(g, 0, 0) != EMPTY) {
