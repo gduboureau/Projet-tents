@@ -488,14 +488,15 @@ static dir coor_to_dir(coor coor) {
 static bool ligne_correcte(cgame g, uint l){ return l < game_nb_rows(g);}
 static bool colonne_correcte(cgame g, uint c){ return c < game_nb_cols(g);}
 
-static bool coordonnée_ok(cgame g, coor coor){ return ligne_correcte(g, coor.ligne) && colonne_correcte(g, coor.colonne);}
+static bool coordonnee_ok(cgame g, coor coor){ return ligne_correcte(g, coor.ligne) && colonne_correcte(g, coor.colonne);}
 
-static coor next_coor(cgame g, coor c, coor dc){
-  int li = c.ligne + dc.ligne;
-  int co = c.colonne + dc.colonne;
-  if(g->wrapping) { li = li%g->nb_rows; co = co%g->nb_cols; }
-  return make_coor(li, co);
-}
+static coor next_coor(cgame g, coor c, coor c2){
+  int li = c.ligne + c2.ligne;
+  int co = c.colonne + c2.colonne;
+  if(g->wrapping) {
+    li = li % g->nb_rows;
+    co = co % g->nb_cols; }
+  return make_coor(li, co);}
 
 static coor dir_next_coor(cgame g, coor coor, dir dir){ return next_coor(g, coor, dir_to_coor(dir));}
 
@@ -504,8 +505,7 @@ static bool correct_next_coor(cgame g, coor c, dir d){ return coordonnée_ok(g, 
 int game_check_move(cgame g, uint i, uint j, square s) {
   if (g == NULL || i >= g->nb_rows || j >= g->nb_cols) {
     fprintf(stderr, "parameter not valid!\n");
-    exit(EXIT_FAILURE);
-  }
+    exit(EXIT_FAILURE);}
 }
 
 
