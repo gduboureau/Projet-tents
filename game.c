@@ -181,6 +181,10 @@ game game_new_empty(void) {
   }
   g->nb_cols = DEFAULT_SIZE;
   g->nb_rows = DEFAULT_SIZE;
+  g->wrapping = false;
+  g->diagadj = false;
+  g->pile1 = queue_new();
+  g->pile2 = queue_new();
   g->nb_tents_row = malloc(sizeof(uint) * DEFAULT_SIZE);
   if (g->nb_tents_row == NULL) {
     fprintf(stderr, "not enough memory!\n");
