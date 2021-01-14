@@ -29,6 +29,7 @@ typedef struct game_s *game;
 
 typedef const struct game_s *cgame;
 
+
 /********game_ext********/
 
 /********************* Hugo *********************/
@@ -411,6 +412,78 @@ void game_play_move(game g, uint i, uint j, square s) {
 }
 
 /********************* Guillaume *********************/
+
+typedef struct coor {
+  uint line;
+  uint column;
+} coor;
+
+static coor make_coor(uint l, uint c) {
+  coor coor;
+  coor.line = l;
+  coor.column = c;
+  return coor;
+}
+typedef enum { NONE, NORTH, SOUTH, WEST, EAST, NW, NE, SW, SE } dir;
+
+static coor dir_to_coor(dir d) {
+  switch (d) {
+    case NONE:
+      return make_coor(0, 0);
+    case NORTH:
+      return make_coor(0, -1);
+    case SOUTH:
+      return make_coor(0, 1);
+    case WEST:
+      return make_coor(-1, 0);
+    case EAST:
+      return make_coor(1, 0);
+    case NW:
+      return make_coor(-1, -1);
+    case NE:
+      return make_coor(1, -1);
+    case SW:
+      return make_coor(-1, 1);
+    case SE:
+      return make_coor(1, 1);
+  }
+  exit(EXIT_FAILURE);
+}
+
+static dir coor_to_dir(coor coor) {
+  uint l = coor.line;
+  uint c = coor.column;
+  switch (l) {
+    case 0:
+      switch (c) {
+        case 0:
+          return NONE;
+        case -1:
+          return NORTH;
+        case 1:
+          return SOUTH;
+      }
+    case -1:
+      switch (c) {
+        case 0:
+          return WEST;
+        case -1:
+          return NW;
+        case 1:
+          return SW;
+      }
+    case 1:
+      switch (c) {
+        case 0:
+          return EAST;
+        case -1:
+          return NE;
+        case 1:
+          return SE;
+      }
+  }
+  exit(EXIT_FAILURE);
+}
 
 int game_check_move(cgame g, uint i, uint j, square s) {
   if (g == NULL || i >= g->nb_rows || j >= g->nb_cols) {
