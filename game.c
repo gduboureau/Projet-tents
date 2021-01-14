@@ -414,14 +414,14 @@ void game_play_move(game g, uint i, uint j, square s) {
 /********************* Guillaume *********************/
 
 typedef struct coor {
-  uint line;
-  uint column;
+  uint ligne;
+  uint colonne;
 } coor;
 
 static coor make_coor(uint l, uint c) {
   coor coor;
-  coor.line = l;
-  coor.column = c;
+  coor.ligne = l;
+  coor.colonne = c;
   return coor;
 }
 typedef enum { NONE, NORTH, SOUTH, WEST, EAST, NW, NE, SW, SE } dir;
@@ -451,8 +451,8 @@ static coor dir_to_coor(dir d) {
 }
 
 static dir coor_to_dir(coor coor) {
-  uint l = coor.line;
-  uint c = coor.column;
+  uint l = coor.ligne;
+  uint c = coor.colonne;
   switch (l) {
     case 0:
       switch (c) {
@@ -484,6 +484,22 @@ static dir coor_to_dir(coor coor) {
   }
   exit(EXIT_FAILURE);
 }
+
+static bool ligne_correcte(cgame g, uint l){ return l < game_nb_rows(g);}
+static bool colonne_correcte(cgame g, uint c){ return c < game_nb_cols(g);}
+
+static bool coordonnée_ok(cgame g, coor coor){ return ligne_correcte(g, coor.ligne) && colonne_correcte(g, coor.colonne);}
+
+static coor next_coor(cgame g, coor c, coor dc){
+  int li = c.ligne + dc.ligne;
+  int co = c.colonne + dc.colonne;
+  if(g->wrapping) { li = li%g->nb_rows; co = co%g->nb_cols; }
+  return make_coor(li, co);
+}
+
+static coor dir_next_coor(cgame g, coor coor, dir dir){ return next_coor(g, coor, dir_to_coor(dir));}
+
+static bool correct_next_coor(cgame g, coor c, dir d){ return coordonnée_ok(g, dir_next_coor(g, c , d));}
 
 int game_check_move(cgame g, uint i, uint j, square s) {
   if (g == NULL || i >= g->nb_rows || j >= g->nb_cols) {
