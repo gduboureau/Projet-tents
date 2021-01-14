@@ -181,6 +181,8 @@ game game_new_empty(void) {
   g->nb_rows = 8;
   g->wrapping = false;
   g->diagadj = false;
+  g->pile1 = NULL;
+  g->pile2 = NULL;
   g->nb_tents_row = malloc(sizeof(uint) * g->nb_rows);
   if (g->nb_tents_row == NULL) {
     fprintf(stderr, "not enough memory!\n");
