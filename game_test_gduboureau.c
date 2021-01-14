@@ -142,7 +142,8 @@ bool test_game_fill_grass_col() {
 /* *********************************************************** */
 
 bool test_game_restart() {
-  game g = game_default_solution();
+  game g = game_new_ext(8, 8, squares, tentes_lig, tentes_col, false, false);
+  game_set_square(g, 0, 0, TENT);
   if (g == NULL) {
     game_delete(g);
     return false;
@@ -196,7 +197,7 @@ bool test_game_default() {
                       EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY,
                       TREE,  EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY};
 
-  game g1 = game_new_ext(8,8,squares, tentes_lig, tentes_col,false,false);
+  game g1 = game_new_ext(8, 8, squares, tentes_lig, tentes_col, false, false);
   if (game_equal(g, g1) == false) {
     game_delete(g);
     game_delete(g1);
@@ -222,7 +223,7 @@ bool test_game_default_solution() {
                       TENT, GRASS, GRASS, GRASS, GRASS, GRASS, GRASS, GRASS,
                       TREE, GRASS, GRASS, GRASS, GRASS, GRASS, GRASS, GRASS};
 
-  game g1 = game_new_ext(8,8,squares, tentes_lig, tentes_col,false,false);
+  game g1 = game_new(squares, tentes_lig, tentes_col);
   if (game_equal(g, g1) == false) {
     game_delete(g);
     game_delete(g1);

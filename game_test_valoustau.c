@@ -736,12 +736,12 @@ bool test_game_check_move(void) {
   game_set_square(g2, 0, 2, TENT);
   if (game_check_move(g2, 0, 3, TENT) != LOSING) {
     game_delete(g);
-    //game_delete(g1);
+    // game_delete(g1);
     game_delete(g2);
     return false;
   }
   game_delete(g);
-  //game_delete(g1);
+  // game_delete(g1);
   game_delete(g2);
   return true;
 }
