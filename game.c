@@ -261,12 +261,12 @@ void game_delete(game g) {
   g->nb_tents_col = NULL;
   free(g->nb_tents_row);
   g->nb_tents_row = NULL;
-  if (g->pile1 != NULL) {
-    queue_free(g->pile1);
+  if (!queue_is_empty(g->pile1)) {
+    queue_free_full(g->pile1, &free);
     g->pile1 = NULL;
   }
-  if (g->pile2 != NULL) {
-    free(g->pile2);
+  if (!queue_is_empty(g->pile2)) {
+    queue_free_full(g->pile2, &free);
     g->pile2 = NULL;
   }
   free(g);
@@ -381,9 +381,9 @@ void game_play_move(game g, uint i, uint j, square s) {
     exit(EXIT_FAILURE);
   }
   if (!queue_is_empty(g->pile2)) {
-    queue_clear(g->pile2);
+    queue_clear_full(g->pile2, &free);
   }
-  struct coup p0;
+  coup p0;
   p0.s = game_get_square(g, i, j);
   p0.i = i;
   p0.j = j;
@@ -1533,7 +1533,7 @@ void game_fill_grass_row(game g, uint i) {
       coup *data0 = (coup *)malloc(sizeof(coup));
       *data0 = p0;
       queue_push_head(g->pile1, data0);
-      struct coup p1;
+      coup p1;
       p1.s = GRASS;
       p1.i = i;
       p1.j = j;
@@ -1559,7 +1559,7 @@ void game_fill_grass_col(game g, uint j) {
       coup *data0 = (coup *)malloc(sizeof(coup));
       *data0 = p0;
       queue_push_head(g->pile1, data0);
-      struct coup p1;
+      coup p1;
       p1.s = GRASS;
       p1.i = i;
       p1.j = j;
@@ -1583,12 +1583,10 @@ void game_restart(game g) {
       }
     }
   }
-  if (g->pile1 != NULL) {
-    queue_free(g->pile1);
-    g->pile1 = NULL;
+  if (!queue_is_empty(g->pile1)) {
+    queue_clear_full(g->pile1, &free);
   }
-  if (g->pile2 != NULL) {
-    free(g->pile2);
-    g->pile2 = NULL;
+  if (!queue_is_empty(g->pile2)) {
+    queue_clear_full(g->pile2, &free);
   }
 }
