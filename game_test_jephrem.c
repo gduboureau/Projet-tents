@@ -52,7 +52,7 @@ bool test_game_copy(void) {
 /* *********************************************************** */
 
 bool test_game_equal(void) {
-  game g1 = game_default();
+  game g1 = game_new_ext(8, 8, squares, tentes_lig, tentes_col, false, false);
   game g2 = game_copy(g1);
   if (game_is_wrapping(g1) != game_is_wrapping(g2) ||
       game_is_diagadj(g1) != game_is_diagadj(g2) ||
