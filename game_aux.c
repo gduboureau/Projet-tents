@@ -81,7 +81,7 @@ game game_default_solution(void) {
                       TREE, GRASS, GRASS, GRASS, TREE,  GRASS, TREE,  GRASS,
                       TENT, GRASS, GRASS, GRASS, GRASS, GRASS, GRASS, GRASS,
                       TREE, GRASS, GRASS, GRASS, GRASS, GRASS, GRASS, GRASS};
-  game g = game_new(squares, tentes_lig, tentes_col);
+  game g = game_new_ext(8, 8, squares, tentes_lig, tentes_col, false, false);
 
   return g;
 }
