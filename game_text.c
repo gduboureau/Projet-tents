@@ -80,7 +80,7 @@ int main(void) {
       }
     }
     if (command == 'e') {
-      if (game_check_move(g, row, column, EMPTY) == REGULAR || game_check_move(g, row, column, EMPTY) == LOSING) {
+      if (game_check_move(g, row, column, EMPTY) == REGULAR ) {
         game_play_move(g, row, column, EMPTY);
         printf("> action: play move 'e' into square (%d,%d)\n", row, column);
       }
