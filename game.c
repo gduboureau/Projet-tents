@@ -549,22 +549,22 @@ static bool r2_nb_tent_respecte(cgame g, square s) {
 }
 
 static bool r3_tent_tree(cgame g, uint x, uint y, square s) {
+  int a = 0;
   if (s == TENT) {
     for (int i = -1; i < 2; i++) {
       for (int j = -1; j < 2; j++) {
         if (((i != -1 && j != -1) || (i != 1 && j != -1) || (i != -1 && j != 1) || (i != 1 && j != 1)) && (correct_next_coor(g, make_coor(x, y),
                               coor_to_dir(make_coor(i, j))))) {
           printf("mots \n");
-          if ((x + i + y + j != y + x) &&
-              game_get_square(g, x + i, y + j) == TREE) {
+          if (game_get_square(g, x + i, y + j) != TREE) {
             printf("pas mots \n");
-            return true;
+            a++;
           }
         }
       }
     }
   }
-  return false;
+  return a != 4;
 }
 
 static bool game_correct(cgame g, uint x, uint y, square s) {
