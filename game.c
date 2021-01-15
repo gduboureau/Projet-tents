@@ -520,7 +520,8 @@ static bool r1_tent_adj_tent(cgame g, uint x, uint y, square s) {
         if (correct_next_coor(g, make_coor(x, y),
                               coor_to_dir(make_coor(i, j)))) {
           printf("mots \n");
-          if ((x+i+y+j != y+x) && game_get_square(g, x + i, y + j) == TENT) {
+          if ((x + i + y + j != y + x) &&
+              game_get_square(g, x + i, y + j) == TENT) {
             printf("pas mots \n");
             return false;
           }
@@ -531,22 +532,43 @@ static bool r1_tent_adj_tent(cgame g, uint x, uint y, square s) {
   return true;
 }
 
-static bool r2_nb_tent_respecte(cgame g,square s) {
-  for (uint i = 0; i < game_nb_rows(g); i++){
-    if (s == TENT && game_get_current_nb_tents_row(g,i) > game_get_expected_nb_tents_row(g,i)){
+static bool r2_nb_tent_respecte(cgame g, square s) {
+  for (uint i = 0; i < game_nb_rows(g); i++) {
+    if (s == TENT && game_get_current_nb_tents_row(g, i) >
+                         game_get_expected_nb_tents_row(g, i)) {
       return false;
     }
   }
-  for (uint j = 0; j < game_nb_cols(g); j++){
-    if (s == TENT && game_get_current_nb_tents_col(g,j) > game_get_expected_nb_tents_col(g,j)){
+  for (uint j = 0; j < game_nb_cols(g); j++) {
+    if (s == TENT && game_get_current_nb_tents_col(g, j) >
+                         game_get_expected_nb_tents_col(g, j)) {
       return false;
     }
   }
   return true;
 }
 
-static bool game_correct(cgame g, uint x, uint y, square s){
-  return r2_nb_tent_respecte(g,s) && r1_tent_adj_tent(g,x,y,s);
+static bool r3_tent_tree(cgame g, uint x, uint y, square s) {
+  if (s == TENT) {
+    for (int i = -1; i < 2; i++) {
+      for (int j = -1; j < 2; j++) {
+        if (((i != -1 && j != -1) || (i != 1 && j != -1) || (i != -1 && j != 1) || (i != 1 && j != 1)) && (correct_next_coor(g, make_coor(x, y),
+                              coor_to_dir(make_coor(i, j))))) {
+          printf("mots \n");
+          if ((x + i + y + j != y + x) &&
+              game_get_square(g, x + i, y + j) == TREE) {
+            printf("pas mots \n");
+            return true;
+          }
+        }
+      }
+    }
+  }
+  return false;
+}
+
+static bool game_correct(cgame g, uint x, uint y, square s) {
+  return r2_nb_tent_respecte(g, s) && r1_tent_adj_tent(g, x, y, s) && r3_tent_tree(g,x,y,s);
 }
 
 int game_check_move(cgame g, uint i, uint j, square s) {
@@ -554,7 +576,9 @@ int game_check_move(cgame g, uint i, uint j, square s) {
     fprintf(stderr, "parameter not valid!\n");
     exit(EXIT_FAILURE);
   }
-  if (!game_correct(g,i,j,s)) { return LOSING;}
+  if (!game_correct(g, i, j, s)) {
+    return LOSING;
+  }
   return REGULAR;
 }
 
