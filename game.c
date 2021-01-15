@@ -531,15 +531,30 @@ static bool r1_tent_adj_tent(cgame g, uint x, uint y, square s) {
   return true;
 }
 
+static bool r2_nb_tent_respecte(cgame g,square s) {
+  for (uint i = 0; i < game_nb_rows(g); i++){
+    if (s == TENT && game_get_current_nb_tents_row(g,i) > game_get_expected_nb_tents_row(g,i)){
+      return false;
+    }
+  }
+  for (uint j = 0; j < game_nb_cols(g); j++){
+    if (s == TENT && game_get_current_nb_tents_col(g,j) > game_get_expected_nb_tents_col(g,j)){
+      return false;
+    }
+  }
+  return true;
+}
+
+static bool game_correct(cgame g, uint x, uint y, square s){
+  return r2_nb_tent_respecte(g,s) && r1_tent_adj_tent(g,x,y,s);
+}
+
 int game_check_move(cgame g, uint i, uint j, square s) {
   if (g == NULL || i >= g->nb_rows || j >= g->nb_cols) {
     fprintf(stderr, "parameter not valid!\n");
     exit(EXIT_FAILURE);
   }
-
-  if (!r1_tent_adj_tent(g, i, j, s)) {
-    return LOSING;
-  }
+  if (!game_correct(g,i,j,s)) { return LOSING;}
   return REGULAR;
 }
 
