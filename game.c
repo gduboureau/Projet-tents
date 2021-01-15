@@ -520,7 +520,7 @@ static bool r1_tent_adj_tent(cgame g, uint x, uint y, square s) {
         if (correct_next_coor(g, make_coor(x, y),
                               coor_to_dir(make_coor(i, j)))) {
           printf("mots \n");
-          if (i != 0 && j != 0 && game_get_square(g, x + i, y + j) == TENT) {
+          if ((x+i+y+j != y+x) && game_get_square(g, x + i, y + j) == TENT) {
             printf("pas mots \n");
             return false;
           }
