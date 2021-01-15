@@ -484,8 +484,12 @@ static dir coor_to_dir(coor coor) {
   exit(EXIT_FAILURE);
 }
 
-static bool ligne_correcte(cgame g, uint l) { return l < game_nb_rows(g); }
-static bool colonne_correcte(cgame g, uint c) { return c < game_nb_cols(g); }
+static bool ligne_correcte(cgame g, uint l) {
+  return l < game_nb_rows(g) && l >= 0;
+}
+static bool colonne_correcte(cgame g, uint c) {
+  return c < game_nb_cols(g) && c >= 0;
+}
 
 static bool coordonnee_ok(cgame g, coor coor) {
   return ligne_correcte(g, coor.ligne) && colonne_correcte(g, coor.colonne);
@@ -506,7 +510,25 @@ static coor dir_next_coor(cgame g, coor coor, dir dir) {
 }
 
 static bool correct_next_coor(cgame g, coor c, dir d) {
-  return coordonnée_ok(g, dir_next_coor(g, c, d));
+  return coordonnee_ok(g, dir_next_coor(g, c, d));
+}
+
+static bool r1_tent_adj_tent(cgame g, uint x, uint y, square s) {
+  if (s == TENT) {
+    for (int i = -1; i < 2; i++) {
+      for (int j = -1; j < 2; j++) {
+        if (correct_next_coor(g, make_coor(x, y),
+                              coor_to_dir(make_coor(i, j)))) {
+          printf("mots \n");
+          if (i != 0 && j != 0 && game_get_square(g, x + i, y + j) == TENT) {
+            printf("pas mots \n");
+            return false;
+          }
+        }
+      }
+    }
+  }
+  return true;
 }
 
 int game_check_move(cgame g, uint i, uint j, square s) {
@@ -514,6 +536,11 @@ int game_check_move(cgame g, uint i, uint j, square s) {
     fprintf(stderr, "parameter not valid!\n");
     exit(EXIT_FAILURE);
   }
+
+  if (!r1_tent_adj_tent(g, i, j, s)) {
+    return LOSING;
+  }
+  return REGULAR;
 }
 
 bool game_is_over(cgame g) {
