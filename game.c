@@ -553,7 +553,7 @@ static bool r3_tent_tree(cgame g, uint x, uint y, square s) {
   if (s == TENT) {
     for (int i = -1; i < 2; i++) {
       for (int j = -1; j < 2; j++) {
-        if (((i != -1 && j != -1) || (i != 1 && j != -1) || (i != -1 && j != 1) || (i != 1 && j != 1)) && (correct_next_coor(g, make_coor(x, y),
+        if (((i != -1 && j != -1) && (i != 1 && j != -1) && (i != -1 && j != 1) && (i != 1 && j != 1)) && (correct_next_coor(g, make_coor(x, y),
                               coor_to_dir(make_coor(i, j))))) {
           printf("mots \n");
           if (game_get_square(g, x + i, y + j) != TREE) {
