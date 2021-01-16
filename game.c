@@ -513,7 +513,7 @@ static bool correct_next_coor(cgame g, coor c, dir d) {
   return coordonnee_ok(g, dir_next_coor(g, c, d));
 }
 
-static bool r1_tent_adj_tent(cgame g, uint x, uint y, square s) {
+/*static bool r1_tent_adj_tent(cgame g, uint x, uint y, square s) {
   if (s == TENT) {
     for (int i = -1; i < 2; i++) {
       for (int j = -1; j < 2; j++) {
@@ -535,7 +535,7 @@ static bool r1_tent_adj_tent(cgame g, uint x, uint y, square s) {
   }
   return true;
 }
-
+*/
 static bool r2_nb_tent_respecte(cgame g, uint x, uint y, square s) {
   if (s == TENT && (game_get_expected_nb_tents_col(g, y) == 0 ||
                     game_get_expected_nb_tents_row(g, x) == 0)) {
@@ -592,7 +592,7 @@ static bool r4_nb_tent_grass(cgame g, uint x, uint y, square s) {
   }
   return true;
 }
-/*
+
 static bool arbre_entoure_grass(cgame g, uint x, uint y, uint x1, uint y1) {
   int a = 0;
   int cmp = 0;
@@ -637,11 +637,11 @@ static bool r5_tree_entoure_grass(cgame g, uint x, uint y, square s) {
   }
   return true;
 }
-*/
+
 static bool game_correct(cgame g, uint x, uint y, square s) {
-  return r2_nb_tent_respecte(g, x, y, s) && r1_tent_adj_tent(g, x, y, s) &&
-         r3_tent_next_to_tree(g, x, y, s) && r4_nb_tent_grass(g, x, y, s); /*&&
-         r5_tree_entoure_grass(g, x, y, s)*/
+  return r2_nb_tent_respecte(g, x, y, s) /*&& r1_tent_adj_tent(g, x, y, s)*/ &&
+         r3_tent_next_to_tree(g, x, y, s) && r4_nb_tent_grass(g, x, y, s) &&
+         r5_tree_entoure_grass(g, x, y, s);
 }
 
 static bool game_illegal(cgame g, uint x, uint y, square s) {
