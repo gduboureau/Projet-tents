@@ -548,12 +548,12 @@ static bool r2_nb_tent_respecte(cgame g, square s) {
   return true;
 }
 
-static bool r3_tent_tree(cgame g, uint x, uint y, square s) {
+static bool r3_tent_next_to_tree(cgame g, uint x, uint y, square s) {
   int a = 0;
   if (s == TENT) {
     for (int i = -1; i < 2; i++) {
       for (int j = -1; j < 2; j++) {
-        if (((i != -1 && j != -1) && (i != 1 && j != -1) && (i != -1 && j != 1) && (i != 1 && j != 1)) && (correct_next_coor(g, make_coor(x, y),
+        if ((i == 0 || j == 0) && (correct_next_coor(g, make_coor(x, y),
                               coor_to_dir(make_coor(i, j))))) {
           printf("mots \n");
           if (game_get_square(g, x + i, y + j) != TREE) {
@@ -567,7 +567,7 @@ static bool r3_tent_tree(cgame g, uint x, uint y, square s) {
   return a != 4;
 }
 
-static bool r4_nb_tent_grass(cgame g,int x, int y, square s){
+static bool r4_nb_tent_grass(cgame g,uint x, uint y, square s){
   int cpt_empty_col = 0;
   int cpt_empty_lin = 0;
   for (uint i = 0; i < game_nb_rows(g); i++){
@@ -590,7 +590,7 @@ static bool r4_nb_tent_grass(cgame g,int x, int y, square s){
 }
 
 static bool game_correct(cgame g, uint x, uint y, square s) {
-  return r2_nb_tent_respecte(g, s) && r1_tent_adj_tent(g, x, y, s) && r3_tent_tree(g,x,y,s) && r4_nb_tent_grass(g,x,y,s);
+  return r2_nb_tent_respecte(g, s) && r1_tent_adj_tent(g, x, y, s) && r3_tent_next_to_tree(g,x,y,s) && r4_nb_tent_grass(g,x,y,s);
 }
 
 static bool game_illegal(cgame g, uint x, uint y, square s){
