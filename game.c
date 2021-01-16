@@ -593,10 +593,20 @@ static bool game_correct(cgame g, uint x, uint y, square s) {
   return r2_nb_tent_respecte(g, s) && r1_tent_adj_tent(g, x, y, s) && r3_tent_tree(g,x,y,s) && r4_nb_tent_grass(g,x,y,s);
 }
 
+static bool game_illegal(cgame g, uint x, uint y, square s){
+  if (game_get_square(g,x,y) == TREE || s == TREE){
+    return false;
+  }
+  return true;
+}
+
 int game_check_move(cgame g, uint i, uint j, square s) {
   if (g == NULL || i >= g->nb_rows || j >= g->nb_cols) {
     fprintf(stderr, "parameter not valid!\n");
     exit(EXIT_FAILURE);
+  }
+  if (!game_illegal(g,i,j,s)){
+    return ILLEGAL;
   }
   if (!game_correct(g, i, j, s)) {
     return LOSING;
