@@ -519,12 +519,13 @@ static bool r1_tent_adj_tent(cgame g, uint x, uint y, square s) {
       for (int j = -1; j < 2; j++) {
         if (correct_next_coor(g, make_coor(x, y),
                               coor_to_dir(make_coor(i, j)))) {
-          if (g->diagadj == false){
+          if (g->diagadj == false) {
             if ((i + j != 0) && game_get_square(g, x + i, y + j) == TENT) {
               return false;
             }
-          }else{
-            if ((i == 0 || j == 0) && (i + j != 0) && game_get_square(g, x + i, y + j) == TENT) {
+          } else {
+            if ((i == 0 || j == 0) && (i + j != 0) &&
+                game_get_square(g, x + i, y + j) == TENT) {
               return false;
             }
           }
@@ -536,12 +537,14 @@ static bool r1_tent_adj_tent(cgame g, uint x, uint y, square s) {
 }
 
 static bool r2_nb_tent_respecte(cgame g, uint x, uint y, square s) {
-  if (s == TENT && game_get_current_nb_tents_row(g, x) >
-                       game_get_expected_nb_tents_row(g, x)) {
+  if (s == TENT && (game_get_expected_nb_tents_col(g, j) == 0 ||
+                    game_get_expected_nb_tents_row(g, i) == 0)) {
     return false;
   }
-  if (s == TENT && game_get_current_nb_tents_col(g, y) >
-                       game_get_expected_nb_tents_col(g, y)) {
+  if (s == TENT && (game_get_expected_nb_tents_row(g, i) <
+                    game_get_current_nb_tents_row(g, i)) ||
+      (game_get_expected_nb_tents_col(g, j) <
+       game_get_current_nb_tents_col(g, j))) {
     return false;
   }
   return true;
