@@ -558,7 +558,7 @@ static bool r3_tent_next_to_tree(cgame g, uint x, uint y, square s) {
       for (int j = -1; j < 2; j++) {
         if ((i == 0 || j == 0) && (i + j != 0) &&
             (correct_next_coor(g, make_coor(x, y),
-                               coor_to_dir(make_coor(i, j))))) {
+                               coor_to_dir(make_coor(i, j))))){
           cpt++;
           if (game_get_square(g, x + i, y + j) != TREE) {
             a++;
