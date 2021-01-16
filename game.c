@@ -593,20 +593,20 @@ static bool r4_nb_tent_grass(cgame g, uint x, uint y, square s) {
   return true;
 }
 
-static bool arbre_seul(cgame g, uint x, uint y) {
+static bool arbre_entoure_grass(cgame g, uint x, uint y, uint x1, uint y1) {
   int a = 0;
   for (int k = -1; k < 2; k++) {
     for (int l = -1; l < 2; l++) {
       if (correct_next_coor(g, make_coor(x + k, y + l),
                             coor_to_dir(make_coor(k, l)))) {
-        if ((k == 0 || l == 0) && (k + l != 0) &&
-            game_get_square(g, x + k, y + l) != TENT) {
+        if ((k == 0 || l == 0) && (k + l != 0) && x + k != x1 && y + l != y1 &&
+            game_get_square(g, x + k, y + l) == GRASS) {
           a++;
         }
       }
     }
   }
-  return a == 4;
+  return a == 3;
 }
 
 static bool r5_tree_entoure_grass(cgame g, uint x, uint y, square s) {
@@ -617,7 +617,7 @@ static bool r5_tree_entoure_grass(cgame g, uint x, uint y, square s) {
                               coor_to_dir(make_coor(i, j)))) {
           if ((i == 0 || j == 0) && (i + j != 0) &&
               game_get_square(g, x + i, y + j) == TREE) {
-            if (arbre_seul(g, x + i, y + j)) {
+            if (arbre_entoure_grass(g, x + i, y + j, x, y)) {
               return false;
             }
           }
