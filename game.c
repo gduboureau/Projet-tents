@@ -576,9 +576,7 @@ static bool r3_tent_next_to_tree(cgame g, uint x, uint y, square s) {
   if (cmp == 3) {
     return a != 3;
   }
-  if (cmp == 4) {
     return a != 4;
-  }
 }
 
 static bool r4_nb_tent_grass(cgame g, uint x, uint y, square s) {
@@ -628,9 +626,7 @@ static bool arbre_entoure_grass(cgame g, uint x, uint y, uint x1, uint y1) {
   if (cmp == 3) {
     return a == 3;
   }
-  if (cmp == 4) {
     return a == 4;
-  }
 }
 
 static bool r5_tree_entoure_grass(cgame g, uint x, uint y, square s) {
