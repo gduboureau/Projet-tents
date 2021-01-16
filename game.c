@@ -579,9 +579,9 @@ static bool r4_nb_tent_grass(cgame g, uint x, uint y, square s) {
     }
   }
   if (s == GRASS &&
-      ((cpt_empty_col <= (game_get_expected_nb_tents_row(g, x) -
+      ((cpt_empty_lin != (game_get_expected_nb_tents_row(g, x) -
                           game_get_current_nb_tents_row(g, x))) ||
-       (cpt_empty_lin <= (game_get_expected_nb_tents_col(g, y) -
+       (cpt_empty_col != (game_get_expected_nb_tents_col(g, y) -
                           game_get_current_nb_tents_col(g, y))))) {
     return false;
   }
