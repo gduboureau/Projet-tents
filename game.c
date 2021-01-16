@@ -599,11 +599,12 @@ static bool arbre_entoure_grass(cgame g, uint x, uint y, uint x1, uint y1) {
   for (int k = -1; k < 2; k++) {
     for (int l = -1; l < 2; l++) {
       if (correct_next_coor(g, make_coor(x, y), coor_to_dir(make_coor(k, l)))) {
-        cmp++;
-        if ((k == 0 || l == 0) && (k + l != 0) &&
-            (x + k != x1 || y + l != y1) &&
-            game_get_square(g, x + k, y + l) == GRASS) {
-          a++;
+        if ((k == 0 || l == 0) && (k + l != 0)){
+          cmp++;
+          if ((x + k != x1 || y + l != y1) &&
+              game_get_square(g, x + k, y + l) == GRASS) {
+            a++;
+          }
         }
       }
     }
