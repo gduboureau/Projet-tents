@@ -519,9 +519,14 @@ static bool r1_tent_adj_tent(cgame g, uint x, uint y, square s) {
       for (int j = -1; j < 2; j++) {
         if (correct_next_coor(g, make_coor(x, y),
                               coor_to_dir(make_coor(i, j)))) {
-          if ((x + i + y + j != y + x) &&
-              game_get_square(g, x + i, y + j) == TENT) {
-            return false;
+          if (g->diagadj == false){
+            if ((i + j != 0) && game_get_square(g, x + i, y + j) == TENT) {
+              return false;
+            }
+          }else{
+            if ((i == 0 || j == 0) && (i + j != 0) && game_get_square(g, x + i, y + j) == TENT) {
+              return false;
+            }
           }
         }
       }
