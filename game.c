@@ -611,7 +611,15 @@ static bool arbre_entoure_grass(cgame g, uint x, uint y, uint x1, uint y1) {
       }
     }
   }
-  return cpt==a;
+  if (cpt == 2) {
+    return a == 2;
+  }
+  if (cpt == 3) {
+    return a == 3;
+  }
+  if (cpt == 4) {
+    return a == 4;
+  }
 }
 
 static bool r5_tree_entoure_grass(cgame g, uint x, uint y, square s) {
