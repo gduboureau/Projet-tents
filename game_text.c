@@ -30,6 +30,8 @@ int main(void) {
       printf("- press 't <i> <j>' to put a tent at square (i,j) \n");
       printf("- press 'g <i> <j>' to put a grass at square (i,j) \n");
       printf("- press 'e <i> <j>' to erase square (i,j) \n");
+      printf(" - press 'z' to undo the last move \n");
+      printf(" - press 'y' to redo the last move \n");
       printf("- press 'r' to restart \n");
       printf("- press 'q' to quit \n");
       game_print(g);
