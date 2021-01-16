@@ -537,14 +537,14 @@ static bool r1_tent_adj_tent(cgame g, uint x, uint y, square s) {
 }
 
 static bool r2_nb_tent_respecte(cgame g, uint x, uint y, square s) {
-  if (s == TENT && (game_get_expected_nb_tents_col(g, j) == 0 ||
-                    game_get_expected_nb_tents_row(g, i) == 0)) {
+  if (s == TENT && (game_get_expected_nb_tents_col(g, y) == 0 ||
+                    game_get_expected_nb_tents_row(g, x) == 0)) {
     return false;
   }
-  if (s == TENT && (game_get_expected_nb_tents_row(g, i) <
-                    game_get_current_nb_tents_row(g, i)) ||
-      (game_get_expected_nb_tents_col(g, j) <
-       game_get_current_nb_tents_col(g, j))) {
+  if (s == TENT && (game_get_expected_nb_tents_row(g, x) <
+                    game_get_current_nb_tents_row(g, x)) ||
+      (game_get_expected_nb_tents_col(g, y) <
+       game_get_current_nb_tents_col(g, y))) {
     return false;
   }
   return true;
@@ -569,23 +569,25 @@ static bool r3_tent_next_to_tree(cgame g, uint x, uint y, square s) {
 }
 
 static bool r4_nb_tent_grass(cgame g, uint x, uint y, square s) {
-  int cpt_empty_col = 0;
-  int cpt_empty_lin = 0;
+  /*Compteur de EMPTY colonne*/
+  uint c = 0;
   for (uint i = 0; i < game_nb_rows(g); i++) {
     if (game_get_square(g, i, y) == EMPTY) {
-      cpt_empty_lin++;
+      c++;
     }
   }
+  /*Compteur de EMPTY ligne*/
+  uint d = 0;
   for (uint j = 0; j < game_nb_cols(g); j++) {
     if (game_get_square(g, x, j) == EMPTY) {
-      cpt_empty_col++;
+      d++;
     }
   }
-  if (s == GRASS &&
-      ((cpt_empty_lin != (game_get_expected_nb_tents_row(g, x) -
-                          game_get_current_nb_tents_row(g, x))) ||
-       (cpt_empty_col != (game_get_expected_nb_tents_col(g, y) -
-                          game_get_current_nb_tents_col(g, y))))) {
+
+  if (s == GRASS && ((d <= (game_get_expected_nb_tents_row(g, x) -
+                            game_get_current_nb_tents_row(g, x))) ||
+                     (c <= (game_get_expected_nb_tents_col(g, y) -
+                            game_get_current_nb_tents_col(g, y))))) {
     return false;
   }
   return true;
