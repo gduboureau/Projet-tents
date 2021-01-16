@@ -519,10 +519,8 @@ static bool r1_tent_adj_tent(cgame g, uint x, uint y, square s) {
       for (int j = -1; j < 2; j++) {
         if (correct_next_coor(g, make_coor(x, y),
                               coor_to_dir(make_coor(i, j)))) {
-          printf("mots \n");
           if ((x + i + y + j != y + x) &&
               game_get_square(g, x + i, y + j) == TENT) {
-            printf("pas mots \n");
             return false;
           }
         }
@@ -532,11 +530,13 @@ static bool r1_tent_adj_tent(cgame g, uint x, uint y, square s) {
   return true;
 }
 
-static bool r2_nb_tent_respecte(cgame g,uint x, uint y, square s) {
-  if (s == TENT && game_get_current_nb_tents_row(g, x) > game_get_expected_nb_tents_row(g, x)) {
-      return false;
+static bool r2_nb_tent_respecte(cgame g, uint x, uint y, square s) {
+  if (s == TENT && game_get_current_nb_tents_row(g, x) >
+                       game_get_expected_nb_tents_row(g, x)) {
+    return false;
   }
-  if (s == TENT && game_get_current_nb_tents_col(g, y) > game_get_expected_nb_tents_col(g, y)) {
+  if (s == TENT && game_get_current_nb_tents_col(g, y) >
+                       game_get_expected_nb_tents_col(g, y)) {
     return false;
   }
   return true;
@@ -547,11 +547,10 @@ static bool r3_tent_next_to_tree(cgame g, uint x, uint y, square s) {
   if (s == TENT) {
     for (int i = -1; i < 2; i++) {
       for (int j = -1; j < 2; j++) {
-        if ((i == 0 || j == 0) && (correct_next_coor(g, make_coor(x, y),
-                              coor_to_dir(make_coor(i, j))))) {
-          printf("mots \n");
+        if ((i == 0 || j == 0) &&
+            (correct_next_coor(g, make_coor(x, y),
+                               coor_to_dir(make_coor(i, j))))) {
           if (game_get_square(g, x + i, y + j) != TREE) {
-            printf("pas mots \n");
             a++;
           }
         }
@@ -561,34 +560,36 @@ static bool r3_tent_next_to_tree(cgame g, uint x, uint y, square s) {
   return a != 4;
 }
 
-static bool r4_nb_tent_grass(cgame g,uint x, uint y, square s){
+static bool r4_nb_tent_grass(cgame g, uint x, uint y, square s) {
   int cpt_empty_col = 0;
   int cpt_empty_lin = 0;
-  for (uint i = 0; i < game_nb_rows(g); i++){
-    if (game_get_square(g,i,y) == EMPTY){
+  for (uint i = 0; i < game_nb_rows(g); i++) {
+    if (game_get_square(g, i, y) == EMPTY) {
       cpt_empty_lin++;
     }
   }
-  for (uint j = 0; j < game_nb_cols(g); j++){
-    if (game_get_square(g,x,j) == EMPTY){
+  for (uint j = 0; j < game_nb_cols(g); j++) {
+    if (game_get_square(g, x, j) == EMPTY) {
       cpt_empty_col++;
     }
   }
-  if (s == GRASS && ((cpt_empty_lin <= (game_get_expected_nb_tents_row(g, x) -
-                            game_get_current_nb_tents_row(g, x))) ||
-                     (cpt_empty_col <= (game_get_expected_nb_tents_col(g, y) -
-                            game_get_current_nb_tents_col(g, y))))) {
+  if (s == GRASS &&
+      ((cpt_empty_col <= (game_get_expected_nb_tents_row(g, x) -
+                          game_get_current_nb_tents_row(g, x))) ||
+       (cpt_empty_lin <= (game_get_expected_nb_tents_col(g, y) -
+                          game_get_current_nb_tents_col(g, y))))) {
     return false;
   }
   return true;
 }
 
 static bool game_correct(cgame g, uint x, uint y, square s) {
-  return r2_nb_tent_respecte(g, x, y, s) && r1_tent_adj_tent(g, x, y, s) && r3_tent_next_to_tree(g,x,y,s) && r4_nb_tent_grass(g,x,y,s);
+  return r2_nb_tent_respecte(g, x, y, s) && r1_tent_adj_tent(g, x, y, s) &&
+         r3_tent_next_to_tree(g, x, y, s) && r4_nb_tent_grass(g, x, y, s);
 }
 
-static bool game_illegal(cgame g, uint x, uint y, square s){
-  if (game_get_square(g,x,y) == TREE || s == TREE){
+static bool game_illegal(cgame g, uint x, uint y, square s) {
+  if (game_get_square(g, x, y) == TREE || s == TREE) {
     return false;
   }
   return true;
@@ -599,7 +600,7 @@ int game_check_move(cgame g, uint i, uint j, square s) {
     fprintf(stderr, "parameter not valid!\n");
     exit(EXIT_FAILURE);
   }
-  if (!game_illegal(g,i,j,s)){
+  if (!game_illegal(g, i, j, s)) {
     return ILLEGAL;
   }
   if (!game_correct(g, i, j, s)) {
