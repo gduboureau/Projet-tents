@@ -567,15 +567,7 @@ static bool r3_tent_next_to_tree(cgame g, uint x, uint y, square s) {
       }
     }
   }
-  if (cpt == 2) {
-    return a == 2;
-  }
-  if (cpt == 3) {
-    return a == 3;
-  }
-  if (cpt == 4) {
-    return a == 4;
-  }
+  return cpt!=a;
 }
 
 static bool r4_nb_tent_grass(cgame g, uint x, uint y, square s) {
@@ -619,15 +611,7 @@ static bool arbre_entoure_grass(cgame g, uint x, uint y, uint x1, uint y1) {
       }
     }
   }
-  if (cpt == 2) {
-    return a == 2;
-  }
-  if (cpt == 3) {
-    return a == 3;
-  }
-  if (cpt == 4) {
-    return a == 4;
-  }
+  return cpt==a;
 }
 
 static bool r5_tree_entoure_grass(cgame g, uint x, uint y, square s) {
