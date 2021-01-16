@@ -567,7 +567,7 @@ static bool r3_tent_next_to_tree(cgame g, uint x, uint y, square s) {
       }
     }
   }
-  return cpt!=a;
+  return cpt==a;
 }
 
 static bool r4_nb_tent_grass(cgame g, uint x, uint y, square s) {
