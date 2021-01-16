@@ -557,7 +557,7 @@ static bool r3_tent_next_to_tree(cgame g, uint x, uint y, square s) {
       for (int j = -1; j < 2; j++) {
         if ((i == 0 || j == 0) && (i + j != 0) &&
             (correct_next_coor(g, make_coor(x, y),
-                               coor_to_dir(make_coor(i, j))))){
+                               coor_to_dir(make_coor(i, j))))) {
           if (game_get_square(g, x + i, y + j) != TREE) {
             a++;
           }
@@ -565,7 +565,7 @@ static bool r3_tent_next_to_tree(cgame g, uint x, uint y, square s) {
       }
     }
   }
-  return a==4;
+  return a != 4;
 }
 
 static bool r4_nb_tent_grass(cgame g, uint x, uint y, square s) {
@@ -595,13 +595,12 @@ static bool r4_nb_tent_grass(cgame g, uint x, uint y, square s) {
 
 static bool arbre_entoure_grass(cgame g, uint x, uint y, uint x1, uint y1) {
   int a = 0;
-  int cpt = 0;
+  int cmp = 0;
   for (int k = -1; k < 2; k++) {
     for (int l = -1; l < 2; l++) {
       if (correct_next_coor(g, make_coor(x, y), coor_to_dir(make_coor(k, l)))) {
-        if ((k == 0 || l == 0) && (k + l != 0) &&
-            (x + k != x1 || y + l != y1)) {
-          cpt++;
+        if ((k == 0 || l == 0) && (k + l != 0) && (x + k != x1 || y + l != y1)){
+          cmp++;
           if (game_get_square(g, x + k, y + l) == GRASS) {
             a++;
           }
@@ -609,13 +608,13 @@ static bool arbre_entoure_grass(cgame g, uint x, uint y, uint x1, uint y1) {
       }
     }
   }
-  if (cpt == 2) {
+  if (cmp == 2) {
     return a == 2;
   }
-  if (cpt == 3) {
+  if (cmp == 3) {
     return a == 3;
   }
-  if (cpt == 4) {
+  if (cmp == 4) {
     return a == 4;
   }
 }
