@@ -733,10 +733,10 @@ static bool tree_equal_tent(cgame g) {
   return true;
 }
 
-static bool tent_with_tree_all(cgame g){
+static bool tent_with_tree_all(cgame g) {
   for (uint i = 0; i < g->nb_rows; i++) {
     for (uint j = 0; j < g->nb_cols; j++) {
-      if (!r3_tent_next_to_tree(g, i, j, game_get_square(g, i, j))){
+      if (!r3_tent_next_to_tree(g, i, j, game_get_square(g, i, j))) {
         return false;
       }
     }
@@ -749,7 +749,8 @@ bool game_is_over(cgame g) {
     fprintf(stderr, "parameter not valid!\n");
     exit(EXIT_FAILURE);
   }
-  return tent_adj_tent_all(g) && nb_tents_ok(g) && tree_equal_tent(g) && tent_with_tree_all(g);
+  return tent_adj_tent_all(g) && nb_tents_ok(g) && tree_equal_tent(g) &&
+         tent_with_tree_all(g);
 }
 
 void game_fill_grass_row(game g, uint i) {
