@@ -423,7 +423,7 @@ int game_check_move(cgame g, uint i, uint j, square s) {
   }
   /* LOSING MOVE */
 
-  /* Analyse si tente adjacente Ã  une tente */
+  /* Analyse si tente adjacente Ã  une tente 
   if (i == 0 && j > 0 && j < DEFAULT_SIZE - 1 && s == TENT &&
       (game_get_square(g, i + 1, j) == TENT ||
        game_get_square(g, i, j - 1) == TENT ||
@@ -504,10 +504,11 @@ int game_check_move(cgame g, uint i, uint j, square s) {
        game_get_square(g, i + 1, j - 1) == TENT)) {  // tent en haut a droite
     return LOSING;
   }
+  */
   //------------------------------------Analyse arbre prÃ©sent au moins une
   // fois autour d'une tente
   // donnÃ©e-----------------------------------------//
-/*
+
   if (i == 0 && s == TENT && j > 0 && j < DEFAULT_SIZE - 1 &&
       game_get_square(g, i + 1, j) != TREE &&
       game_get_square(g, i, j - 1) != TREE &&
