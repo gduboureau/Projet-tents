@@ -1283,7 +1283,7 @@ int game_check_move(cgame g, uint i, uint j, square s) {
   }
 
   /* Analyse si tente non attendue dans une row/col */
-  if (s == TENT && (game_get_expected_nb_tents_col(g, j) == 0 ||
+  /*if (s == TENT && (game_get_expected_nb_tents_col(g, j) == 0 ||
                     game_get_expected_nb_tents_row(g, i) == 0)) {
     return LOSING;
   }
@@ -1292,19 +1292,19 @@ int game_check_move(cgame g, uint i, uint j, square s) {
                     (game_get_expected_nb_tents_col(g, j) <
                      game_get_current_nb_tents_col(g, j)))) {
     return LOSING;
-  }
+  }*/
 
   /* Analyse si GRASS placÃ© alors que le nombre de empty n'est pas suffisant
    * pour placer les tentes attendues */
 
   /*Compteur de EMPTY colonne*/
-  /*uint c = 0;
+  uint c = 0;
   for (uint x = 0; x < DEFAULT_SIZE; x++) {
     if (game_get_square(g, x, j) == EMPTY) {
       c++;
     }
   }
-  Compteur de EMPTY ligne
+  /*Compteur de EMPTY ligne*/
   uint d = 0;
   for (uint y = 0; y < DEFAULT_SIZE; y++) {
     if (game_get_square(g, i, y) == EMPTY) {
@@ -1318,7 +1318,7 @@ int game_check_move(cgame g, uint i, uint j, square s) {
                             game_get_current_nb_tents_col(g, j))))) {
     return LOSING;
   }
-  */
+
   return REGULAR;
 }
 
