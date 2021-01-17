@@ -684,6 +684,17 @@ int game_check_move(cgame g, uint i, uint j, square s) {
   return REGULAR;
 }
 
+static bool tent_adj_tent_all(cgame g) {
+  for (uint i = 0; i < g->nb_rows; i++) {
+    for (uint j = 0; j < g->nb_cols; j++) {
+      if (!r1_tent_adj_tent(g, i, j, game_get_square(g, i, j))) {
+        return false;
+      }
+    }
+  }
+  return true;
+}
+
 bool game_is_over(cgame g) {
   if (g == NULL) {
     fprintf(stderr, "parameter not valid!\n");
@@ -691,107 +702,16 @@ bool game_is_over(cgame g) {
   }
   uint cpt = 0;
   uint c = 0;
-  //------------------------------------Analyse si tente présente
-  // autour(+diagonale) d'une tente
+
+  if (!tent_adj_tent_all(g)) {
+    return false;
+  }
+
+  //------------------------------------Analyse arbre présent au moins une
+  // fois autour d'une tente
   // donnée-----------------------------------------//
   for (uint i = 0; i < g->nb_rows; i++) {
     for (uint j = 0; j < g->nb_cols; j++) {
-      if (i == 0 && j > 0 && j < g->nb_cols - 1 &&
-          game_get_square(g, i, j) == TENT &&
-          (game_get_square(g, i + 1, j) == TENT ||
-           game_get_square(g, i, j - 1) == TENT ||
-           game_get_square(g, i, j + 1) == TENT ||
-           (game_get_square(g, i + 1, j + 1) == TENT &&
-            game_is_diagadj(g) == false) ||
-           (game_get_square(g, i + 1, j - 1) == TENT &&
-            game_is_diagadj(g) == false))) {
-        return false;  // tent i==0 bordure j exclue
-      }
-      if (i > 0 && i < g->nb_rows - 1 && j > 0 && j < g->nb_cols - 1 &&
-          game_get_square(g, i, j) == TENT &&
-          (game_get_square(g, i - 1, j) == TENT ||
-           game_get_square(g, i + 1, j) == TENT ||
-           game_get_square(g, i, j - 1) == TENT ||
-           game_get_square(g, i, j + 1) == TENT ||
-           (game_get_square(g, i - 1, j - 1) == TENT &&
-            game_is_diagadj(g) == false) ||
-           (game_get_square(g, i + 1, j + 1) == TENT &&
-            game_is_diagadj(g) == false) ||
-           (game_get_square(g, i + 1, j - 1) == TENT &&
-            game_is_diagadj(g) == false) ||
-           (game_get_square(g, i - 1, j + 1) == TENT &&
-            game_is_diagadj(g) == false))) {  // tent toute bordure exclue
-        return false;
-      }
-      if (i == 0 && j == 0 && game_get_square(g, i, j) == TENT &&
-          (game_get_square(g, i + 1, j) == TENT ||
-           game_get_square(g, i, j + 1) == TENT ||
-           (game_get_square(g, i + 1, j + 1) == TENT &&
-            game_is_diagadj(g) == false))) {  // tent en haut a gauche
-        return false;
-      }
-      if (i > 0 && j == 0 && i < g->nb_rows - 1 &&
-          game_get_square(g, i, j) == TENT &&
-          (game_get_square(g, i - 1, j) == TENT ||
-           game_get_square(g, i + 1, j) == TENT ||
-           game_get_square(g, i, j + 1) == TENT ||
-           (game_get_square(g, i + 1, j + 1) == TENT &&
-            game_is_diagadj(g) == false) ||
-           (game_get_square(g, i - 1, j + 1) == TENT &&
-            game_is_diagadj(g) ==
-                false))) {  // tent j==0 toute bordure i exclue
-        return false;
-      }
-      if (i == g->nb_rows - 1 && j == 0 && game_get_square(g, i, j) == TENT &&
-          (game_get_square(g, i - 1, j) == TENT ||
-           game_get_square(g, i, j + 1) == TENT ||
-           (game_get_square(g, i - 1, j + 1) == TENT &&
-            game_is_diagadj(g) == false))) {  // tent en bas a gauche
-        return false;
-      }
-      if (i == g->nb_rows - 1 && j > 0 && j < g->nb_cols - 1 &&
-          game_get_square(g, i, j) == TENT &&
-          (game_get_square(g, i - 1, j) == TENT ||
-           game_get_square(g, i, j - 1) == TENT ||
-           game_get_square(g, i, j + 1) == TENT ||
-           (game_get_square(g, i - 1, j - 1) == TENT &&
-            game_is_diagadj(g) == false) ||
-           (game_get_square(g, i - 1, j + 1) == TENT &&
-            game_is_diagadj(g) ==
-                false))) {  // tent i==g->nb_rows-1 bordure j exclue
-        return false;
-      }
-      if (i == g->nb_rows - 1 && j == g->nb_cols - 1 &&
-          game_get_square(g, i, j) == TENT &&
-          (game_get_square(g, i - 1, j) == TENT ||
-           game_get_square(g, i, j - 1) == TENT ||
-           (game_get_square(g, i - 1, j - 1) == TENT &&
-            game_is_diagadj(g) == false))) {  // tent en bas a droite
-        return false;
-      }
-      if (i > 0 && j == g->nb_cols - 1 && i < g->nb_rows - 1 &&
-          game_get_square(g, i, j) == TENT &&
-          (game_get_square(g, i - 1, j) == TENT ||
-           game_get_square(g, i + 1, j) == TENT ||
-           game_get_square(g, i, j - 1) == TENT ||
-           (game_get_square(g, i + 1, j - 1) == TENT &&
-            game_is_diagadj(g) == false) ||
-           (game_get_square(g, i - 1, j - 1) == TENT &&
-            game_is_diagadj(g) ==
-                false))) {  // tent j==g->nb_cols-1 bordure i exclue
-        return false;
-      }
-      if (i == 0 && j == g->nb_cols - 1 && game_get_square(g, i, j) == TENT &&
-          (game_get_square(g, i + 1, j) == TENT ||
-           game_get_square(g, i, j - 1) == TENT ||
-           (game_get_square(g, i + 1, j - 1) == TENT &&
-            game_is_diagadj(g) == false))) {  // tent en haut a droite
-        return false;
-      }
-      //------------------------------------Analyse arbre présent au moins une
-      // fois autour d'une tente
-      // donnée-----------------------------------------//
-
       if (i == 0 && j > 0 && j < g->nb_cols - 1 &&
           game_get_square(g, i, j) == TENT &&
           game_get_square(g, i + 1, j) != TREE &&
@@ -870,6 +790,7 @@ bool game_is_over(cgame g) {
       }
     }
   }
+
   if (cpt != c) {
     return false;
   }
@@ -878,6 +799,7 @@ bool game_is_over(cgame g) {
   }
   return true;
 }
+
 void game_fill_grass_row(game g, uint i) {
   if (g == NULL || i >= g->nb_cols) {
     fprintf(stderr, "parameter not valid!\n");
