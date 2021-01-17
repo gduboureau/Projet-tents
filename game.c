@@ -733,93 +733,23 @@ static bool tree_equal_tent(cgame g) {
   return true;
 }
 
-bool game_is_over(cgame g) {
-  if (g == NULL) {
-    fprintf(stderr, "parameter not valid!\n");
-    exit(EXIT_FAILURE);
-  }
-
-  if (!tent_adj_tent_all(g)) {
-    return false;
-  }
-
-  if (!nb_tents_ok(g)) {
-    return false;
-  }
-
-  if (!tree_equal_tent(g)) {
-    return false;
-  }
-  //------------------------------------Analyse arbre présent au moins une
-  // fois autour d'une tente
-  // donnée-----------------------------------------//
+static bool tent_with_tree_all(cgame g){
   for (uint i = 0; i < g->nb_rows; i++) {
     for (uint j = 0; j < g->nb_cols; j++) {
-      if (i == 0 && j > 0 && j < g->nb_cols - 1 &&
-          game_get_square(g, i, j) == TENT &&
-          game_get_square(g, i + 1, j) != TREE &&
-          game_get_square(g, i, j - 1) != TREE &&
-          game_get_square(g, i, j + 1) != TREE) {  // tent i==0 bordure j exclue
-        return false;
-      }
-      if (i > 0 && i < g->nb_rows - 1 && j > 0 && j < g->nb_cols - 1 &&
-          game_get_square(g, i, j) == TENT &&
-          game_get_square(g, i - 1, j) != TREE &&
-          game_get_square(g, i + 1, j) != TREE &&
-          game_get_square(g, i, j - 1) != TREE &&
-          game_get_square(g, i, j + 1) != TREE) {  // tent toute bordure exclue
-        return false;
-      }
-      if (i == 0 && j == 0 && game_get_square(g, i + 1, j) != TREE &&
-          game_get_square(g, i, j) == TENT &&
-          game_get_square(g, i, j + 1) != TREE) {  // tent en haut a gauche
-        return false;
-      }
-      if (i > 0 && j == 0 && i < g->nb_rows - 1 &&
-          game_get_square(g, i, j) == TENT &&
-          game_get_square(g, i - 1, j) != TREE &&
-          game_get_square(g, i + 1, j) != TREE &&
-          game_get_square(g, i, j + 1) !=
-              TREE) {  // tent j==0 toute bordure i exclue
-        return false;
-      }
-      if (i == g->nb_rows - 1 && j == 0 &&
-          game_get_square(g, i - 1, j) != TREE &&
-          game_get_square(g, i, j) == TENT &&
-          game_get_square(g, i, j + 1) != TREE) {  // tent en bas a gauche
-        return false;
-      }
-      if (i == g->nb_rows - 1 && j > 0 && j < g->nb_cols - 1 &&
-          game_get_square(g, i, j) == TENT &&
-          game_get_square(g, i - 1, j) != TREE &&
-          game_get_square(g, i, j - 1) != TREE &&
-          game_get_square(g, i, j + 1) !=
-              TREE) {  // tent i==g->nb_rows-1 bordure j exclue
-        return false;
-      }
-      if (i == g->nb_rows - 1 && j == g->nb_cols - 1 &&
-          game_get_square(g, i, j) == TENT &&
-          game_get_square(g, i - 1, j) != TREE &&
-          game_get_square(g, i, j - 1) != TREE) {  // tent en bas a droite
-        return false;
-      }
-      if (i > 0 && j == g->nb_cols - 1 && i < g->nb_rows - 1 &&
-          game_get_square(g, i, j) == TENT &&
-          game_get_square(g, i - 1, j) != TREE &&
-          game_get_square(g, i + 1, j) != TREE &&
-          game_get_square(g, i, j - 1) !=
-              TREE) {  // tent j==g->nb_cols-1 bordure i exclue
-        return false;
-      }
-      if (i == 0 && j == g->nb_cols - 1 &&
-          game_get_square(g, i + 1, j) != TREE &&
-          game_get_square(g, i, j) == TENT &&
-          game_get_square(g, i, j - 1) != TREE) {  // tent en haut a droite
+      if (!r3_tent_next_to_tree(g, i, j, game_get_square(g, i, j))){
         return false;
       }
     }
   }
   return true;
+}
+
+bool game_is_over(cgame g) {
+  if (g == NULL) {
+    fprintf(stderr, "parameter not valid!\n");
+    exit(EXIT_FAILURE);
+  }
+  return tent_adj_tent_all(g) && nb_tents_ok(g) && tree_equal_tent(g) && tent_with_tree_all(g);
 }
 
 void game_fill_grass_row(game g, uint i) {
