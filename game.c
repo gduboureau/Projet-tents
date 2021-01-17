@@ -547,7 +547,7 @@ static bool r2_nb_tent_respecte(cgame g, uint x, uint y, square s) {
                      game_get_current_nb_tents_col(g, y)))) {
     return false;
   }
-  if ((s == TENT && game_get_expected_nb_tents_all(g) <= game_get_current_nb_tents_all(g)) || game_get_expected_nb_tents_all(g) < game_get_current_nb_tents_all(g)) {
+  if (game_get_expected_nb_tents_all(g) < game_get_current_nb_tents_all(g)) {
     return false;
   }
   return true;
