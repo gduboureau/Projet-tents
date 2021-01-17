@@ -520,12 +520,12 @@ static bool r1_tent_adj_tent(cgame g, uint x, uint y, square s) {
         if (correct_next_coor(g, make_coor(x, y),
                               coor_to_dir(make_coor(i, j)))) {
           coor coo_next = next_coor(g, make_coor(x, y), make_coor(i, j));
-            if (g->diagadj == false) {
-              if ((i != 0 || j!=0) && game_get_square(g, coo_next.ligne, coo_next.colonne) == TENT) {
-                return false;
-              }
+          if (g->diagadj == false) {
+            if ((i != 0 || j != 0) &&
+                game_get_square(g, coo_next.ligne, coo_next.colonne) == TENT) {
+              return false;
             }
-            else {
+          } else {
             if ((i == 0 || j == 0) && (i + j != 0) &&
                 game_get_square(g, coo_next.ligne, coo_next.colonne) == TENT) {
               return false;
@@ -564,7 +564,7 @@ static bool r3_tent_next_to_tree(cgame g, uint x, uint y, square s) {
         if ((i == 0 || j == 0) && (i + j != 0) &&
             (correct_next_coor(g, make_coor(x, y),
                                coor_to_dir(make_coor(i, j))))) {
-                                 coor coo_next = next_coor(g, make_coor(x, y), make_coor(i, j));
+          coor coo_next = next_coor(g, make_coor(x, y), make_coor(i, j));
           cmp++;
           if (game_get_square(g, coo_next.ligne, coo_next.colonne) != TREE) {
             a++;
@@ -579,7 +579,7 @@ static bool r3_tent_next_to_tree(cgame g, uint x, uint y, square s) {
   if (cmp == 3) {
     return a != 3;
   }
-    return a != 4;
+  return a != 4;
 }
 
 static bool r4_nb_tent_grass(cgame g, uint x, uint y, square s) {
@@ -624,7 +624,7 @@ static bool arbre_entoure_grass(cgame g, uint x, uint y, uint x1, uint y1) {
       }
     }
   }
-  if (cmp == 1){
+  if (cmp == 1) {
     return a == 1;
   }
   if (cmp == 2) {
@@ -633,7 +633,7 @@ static bool arbre_entoure_grass(cgame g, uint x, uint y, uint x1, uint y1) {
   if (cmp == 3) {
     return a == 3;
   }
-    return a == 4;
+  return a == 4;
 }
 
 static bool r5_tree_entoure_grass(cgame g, uint x, uint y, square s) {
@@ -642,10 +642,11 @@ static bool r5_tree_entoure_grass(cgame g, uint x, uint y, square s) {
       for (int j = -1; j < 2; j++) {
         if (correct_next_coor(g, make_coor(x, y),
                               coor_to_dir(make_coor(i, j)))) {
-                                coor coo_next = next_coor(g, make_coor(x, y), make_coor(i, j));
+          coor coo_next = next_coor(g, make_coor(x, y), make_coor(i, j));
           if ((i == 0 || j == 0) && (i + j != 0) &&
               game_get_square(g, coo_next.ligne, coo_next.colonne) == TREE) {
-            if (arbre_entoure_grass(g, coo_next.ligne, coo_next.colonne, x, y)) {
+            if (arbre_entoure_grass(g, coo_next.ligne, coo_next.colonne, x,
+                                    y)) {
               return false;
             }
           }
@@ -682,7 +683,6 @@ int game_check_move(cgame g, uint i, uint j, square s) {
   }
   return REGULAR;
 }
-
 
 bool game_is_over(cgame g) {
   if (g == NULL) {
