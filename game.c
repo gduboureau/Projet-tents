@@ -513,18 +513,86 @@ static bool correct_next_coor(cgame g, coor c, dir d) {
   return coordonnee_ok(g, dir_next_coor(g, c, d));
 }
 
-static bool r1_tent_adj_tent(cgame g, uint x, uint y, square s) {
-  if (s == TENT) {
-    for (int i = -1; i < 2; i++) {
-      for (int j = -1; j < 2; j++) {
-        if (correct_next_coor(g, make_coor(x, y),
-                              coor_to_dir(make_coor(i, j)))) {
-            if ((i + j != 0) && game_get_square(g, x + i, y + j) == TENT) {
-              return false;
-            }
-        }
-      }
-    }
+static bool r1_tent_adj_tent(cgame g, uint i, uint j, square s) {
+    if (i == 0 && j > 0 && j < DEFAULT_SIZE - 1 && s == TENT &&
+      (game_get_square(g, i + 1, j) == TENT ||
+       game_get_square(g, i, j - 1) == TENT ||
+       game_get_square(g, i, j + 1) == TENT ||
+       game_get_square(g, i + 1, j + 1) == TENT ||
+       game_get_square(g, i + 1, j - 1) == TENT)) {
+    return false;  // tent i==0 bordure j exclue
+  }
+
+  if (i > 0 && i < DEFAULT_SIZE - 1 && j > 0 && j < DEFAULT_SIZE - 1 &&
+      s == TENT &&
+      (game_get_square(g, i - 1, j) == TENT ||
+       game_get_square(g, i + 1, j) == TENT ||
+       game_get_square(g, i, j - 1) == TENT ||
+       game_get_square(g, i, j + 1) == TENT ||
+       game_get_square(g, i - 1, j - 1) == TENT ||
+       game_get_square(g, i + 1, j + 1) == TENT ||
+       game_get_square(g, i + 1, j - 1) == TENT ||
+       game_get_square(g, i - 1, j + 1) ==
+           TENT)) {  // tent toute bordure exclue
+    return false;
+  }
+
+  if (i == 0 && j == 0 && s == TENT &&
+      (game_get_square(g, i + 1, j) == TENT ||
+       game_get_square(g, i, j + 1) == TENT ||
+       game_get_square(g, i + 1, j + 1) == TENT)) {  // tent en haut a gauche
+    return false;
+  }
+
+  if (i > 0 && j == 0 && i < DEFAULT_SIZE - 1 && s == TENT &&
+      (game_get_square(g, i - 1, j) == TENT ||
+       game_get_square(g, i + 1, j) == TENT ||
+       game_get_square(g, i, j + 1) == TENT ||
+       game_get_square(g, i + 1, j + 1) == TENT ||
+       game_get_square(g, i - 1, j + 1) ==
+           TENT)) {  // tent j==0 toute bordure i exclue
+    return false;
+  }
+
+  if (i == DEFAULT_SIZE - 1 && j == 0 && s == TENT &&
+      (game_get_square(g, i - 1, j) == TENT ||
+       game_get_square(g, i, j + 1) == TENT ||
+       game_get_square(g, i - 1, j + 1) == TENT)) {  // tent en bas a gauche
+    return false;
+  }
+
+  if (i == DEFAULT_SIZE - 1 && j > 0 && j < DEFAULT_SIZE - 1 && s == TENT &&
+      (game_get_square(g, i - 1, j) == TENT ||
+       game_get_square(g, i, j - 1) == TENT ||
+       game_get_square(g, i, j + 1) == TENT ||
+       game_get_square(g, i - 1, j - 1) == TENT ||
+       game_get_square(g, i - 1, j + 1) ==
+           TENT)) {  // tent i==DEFAULT_SIZE-1 bordure j exclue
+    return false;
+  }
+
+  if (i == DEFAULT_SIZE - 1 && j == DEFAULT_SIZE - 1 && s == TENT &&
+      (game_get_square(g, i - 1, j) == TENT ||
+       game_get_square(g, i, j - 1) == TENT ||
+       game_get_square(g, i - 1, j - 1) == TENT)) {  // tent en bas a droite
+    return false;
+  }
+
+  if (i > 0 && j == DEFAULT_SIZE - 1 && i < DEFAULT_SIZE - 1 && s == TENT &&
+      (game_get_square(g, i - 1, j) == TENT ||
+       game_get_square(g, i + 1, j) == TENT ||
+       game_get_square(g, i, j - 1) == TENT ||
+       game_get_square(g, i + 1, j - 1) == TENT ||
+       game_get_square(g, i - 1, j - 1) ==
+           TENT)) {  // tent j==DEFAULT_SIZE-1 bordure i exclue
+    return false;
+  }
+
+  if (i == 0 && j == DEFAULT_SIZE - 1 && s == TENT &&
+      (game_get_square(g, i + 1, j) == TENT ||
+       game_get_square(g, i, j - 1) == TENT ||
+       game_get_square(g, i + 1, j - 1) == TENT)) {  // tent en haut a droite
+    return false;
   }
   return true;
 }
