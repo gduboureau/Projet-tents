@@ -695,18 +695,61 @@ static bool tent_adj_tent_all(cgame g) {
   return true;
 }
 
+static bool nb_tents_ok(cgame g) {
+  for (uint i = 0; i < g->nb_rows; i++) {
+    for (uint j = 0; j < g->nb_cols; j++) {
+      if (game_get_current_nb_tents_row(g, i) !=
+          game_get_expected_nb_tents_row(g, i)) {
+        return false;
+      }
+      if (game_get_current_nb_tents_col(g, j) !=
+          game_get_expected_nb_tents_col(g, j)) {
+        return false;
+      }
+    }
+  }
+  if (game_get_expected_nb_tents_all(g) < game_get_current_nb_tents_all(g)) {
+    return false;
+  }
+  return true;
+}
+
+static bool tree_equal_tent(cgame g) {
+  uint cpt = 0;
+  uint c = 0;
+  for (uint i = 0; i < g->nb_rows; i++) {
+    for (uint j = 0; j < g->nb_cols; j++) {
+      if (game_get_square(g, i, j) == TREE) {
+        cpt = cpt + 1;
+      }
+      if (game_get_square(g, i, j) == TENT) {
+        c = c + 1;
+      }
+    }
+  }
+  if (cpt != c) {
+    return false;
+  }
+  return true;
+}
+
 bool game_is_over(cgame g) {
   if (g == NULL) {
     fprintf(stderr, "parameter not valid!\n");
     exit(EXIT_FAILURE);
   }
-  uint cpt = 0;
-  uint c = 0;
 
   if (!tent_adj_tent_all(g)) {
     return false;
   }
 
+  if (!nb_tents_ok(g)) {
+    return false;
+  }
+
+  if (!tree_equal_tent(g)) {
+    return false;
+  }
   //------------------------------------Analyse arbre présent au moins une
   // fois autour d'une tente
   // donnée-----------------------------------------//
@@ -774,28 +817,7 @@ bool game_is_over(cgame g) {
           game_get_square(g, i, j - 1) != TREE) {  // tent en haut a droite
         return false;
       }
-      if (game_get_current_nb_tents_row(g, i) !=
-          game_get_expected_nb_tents_row(g, i)) {
-        return false;
-      }
-      if (game_get_current_nb_tents_col(g, j) !=
-          game_get_expected_nb_tents_col(g, j)) {
-        return false;
-      }
-      if (game_get_square(g, i, j) == TREE) {
-        cpt = cpt + 1;
-      }
-      if (game_get_square(g, i, j) == TENT) {
-        c = c + 1;
-      }
     }
-  }
-
-  if (cpt != c) {
-    return false;
-  }
-  if (game_get_expected_nb_tents_all(g) < game_get_current_nb_tents_all(g)) {
-    return false;
   }
   return true;
 }
