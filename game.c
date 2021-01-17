@@ -507,7 +507,7 @@ int game_check_move(cgame g, uint i, uint j, square s) {
   //------------------------------------Analyse arbre prÃ©sent au moins une
   // fois autour d'une tente
   // donnÃ©e-----------------------------------------//
-
+/*
   if (i == 0 && s == TENT && j > 0 && j < DEFAULT_SIZE - 1 &&
       game_get_square(g, i + 1, j) != TREE &&
       game_get_square(g, i, j - 1) != TREE &&
@@ -563,7 +563,7 @@ int game_check_move(cgame g, uint i, uint j, square s) {
   }
 
   /* Analyse si arbre adj grass puis arbre entourÃ© de grass */
-/*
+
   if (i == 0 && j == 0 && s == GRASS) {  // grass placÃ© coin gauche haut
     if (game_get_square(g, i + 1, j) == TREE &&
         (game_get_square(g, i + 1, j + 1) == GRASS ||
@@ -1281,7 +1281,7 @@ int game_check_move(cgame g, uint i, uint j, square s) {
       return LOSING;
     }
   }
-*/
+
   /* Analyse si tente non attendue dans une row/col */
   if (s == TENT && (game_get_expected_nb_tents_col(g, j) == 0 ||
                     game_get_expected_nb_tents_row(g, i) == 0)) {
