@@ -620,6 +620,9 @@ static bool arbre_entoure_grass(cgame g, uint x, uint y, uint x1, uint y1) {
       }
     }
   }
+  if (cmp == 1){
+    return a == 1;
+  }
   if (cmp == 2) {
     return a == 2;
   }
