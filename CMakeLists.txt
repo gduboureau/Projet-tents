@@ -4,7 +4,7 @@ project("Game_Text" C)
 
 set(CMAKE_VERBOSE_MAKEFILE ON)
 
-set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wall -std=c99 -g")
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wall -std=c99 -g --coverage")
 
 add_library(game game.c game_aux.c queue.c)
 
