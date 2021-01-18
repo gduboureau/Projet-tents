@@ -42,6 +42,7 @@ add_test(test_valoustau_game_get_current_nb_tents_all ./game_test_valoustau game
 add_test(test_valoustau_game_play_move ./game_test_valoustau game_play_move)
 add_test(test_valoustau_game_check_move ./game_test_valoustau game_check_move)
 add_test(test_valoustau_game_is_diagadj ./game_test_valoustau game_is_diagadj)
+add_test(test_valoustau_game_is_wrapping ./game_test_valoustau game_is_wrapping)
 
 #* ********** jephrem ********** *#
 add_executable(game_test_jephrem game_test_jephrem.c)

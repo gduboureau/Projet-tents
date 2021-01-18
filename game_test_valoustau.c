@@ -32,13 +32,14 @@ bool test_game_is_wrapping(void) {
   game g = game_new_ext(8, 8, squares, tentes_lig, tentes_col, true, true);
   game g1 = game_new_ext(8, 8, squares, tentes_lig, tentes_col, false, true);
 
-  if (game_check_move(g, 3, 7, TENT) != REGULAR) {
+  game_set_square(g, 4, 7, TENT);
+  if (game_check_move(g, 4, 0, TENT) != LOSING) {
     game_delete(g);
     game_delete(g1);
     return false;
   }
-
-  if (game_check_move(g, 7, 6, TENT) == REGULAR) {
+  game_set_square(g1, 4, 7, TENT);
+  if (game_check_move(g1, 4, 0, TENT) != LOSING) {
     game_delete(g);
     game_delete(g1);
     return false;
@@ -785,6 +786,8 @@ int main(int argc, char *argv[]) {
     ok = test_game_check_move();
   else if (strcmp("game_is_diagadj", argv[1]) == 0)
     ok = test_game_is_diagadj();
+  else if (strcmp("game_is_wrapping", argv[1]) == 0)
+    ok = test_game_is_wrapping();
   else {
     fprintf(stderr, "Error: test \"%s\" not found!\n", argv[1]);
     exit(EXIT_FAILURE);
