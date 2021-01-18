@@ -6,17 +6,17 @@
 
 void game_print(cgame g) {
   printf("   ");
-  for (unsigned int y = 0; y < DEFAULT_SIZE; y++) {
+  for (unsigned int y = 0; y < game_nb_cols(g); y++) {
     printf("%d", y);
   }
   printf("\n   ");
-  for (unsigned int z = 0; z < DEFAULT_SIZE; z++) {
+  for (unsigned int z = 0; z < game_nb_cols(g); z++) {
     printf("-");
   }
   unsigned int j;
-  for (unsigned int i = 0; i < DEFAULT_SIZE; i++) {
+  for (unsigned int i = 0; i < game_nb_rows(g); i++) {
     printf("\n%d |", i);
-    for (j = 0; j < DEFAULT_SIZE; j++) {
+    for (j = 0; j < game_nb_cols(g); j++) {
       if (game_get_square(g, i, j) == EMPTY) {
         printf(" ");
       }
@@ -30,7 +30,7 @@ void game_print(cgame g) {
         printf("-");
       }
     }
-    if (j == DEFAULT_SIZE) {
+    if (j == game_nb_cols(g)) {
       uint lign = game_get_expected_nb_tents_row(g, i);
       printf("| %u", lign);
     }
@@ -38,11 +38,11 @@ void game_print(cgame g) {
 
   printf("\n   ");
 
-  for (unsigned int z = 0; z < DEFAULT_SIZE; z++) {
+  for (unsigned int z = 0; z < game_nb_cols(g); z++) {
     printf("-");
   }
   printf("\n   ");
-  for (unsigned int w = 0; w < DEFAULT_SIZE; w++) {
+  for (unsigned int w = 0; w < game_nb_cols(g); w++) {
     uint colo = game_get_expected_nb_tents_col(g, w);
     printf("%u", colo);
   }
