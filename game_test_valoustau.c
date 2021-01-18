@@ -44,7 +44,14 @@ bool test_game_is_wrapping(void) {
     game_delete(g1);
     return false;
   }
-
+  game_set_square(g, 7, 7, GRASS);
+  game_set_square(g, 7, 1, GRASS);
+  game_set_square(g, 6, 0, GRASS);
+  if (game_check_move(g, 0, 0, GRASS) != LOSING) {
+    game_delete(g);
+    game_delete(g1);
+    return false;
+  }
   game_delete(g);
   game_delete(g1);
   return true;
