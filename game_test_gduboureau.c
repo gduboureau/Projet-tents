@@ -169,6 +169,7 @@ bool test_game_restart() {
     }
   }
   if (!queue_is_empty(g->pile1) || !queue_is_empty(g->pile2)) {
+    game_delete(g);
     return false;
   }
   game g1 = game_new_ext(8, 8, squares, tentes_lig, tentes_col, false, false);
@@ -220,7 +221,7 @@ bool test_game_default() {
 
 /* *********************************************************** */
 bool test_game_default_solution() {
-  /*game g = game_default_solution();
+  game g = game_default_solution();
   uint tentes_lig[] = {3, 0, 4, 0, 4, 0, 1, 0};
   uint tentes_col[] = {4, 0, 1, 2, 1, 1, 2, 1};
 
@@ -240,7 +241,7 @@ bool test_game_default_solution() {
     return false;
   }
   game_delete(g);
-  game_delete(g1);*/
+  game_delete(g1);
   return true;
 }
 
