@@ -36,8 +36,10 @@ bool test_game_new_ext(void) {
       game_delete(g);
       return false;
     }
+  }
 
-    if (g->squares[i] == GRASS || g->squares[i] == TENT) {
+  for (uint j = 0; j < g->nb_rows * g->nb_cols; j++) {
+    if (g->squares[j] == GRASS || g->squares[j] == TENT) {
       fprintf(stderr, "Error : the game is not correct!\n");
       game_delete(g);
       return false;
@@ -48,7 +50,8 @@ bool test_game_new_ext(void) {
     game_delete(g);
     return false;
   }
-  if (game_nb_cols(g) > 8 || game_nb_rows(g) > 8 || game_nb_cols(g) <= 0 || game_nb_rows(g) <= 0) {
+  if (game_nb_cols(g) > 8 || game_nb_rows(g) > 8 || game_nb_cols(g) <= 0 ||
+      game_nb_rows(g) <= 0) {
     game_delete(g);
     return false;
   }
