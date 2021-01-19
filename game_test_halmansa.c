@@ -39,7 +39,7 @@ bool test_game_new_ext(void) {
   }
 
   for (uint j = 0; j < g->nb_rows * g->nb_cols; j++) {
-    if (g->squares[j] != EMPTY || g->squares[j] != TREE) {
+    if (g->squares[j] == GRASS || g->squares[j] == TENT) {
       fprintf(stderr, "Error : the game is not correct!\n");
       game_delete(g);
       return false;
