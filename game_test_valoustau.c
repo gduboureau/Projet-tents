@@ -8,7 +8,7 @@
 #include "game_ext.h"
 typedef unsigned int uint;
 
-uint tentes_lig[] = {3, 1, 4, 0, 4, 0, 1, 0};
+uint tentes_lig[] = {3, 1, 4, 0, 4, 0, 1, 1};
 uint tentes_col[] = {4, 1, 1, 2, 1, 1, 2, 1};
 
 square squares[] = {
@@ -135,6 +135,13 @@ bool test_game_check_move(void) {
   game g2 = game_new_ext(8, 8, squares, tentes_lig, tentes_col, true, true);
   game g3 = game_new_ext(8, 8, squares, tentes_lig, tentes_col, true, false);
 
+  if(game_check_move(g3,7,7,TENT) == LOSING){
+    game_delete(g);
+    game_delete(g1);
+    game_delete(g2);
+    game_delete(g3);
+    return false;
+  }
   game_set_square(g2, 4, 7, TENT);
   if (game_check_move(g2, 4, 0, TENT) != LOSING) {
     game_delete(g);
