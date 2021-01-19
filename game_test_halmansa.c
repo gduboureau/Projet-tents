@@ -31,7 +31,15 @@ bool test_game_new_ext(void) {
   game g = game_new_ext(8, 8, squares, tentes_lig, tentes_col, false, false);
 
   for (uint i = 0; i < g->nb_rows; i++) {
-    if (g->nb_tents_row[i] >= 5 || g->nb_tents_col[i] >= 5) {
+    if (g->nb_tents_row[i] > g->nb_rows) {
+      fprintf(stderr, "Error : the game is not correct!\n");
+      game_delete(g);
+      return false;
+    }
+  }
+
+  for (uint k = 0; k < g->nb_cols; k++) {
+    if (g->nb_tents_col[k] > g->nb_cols) {
       fprintf(stderr, "Error : the game is not correct!\n");
       game_delete(g);
       return false;
