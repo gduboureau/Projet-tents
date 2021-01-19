@@ -119,16 +119,54 @@ bool test_game_play_move(void) {
 /* ********** GAME CHECK MOVE ********** */
 
 bool test_game_check_move(void) {
-  /*game g = game_new_ext(8, 8, squares, tentes_lig, tentes_col, false, false);
+  game g = game_new_ext(8, 8, squares, tentes_lig, tentes_col, false, true);
   game_play_move(g,0,0,TENT);
-  if (game_is_diagadj(g) && game_check_move(g,1,1,TENT) == LOSING){
+  if (game_check_move(g,1,1,TENT) == LOSING){
+    game_delete(g);
     return false;
   }
-  if (!game_is_diagadj(g) && game_check_move(g,1,1,TENT) != LOSING){
+  game g1 = game_new_ext(8, 8, squares, tentes_lig, tentes_col, false, false);
+  if (game_check_move(g1,1,1,TENT) != LOSING){
+    game_delete(g1);
+    game_delete(g);
     return false;
-  }*/
+  }
+  game g2 = game_new_ext(8, 8, squares, tentes_lig, tentes_col, true, true);
+  game g3 = game_new_ext(8, 8, squares, tentes_lig, tentes_col, true, false);
+
+  game_set_square(g2, 4, 7, TENT);
+  if (game_check_move(g2, 4, 0, TENT) != LOSING) {
+    game_delete(g);
+    game_delete(g1);
+    game_delete(g2);
+    game_delete(g3);
+    return false;
+  }
+  game_set_square(g3, 4, 7, TENT);
+  if (game_check_move(g3, 4, 0, TENT) != LOSING) {
+    game_delete(g);
+    game_delete(g1);
+    game_delete(g2);
+    game_delete(g3);
+    return false;
+  }
+  game_set_square(g2, 7, 7, GRASS);
+  game_set_square(g2, 7, 1, GRASS);
+  game_set_square(g2, 6, 0, GRASS);
+  if (game_check_move(g2, 0, 0, GRASS) != LOSING) {
+    game_delete(g);
+    game_delete(g1);
+    game_delete(g2);
+    game_delete(g3);
+    return false;
+  }
+  game_delete(g);
+    game_delete(g1);
+    game_delete(g2);
+    game_delete(g3);
   return true;
 }
+
 
 /* ********** USAGE ********** */
 
