@@ -337,7 +337,7 @@ bool test_game_play_move(void) {
 /* ********** GAME CHECK MOVE ********** */
 
 bool test_game_check_move(void) {
- /* game g = game_new_ext(8, 8, squares, tentes_lig, tentes_col, false, false);
+  game g = game_new_ext(8, 8, squares, tentes_lig, tentes_col, false, false);
   for (uint i = 0; i < game_nb_rows(g); i++) {
     for (uint j = 0; j < game_nb_cols(g); j++) {
       // ILLEGAL MOVE
@@ -758,7 +758,7 @@ bool test_game_check_move(void) {
   }
   game_delete(g);
   // game_delete(g1);
-  game_delete(g2);*/
+  game_delete(g2);
   return true;
 }
 
