@@ -29,9 +29,7 @@ typedef struct game_s *game;
 
 typedef const struct game_s *cgame;
 
-/********game_ext********/
-
-/********************* Hugo *********************/
+// game_ext
 
 game game_new_ext(uint nb_rows, uint nb_cols, square *squares,
                   uint *nb_tents_row, uint *nb_tents_col, bool wrapping,
@@ -85,8 +83,6 @@ game game_new_empty_ext(uint nb_rows, uint nb_cols, bool wrapping,
   return g;
 }
 
-/********************* Guillaume *********************/
-
 uint game_nb_rows(cgame g) {
   assert(g);
   return g->nb_rows;
@@ -96,8 +92,6 @@ uint game_nb_cols(cgame g) {
   assert(g);
   return g->nb_cols;
 }
-
-/********************* Valentin *********************/
 
 bool game_is_wrapping(cgame g) {
   assert(g);
@@ -109,7 +103,6 @@ bool game_is_diagadj(cgame g) {
   return g->diagadj;
 }
 
-/********************* Jennifer *********************/
 void game_undo(game g) {
   if (!queue_is_empty(g->pile1)) {
     coup *data =
@@ -132,9 +125,7 @@ void game_redo(game g) {
   }
 }
 
-/********game********/
-
-/********************* Jennifer *********************/
+// V1
 
 game game_new(square *squares, uint *nb_tents_row, uint *nb_tents_col) {
   assert(squares);
@@ -252,8 +243,6 @@ void game_set_square(game g, uint i, uint j, square s) {
   g->squares[(i * g->nb_cols) + j] = s;
 }
 
-/********************* Hugo *********************/
-
 square game_get_square(cgame g, uint i, uint j) {
   assert(g);
   assert(i < g->nb_rows);
@@ -292,8 +281,6 @@ uint game_get_expected_nb_tents_col(cgame g, uint j) {
   assert(j >= 0);
   return g->nb_tents_col[j];
 }
-
-/********************* Valentin *********************/
 
 uint game_get_expected_nb_tents_all(cgame g) {
   assert(g);
@@ -367,8 +354,6 @@ void game_play_move(game g, uint i, uint j, square s) {
                   data);  // on sauvegarde les données du coup joué en (i,j)
   game_set_square(g, i, j, s);
 }
-
-/********************* Guillaume *********************/
 
 typedef struct coor {  // coor = coordonnée
   uint ligne;
