@@ -160,7 +160,7 @@ bool test_game_fill_grass_col() {
     }
   }
 
-  game_fill_grass_row(g1, 0);
+  game_fill_grass_col(g1, 0);
   if (game_get_square(g1, 6, 0) != GRASS) {
     game_delete(g);
     game_delete(g1);
