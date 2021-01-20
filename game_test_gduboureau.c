@@ -155,6 +155,14 @@ bool test_game_restart() {
   game g = game_new_ext(8, 8, squares, tentes_lig, tentes_col, false, false);
   queue* pile1 = queue_new();
   game_set_square(g, 0, 0, TENT);
+  coup p0;
+  p0.s = TENT;
+  p0.i = 0;
+  p0.j = 0;
+  coup* data0 = (coup*)malloc(sizeof(coup));
+  assert(data0);
+  *data0 = p0;
+  queue_push_head(g->pile1, data0);
   game_restart(g);
   if (!queue_is_empty(pile1)) {
     queue_free(pile1);
