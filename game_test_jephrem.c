@@ -132,29 +132,7 @@ bool test_game_equal(void) {
     game_delete(g8);
     return false;
   }
-    if (game_equal(g5, g6) == true) {
-      game_delete(g1);
-      game_delete(g2);
-      game_delete(g3);
-      game_delete(g4);
-      game_delete(g5);
-      game_delete(g6);
-      game_delete(g7);
-      game_delete(g8);
-      return false;
-    }
-    if (game_equal(g5, g7) == true) {
-      game_delete(g1);
-      game_delete(g2);
-      game_delete(g3);
-      game_delete(g4);
-      game_delete(g5);
-      game_delete(g6);
-      game_delete(g7);
-      game_delete(g8);
-      return false;
-    }
-
+  if (game_equal(g5, g6) == true) {
     game_delete(g1);
     game_delete(g2);
     game_delete(g3);
@@ -163,127 +141,149 @@ bool test_game_equal(void) {
     game_delete(g6);
     game_delete(g7);
     game_delete(g8);
-    return true;
+    return false;
   }
-  /* *********************************************************** */
+  if (game_equal(g5, g7) == true) {
+    game_delete(g1);
+    game_delete(g2);
+    game_delete(g3);
+    game_delete(g4);
+    game_delete(g5);
+    game_delete(g6);
+    game_delete(g7);
+    game_delete(g8);
+    return false;
+  }
 
-  bool test_game_new_empty(void) {
-    game g = game_new_empty_ext(8, 8, false, false);
-    for (uint i = 0; i < game_nb_rows(g); i++) {
-      if (game_get_expected_nb_tents_row(g, i) != 0) {
+  game_delete(g1);
+  game_delete(g2);
+  game_delete(g3);
+  game_delete(g4);
+  game_delete(g5);
+  game_delete(g6);
+  game_delete(g7);
+  game_delete(g8);
+  return true;
+}
+/* *********************************************************** */
+
+bool test_game_new_empty(void) {
+  game g = game_new_empty_ext(8, 8, false, false);
+  for (uint i = 0; i < game_nb_rows(g); i++) {
+    if (game_get_expected_nb_tents_row(g, i) != 0) {
+      fprintf(stderr, "Error : the game is not empty!\n");
+      game_delete(g);
+      return false;
+    }
+  }
+  for (uint j = 0; j < game_nb_cols(g); j++) {
+    if (game_get_expected_nb_tents_col(g, j) != 0) {
+      fprintf(stderr, "Error : the game is not empty!\n");
+      game_delete(g);
+      return false;
+    }
+  }
+
+  for (uint x = 0; x < game_nb_rows(g); x++) {
+    for (uint y = 0; y < game_nb_cols(g); y++) {
+      if (game_get_square(g, x, y) != EMPTY) {
         fprintf(stderr, "Error : the game is not empty!\n");
         game_delete(g);
         return false;
       }
     }
-    for (uint j = 0; j < game_nb_cols(g); j++) {
-      if (game_get_expected_nb_tents_col(g, j) != 0) {
-        fprintf(stderr, "Error : the game is not empty!\n");
-        game_delete(g);
-        return false;
-      }
-    }
+  }
+  game_delete(g);
+  return true;
+}
 
-    for (uint x = 0; x < game_nb_rows(g); x++) {
-      for (uint y = 0; y < game_nb_cols(g); y++) {
-        if (game_get_square(g, x, y) != EMPTY) {
-          fprintf(stderr, "Error : the game is not empty!\n");
-          game_delete(g);
-          return false;
-        }
-      }
-    }
+/* *********************************************************** */
+
+bool test_game_new() {
+  game g = game_new_ext(8, 8, squares, tentes_lig, tentes_col, false, false);
+  game_delete(g);
+  return true;
+}
+
+/* *********************************************************** */
+
+bool test_game_set_square() {
+  game g = game_new_empty_ext(8, 8, false, false);
+  game_set_square(g, 0, 4, TREE);
+  if (game_get_square(g, 0, 4) != TREE) {
     game_delete(g);
-    return true;
+    return false;
   }
+  game_delete(g);
+  return true;
+}
 
-  /* *********************************************************** */
+/* *********************************************************** */
 
-  bool test_game_new() {
-    game g = game_new_ext(8, 8, squares, tentes_lig, tentes_col, false, false);
+bool test_game_undo() {
+  game g = game_new_ext(8, 8, squares, tentes_lig, tentes_col, false, false);
+  game_play_move(g, 0, 0, TENT);
+  game_undo(g);
+  if (game_get_square(g, 0, 0) != EMPTY) {
     game_delete(g);
-    return true;
+    return false;
   }
+  game_delete(g);
+  return true;
+}
 
-  /* *********************************************************** */
+/* *********************************************************** */
 
-  bool test_game_set_square() {
-    game g = game_new_empty_ext(8, 8, false, false);
-    game_set_square(g, 0, 4, TREE);
-    if (game_get_square(g, 0, 4) != TREE) {
-      game_delete(g);
-      return false;
-    }
+bool test_game_redo() {
+  game g = game_new_empty_ext(8, 8, false, false);
+  game_play_move(g, 0, 0, TENT);
+  game_undo(g);
+  game_redo(g);
+  if (game_get_square(g, 0, 0) != TENT) {
     game_delete(g);
-    return true;
+    return false;
+  }
+  game_delete(g);
+  return true;
+}
+
+/* *********************************************************** */
+
+int main(int argc, char *argv[]) {
+  if (argc == 1) {
+    usage(argc, argv);
   }
 
-  /* *********************************************************** */
-
-  bool test_game_undo() {
-    game g = game_new_ext(8, 8, squares, tentes_lig, tentes_col, false, false);
-    game_play_move(g, 0, 0, TENT);
-    game_undo(g);
-    if (game_get_square(g, 0, 0) != EMPTY) {
-      game_delete(g);
-      return false;
-    }
-    game_delete(g);
-    return true;
+  // start test
+  fprintf(stderr, "=> Start test \"%s\"\n", argv[1]);
+  bool ok = false;
+  if (strcmp("game_delete", argv[1]) == 0) {
+    ok = test_game_delete();
+  } else if (strcmp("game_copy", argv[1]) == 0) {
+    ok = test_game_copy();
+  } else if (strcmp("game_equal", argv[1]) == 0) {
+    ok = test_game_equal();
+  } else if (strcmp("game_new_empty", argv[1]) == 0) {
+    ok = test_game_new_empty();
+  } else if (strcmp("game_new", argv[1]) == 0) {
+    ok = test_game_new();
+  } else if (strcmp("game_set_square", argv[1]) == 0) {
+    ok = test_game_set_square();
+  } else if (strcmp("game_undo", argv[1]) == 0) {
+    ok = test_game_undo();
+  } else if (strcmp("game_redo", argv[1]) == 0) {
+    ok = test_game_redo();
+  } else {
+    fprintf(stderr, "Error: test \"%s\" not found!\n", argv[1]);
+    exit(EXIT_FAILURE);
   }
 
-  /* *********************************************************** */
-
-  bool test_game_redo() {
-    game g = game_new_empty_ext(8, 8, false, false);
-    game_play_move(g, 0, 0, TENT);
-    game_undo(g);
-    game_redo(g);
-    if (game_get_square(g, 0, 0) != TENT) {
-      game_delete(g);
-      return false;
-    }
-    game_delete(g);
-    return true;
+  // print test result
+  if (ok) {
+    fprintf(stderr, "Test \"%s\" finished: SUCCESS\n", argv[1]);
+    return EXIT_SUCCESS;
+  } else {
+    fprintf(stderr, "Test \"%s\" finished: FAILURE\n", argv[1]);
+    return EXIT_FAILURE;
   }
-
-  /* *********************************************************** */
-
-  int main(int argc, char *argv[]) {
-    if (argc == 1) {
-      usage(argc, argv);
-    }
-
-    // start test
-    fprintf(stderr, "=> Start test \"%s\"\n", argv[1]);
-    bool ok = false;
-    if (strcmp("game_delete", argv[1]) == 0) {
-      ok = test_game_delete();
-    } else if (strcmp("game_copy", argv[1]) == 0) {
-      ok = test_game_copy();
-    } else if (strcmp("game_equal", argv[1]) == 0) {
-      ok = test_game_equal();
-    } else if (strcmp("game_new_empty", argv[1]) == 0) {
-      ok = test_game_new_empty();
-    } else if (strcmp("game_new", argv[1]) == 0) {
-      ok = test_game_new();
-    } else if (strcmp("game_set_square", argv[1]) == 0) {
-      ok = test_game_set_square();
-    } else if (strcmp("game_undo", argv[1]) == 0) {
-      ok = test_game_undo();
-    } else if (strcmp("game_redo", argv[1]) == 0) {
-      ok = test_game_redo();
-    } else {
-      fprintf(stderr, "Error: test \"%s\" not found!\n", argv[1]);
-      exit(EXIT_FAILURE);
-    }
-
-    // print test result
-    if (ok) {
-      fprintf(stderr, "Test \"%s\" finished: SUCCESS\n", argv[1]);
-      return EXIT_SUCCESS;
-    } else {
-      fprintf(stderr, "Test \"%s\" finished: FAILURE\n", argv[1]);
-      return EXIT_FAILURE;
-    }
-  }
+}
