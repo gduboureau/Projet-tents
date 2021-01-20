@@ -168,13 +168,11 @@ bool test_game_restart() {
       }
     }
   }
-  if (g->pile1->length != 0 || g->pile1->head != NULL ||
-      g->pile1->tail != NULL) {
+  if (!queue_is_empty(g->pile1)) {
     game_delete(g);
     return false;
   }
-  if (g->pile2->length != 0 || g->pile2->head != NULL ||
-      g->pile2->tail != NULL) {
+  if (!queue_is_empty(g->pile2)) {
     game_delete(g);
     return false;
   }
