@@ -153,37 +153,34 @@ bool test_game_fill_grass_col() {
 
 bool test_game_restart() {
   game g = game_new_ext(8, 8, squares, tentes_lig, tentes_col, false, false);
+  queue* pile1 = queue_new();
   game_set_square(g, 0, 0, TENT);
-  if (g == NULL) {
-    game_delete(g);
+  game_restart(g);
+  if (!queue_is_empty(pile1)) {
+    queue_free(pile1);
     return false;
   }
-  game_restart(g);
   for (unsigned int i = 0; i < game_nb_rows(g); i++) {
     for (unsigned int j = 0; j < game_nb_cols(g); j++) {
       if (game_get_square(g, i, j) == TENT ||
           game_get_square(g, i, j) == GRASS) {
         game_delete(g);
+        queue_free(pile1);
         return false;
       }
     }
   }
-  if (!queue_is_empty(g->pile1)) {
-    game_delete(g);
-    return false;
-  }
-  if (!queue_is_empty(g->pile2)) {
-    game_delete(g);
-    return false;
-  }
+
   game g1 = game_new_ext(8, 8, squares, tentes_lig, tentes_col, false, false);
   if (game_equal(g, g1) == false) {
     game_delete(g);
     game_delete(g1);
+    queue_free(pile1);
     return false;
   }
   game_delete(g1);
   game_delete(g);
+  queue_free(pile1);
   return true;
 }
 
