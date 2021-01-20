@@ -127,8 +127,13 @@ bool test_game_fill_grass_row() {
     return false;
   }
   game_undo(g1);
-  if (game_get_square(g1, 0, 7) == GRASS ||
-      game_get_square(g1, 0, 6) != GRASS) {
+  if (game_get_square(g1, 0, 7) == GRASS) {
+    game_delete(g);
+    game_delete(g1);
+    return false;
+  }
+  game_redo(g1);
+  if (game_get_square(g1, 0, 7) != GRASS) {
     game_delete(g);
     game_delete(g1);
     return false;
@@ -167,13 +172,17 @@ bool test_game_fill_grass_col() {
     return false;
   }
   game_undo(g1);
-  if (game_get_square(g1, 6, 0) == GRASS ||
-      game_get_square(g1, 4, 0) != GRASS) {
+  if (game_get_square(g1, 6, 0) == GRASS) {
     game_delete(g);
     game_delete(g1);
     return false;
   }
-
+  game_redo(g1);
+  if (game_get_square(g1, 6, 0) != GRASS) {
+    game_delete(g);
+    game_delete(g1);
+    return false;
+  }
   game_delete(g);
   game_delete(g1);
   return true;
