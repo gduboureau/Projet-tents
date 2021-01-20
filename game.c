@@ -517,6 +517,7 @@ static bool r1_tent_adj_tent(cgame g, uint x, uint y, square s) {
   if (s == TENT) {
     for (int i = -1; i < 2; i++) {
       for (int j = -1; j < 2; j++) {
+        printf("oui\n");
         if (correct_next_coor(g, make_coor(x, y),
                               coor_to_dir(make_coor(i, j)))) {
           coor coo_next = next_coor(g, make_coor(x, y), make_coor(i, j));
@@ -527,7 +528,9 @@ static bool r1_tent_adj_tent(cgame g, uint x, uint y, square s) {
             }
           } else {
             if ((i == 0 || j == 0) && (i + j != 0) &&
-                game_get_square(g, coo_next.ligne, coo_next.colonne) == TENT) {
+                game_get_square(g, coo_next.ligne, coo_next.colonne) == TENT && coo_next.ligne!=0 && coo_next.colonne!=0) {
+                  printf("%d et %d\n",coo_next.ligne,coo_next.colonne);
+              printf("no\n");
               return false;
             }
           }
@@ -535,6 +538,7 @@ static bool r1_tent_adj_tent(cgame g, uint x, uint y, square s) {
       }
     }
   }
+  printf("yes\n");
   return true;
 }
 
@@ -566,7 +570,7 @@ static bool r3_tent_next_to_tree(cgame g, uint x, uint y, square s) {
                                coor_to_dir(make_coor(i, j))))) {
           coor coo_next = next_coor(g, make_coor(x, y), make_coor(i, j));
           cmp++;
-          if (game_get_square(g, coo_next.ligne, coo_next.colonne) != TREE) {
+          if (game_get_square(g, coo_next.ligne, coo_next.colonne) != TREE && coo_next.ligne!=0 && coo_next.colonne!=0) {
             a++;
           }
         }
