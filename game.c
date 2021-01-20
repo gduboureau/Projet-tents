@@ -509,12 +509,15 @@ static bool r1_tent_adj_tent(cgame g, uint x, uint y, square s) {
                               coor_to_dir(make_coor(i, j)))) {
           coor coo_next = next_coor(g, make_coor(x, y), make_coor(i, j));
           if (g->diagadj == false) {
-            if ((i != 0 || j != 0) &&
+            if ((i != 0 ||
+                 j != 0) &&  // test pour ne pas parcourir la case (x,y)
                 game_get_square(g, coo_next.ligne, coo_next.colonne) == TENT) {
               return false;
             }
           } else {
-            if ((i == 0 || j == 0) && (i + j != 0) &&
+            if ((i == 0 || j == 0) &&
+                (i + j != 0) &&  // test pour ne pas parcourir la case (x,y) et
+                                 // les diagonales
                 game_get_square(g, coo_next.ligne, coo_next.colonne) == TENT) {
               return false;
             }
@@ -544,94 +547,102 @@ static bool r2_nb_tent_respecte(cgame g, uint x, uint y, square s) {
 }
 
 static bool r3_tent_next_to_tree(cgame g, uint x, uint y, square s) {
-  int a = 0;
-  int cmp = 0;
+  int cpt = 0;  // compteur de case != arbre
+  int cpt_case_correcte = 0;
   if (s == TENT) {
     for (int i = -1; i < 2; i++) {
       for (int j = -1; j < 2; j++) {
-        if ((i == 0 || j == 0) && (i + j != 0) &&
+        if ((i == 0 || j == 0) &&
+            (i + j != 0) &&  // test pour ne pas parcourir la case (x,y) et les
+                             // diagonales
             (correct_next_coor(g, make_coor(x, y),
                                coor_to_dir(make_coor(i, j))))) {
           coor coo_next = next_coor(g, make_coor(x, y), make_coor(i, j));
-          cmp++;
+          cpt_case_correcte++;
           if (game_get_square(g, coo_next.ligne, coo_next.colonne) != TREE) {
-            a++;
+            cpt++;
           }
         }
       }
     }
   }
-  if (cmp == 2) {
-    return a != 2;
+  if (cpt_case_correcte == 2) {
+    return cpt != 2;
   }
-  if (cmp == 3) {
-    return a != 3;
+  if (cpt_case_correcte == 3) {
+    return cpt != 3;
   }
-  return a != 4;
+  return cpt !=
+         4;  // return true si il y a au moins un arbre autour de la case (x,y)
 }
 
 static bool r4_nb_tent_grass(cgame g, uint x, uint y, square s) {
   /*Compteur de EMPTY colonne*/
-  uint c = 0;
+  uint cpt_c = 0;
   for (uint i = 0; i < game_nb_rows(g); i++) {
     if (game_get_square(g, i, y) == EMPTY) {
-      c++;
+      cpt_c++;
     }
   }
   /*Compteur de EMPTY ligne*/
-  uint d = 0;
+  uint cpt_l = 0;
   for (uint j = 0; j < game_nb_cols(g); j++) {
     if (game_get_square(g, x, j) == EMPTY) {
-      d++;
+      cpt_l++;
     }
   }
 
-  if (s == GRASS && ((d <= (game_get_expected_nb_tents_row(g, x) -
-                            game_get_current_nb_tents_row(g, x))) ||
-                     (c <= (game_get_expected_nb_tents_col(g, y) -
-                            game_get_current_nb_tents_col(g, y))))) {
+  if (s == GRASS && ((cpt_l <= (game_get_expected_nb_tents_row(g, x) -
+                                game_get_current_nb_tents_row(g, x))) ||
+                     (cpt_c <= (game_get_expected_nb_tents_col(g, y) -
+                                game_get_current_nb_tents_col(g, y))))) {
     return false;
   }
   return true;
 }
 
 static bool arbre_entoure_grass(cgame g, uint x, uint y, uint x1, uint y1) {
-  int a = 0;
-  int cmp = 0;
+  int cpt = 0;  // compteur de grass
+  int cpt_case_correcte = 0;
   for (int k = -1; k < 2; k++) {
     for (int l = -1; l < 2; l++) {
       if (correct_next_coor(g, make_coor(x, y), coor_to_dir(make_coor(k, l)))) {
         coor coo_next = next_coor(g, make_coor(x, y), make_coor(k, l));
-        if ((k == 0 || l == 0) && (k + l != 0) &&
-            (x + k != x1 || y + l != y1)) {
-          cmp++;
+        if ((k == 0 || l == 0) &&
+            (k + l != 0) &&  // test pour ne pas parcourir la case (x,y) et les
+                             // diagonales
+            (x + k != x1 ||
+             y + l != y1)) {  // test pour ne pas parcourir la case (x1,y1)
+          cpt_case_correcte++;
           if (game_get_square(g, coo_next.ligne, coo_next.colonne) == GRASS) {
-            a++;
+            cpt++;
           }
         }
       }
     }
   }
-  if (cmp == 1) {
-    return a == 1;
+  if (cpt_case_correcte == 1) {
+    return cpt == 1;
   }
-  if (cmp == 2) {
-    return a == 2;
+  if (cpt_case_correcte == 2) {
+    return cpt == 2;
   }
-  if (cmp == 3) {
-    return a == 3;
+  if (cpt_case_correcte == 3) {
+    return cpt == 3;
   }
-  return a == 4;
+  return cpt == 4;  // return true si l'arbre est entouré de grass
 }
 
-static bool r5_tree_entoure_grass(cgame g, uint x, uint y, square s) {
+static bool r5_tree_non_entoure_grass(cgame g, uint x, uint y, square s) {
   if (s == GRASS) {
     for (int i = -1; i < 2; i++) {
       for (int j = -1; j < 2; j++) {
         if (correct_next_coor(g, make_coor(x, y),
                               coor_to_dir(make_coor(i, j)))) {
           coor coo_next = next_coor(g, make_coor(x, y), make_coor(i, j));
-          if ((i == 0 || j == 0) && (i + j != 0) &&
+          if ((i == 0 || j == 0) &&
+              (i + j != 0) &&  // test pour ne pas parcourir la case (x,y) et
+                               // les diagonales
               game_get_square(g, coo_next.ligne, coo_next.colonne) == TREE) {
             if (arbre_entoure_grass(g, coo_next.ligne, coo_next.colonne, x,
                                     y)) {
@@ -648,7 +659,7 @@ static bool r5_tree_entoure_grass(cgame g, uint x, uint y, square s) {
 static bool game_correct(cgame g, uint x, uint y, square s) {
   return r2_nb_tent_respecte(g, x, y, s) && r1_tent_adj_tent(g, x, y, s) &&
          r3_tent_next_to_tree(g, x, y, s) && r4_nb_tent_grass(g, x, y, s) &&
-         r5_tree_entoure_grass(g, x, y, s);
+         r5_tree_non_entoure_grass(g, x, y, s);
 }
 
 static bool game_illegal(cgame g, uint x, uint y, square s) {
@@ -704,25 +715,25 @@ static bool nb_tents_ok(cgame g) {
 }
 
 static bool tree_equal_tent(cgame g) {
-  uint cpt = 0;
-  uint c = 0;
+  uint cpt_tree = 0;
+  uint cpt_tent = 0;
   for (uint i = 0; i < g->nb_rows; i++) {
     for (uint j = 0; j < g->nb_cols; j++) {
       if (game_get_square(g, i, j) == TREE) {
-        cpt = cpt + 1;
+        cpt_tree++;
       }
       if (game_get_square(g, i, j) == TENT) {
-        c = c + 1;
+        cpt_tent++;
       }
     }
   }
-  if (cpt != c) {
+  if (cpt_tree != cpt_tent) {
     return false;
   }
   return true;
 }
 
-static bool tent_with_tree_all(cgame g) {
+static bool tent_adj_tree_all(cgame g) {
   for (uint i = 0; i < g->nb_rows; i++) {
     for (uint j = 0; j < g->nb_cols; j++) {
       if (!r3_tent_next_to_tree(g, i, j, game_get_square(g, i, j))) {
@@ -736,7 +747,7 @@ static bool tent_with_tree_all(cgame g) {
 bool game_is_over(cgame g) {
   assert(g);
   return tent_adj_tent_all(g) && nb_tents_ok(g) && tree_equal_tent(g) &&
-         tent_with_tree_all(g);
+         tent_adj_tree_all(g);
 }
 
 void game_fill_grass_row(game g, uint i) {
@@ -751,14 +762,15 @@ void game_fill_grass_row(game g, uint i) {
       p0.j = j;
       coup *data0 = (coup *)malloc(sizeof(coup));
       *data0 = p0;
-      queue_push_head(g->pile1, data0);
+      queue_push_head(g->pile1,
+                      data0);  // on sauvegarde les données de la case (i,j)
       coup p1;
       p1.s = GRASS;
       p1.i = i;
       p1.j = j;
       coup *data = (coup *)malloc(sizeof(coup));
       *data = p1;
-      queue_push_head(g->pile1, data);
+      queue_push_head(g->pile1, data);  // on sauvegarde le coup joué (GRASS)
       game_set_square(g, i, j, GRASS);
     }
   }
@@ -776,14 +788,15 @@ void game_fill_grass_col(game g, uint j) {
       p0.j = j;
       coup *data0 = (coup *)malloc(sizeof(coup));
       *data0 = p0;
-      queue_push_head(g->pile1, data0);
+      queue_push_head(g->pile1,
+                      data0);  // on sauvegarde les données de la case (i,j)
       coup p1;
       p1.s = GRASS;
       p1.i = i;
       p1.j = j;
       coup *data = (coup *)malloc(sizeof(coup));
       *data = p1;
-      queue_push_head(g->pile1, data);
+      queue_push_head(g->pile1, data);  // on sauvegarde le coup joué (GRASS)
       game_set_square(g, i, j, GRASS);
     }
   }
@@ -799,10 +812,10 @@ void game_restart(game g) {
     }
   }
   if (!queue_is_empty(g->pile1)) {
-    queue_clear_full(g->pile1, &free);
+    queue_clear_full(g->pile1, &free);  // on vide la pile1
   }
 
   if (!queue_is_empty(g->pile2)) {
-    queue_clear_full(g->pile2, &free);
+    queue_clear_full(g->pile2, &free);  // on vide la pile2
   }
 }
