@@ -153,9 +153,26 @@ bool test_game_fill_grass_col() {
 
 bool test_game_restart() {
   game g = game_new_ext(8, 8, squares, tentes_lig, tentes_col, false, false);
-  game_play_move(g, 0, 0, TENT);
+  game_set_square(g, 0, 0, TENT);
+  coup p0;
+  p0.s = TENT;
+  p0.i = 0;
+  p0.j = 0;
+  coup* data0 = (coup*)malloc(sizeof(coup));
+  *data0 = p0;
+  queue_push_head(g->pile1, data0);
+  coup p1;
+  p1.s = GRASS;
+  p1.i = 0;
+  p1.j = 1;
+  coup* data1 = (coup*)malloc(sizeof(coup));
+  *data1 = p1;
+  queue_push_head(g->pile2, data1);
   game_restart(g);
-  if (!queue_is_empty(g->pile1) || !queue_is_empty(g->pile2)) {
+  if (!queue_is_empty(g->pile1) || queue_length(g->pile1) != 0) {
+    return false;
+  }
+  if (!queue_is_empty(g->pile2) || queue_length(g->pile2) != 0) {
     return false;
   }
   for (unsigned int i = 0; i < game_nb_rows(g); i++) {
