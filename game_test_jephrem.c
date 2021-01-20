@@ -3,7 +3,6 @@
 #include <stdlib.h>
 #include <string.h>
 
-//#include "game.c"
 #include "game.h"
 #include "game_aux.h"
 #include "game_ext.h"
@@ -107,8 +106,20 @@ bool test_game_equal(void) {
   game g5 = game_new_ext(8, 8, squares, tentes_lig, tentes_col, false, true);
   game g6 = game_new_ext(8, 8, squares, tentes_lig, tentes_col, false, false);
   game g7 = game_new_ext(8, 8, squares, tentes_lig, tentes_col, true, false);
-  game g8 = game_copy(g7);
-  // g8->wrapping = true;
+  game g8 = game_copy(g6);
+
+  if (game_equal(g8, g7) == true) {
+    game_delete(g1);
+    game_delete(g2);
+    game_delete(g3);
+    game_delete(g4);
+    game_delete(g5);
+    game_delete(g6);
+    game_delete(g7);
+    game_delete(g8);
+    return false;
+  }
+  g8=game_new_ext(8, 8, squares, tentes_lig, tentes_col, true, false);
 
   if (game_equal(g8, g7) == false) {
     game_delete(g1);
@@ -120,7 +131,6 @@ bool test_game_equal(void) {
     game_delete(g7);
     game_delete(g8);
     return false;
-  }
 
   if (game_equal(g5, g6) == true) {
     game_delete(g1);
