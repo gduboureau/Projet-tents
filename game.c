@@ -224,17 +224,19 @@ void game_delete(game g) {
   free(g->nb_tents_row);
   g->nb_tents_row = NULL;
   while (!queue_is_empty(g->pile1)) {
-    coup *data = (coup *)queue_pop_head(g->pile1);
+    coup *data = (coup *)queue_pop_head(
+        g->pile1);  // on désempile chaque élément de la pile1
     free(data);
   }
-  queue_clear_full(g->pile1, &free);
+  queue_clear_full(g->pile1, &free);  // on vide la pile1
   queue_free(g->pile1);
   g->pile1 = NULL;
   while (!queue_is_empty(g->pile2)) {
-    coup *data1 = (coup *)queue_pop_head(g->pile2);
+    coup *data1 = (coup *)queue_pop_head(
+        g->pile2);  // on désempile chaque élément de la pile2
     free(data1);
   }
-  queue_clear_full(g->pile2, &free);
+  queue_clear_full(g->pile2, &free);  // on vide la pile2
   queue_free(g->pile2);
   g->pile2 = NULL;
   free(g);
@@ -343,7 +345,7 @@ void game_play_move(game g, uint i, uint j, square s) {
     exit(EXIT_FAILURE);
   }
   if (!queue_is_empty(g->pile2)) {
-    queue_clear_full(g->pile2, &free);
+    queue_clear_full(g->pile2, &free);  // on vide la pile 2
   }
   coup p0;
   p0.s = game_get_square(g, i, j);
@@ -352,7 +354,8 @@ void game_play_move(game g, uint i, uint j, square s) {
   coup *data0 = (coup *)malloc(sizeof(coup));
   assert(data0);
   *data0 = p0;
-  queue_push_head(g->pile1, data0);
+  queue_push_head(g->pile1,
+                  data0);  // on sauvegarde les données de la case (i,j)
   coup p1;
   p1.s = s;
   p1.i = i;
@@ -360,13 +363,14 @@ void game_play_move(game g, uint i, uint j, square s) {
   coup *data = (coup *)malloc(sizeof(coup));
   assert(data);
   *data = p1;
-  queue_push_head(g->pile1, data);
+  queue_push_head(g->pile1,
+                  data);  // on sauvegarde les données du coup joué en (i,j)
   game_set_square(g, i, j, s);
 }
 
 /********************* Guillaume *********************/
 
-typedef struct coor {
+typedef struct coor {  // coor = coordonnée
   uint ligne;
   uint colonne;
 } coor;
@@ -377,7 +381,17 @@ static coor make_coor(uint l, uint c) {
   coor.colonne = c;
   return coor;
 }
-typedef enum { NONE, NORTH, SOUTH, WEST, EAST, NW, NE, SW, SE } dir;
+typedef enum {
+  NONE,
+  NORTH,
+  SOUTH,
+  WEST,
+  EAST,
+  NW,
+  NE,
+  SW,
+  SE
+} dir;  // dir = direction
 
 static coor dir_to_coor(dir d) {
   switch (d) {
@@ -453,21 +467,24 @@ static coor next_coor(cgame g, coor c, coor c2) {
   int li = c.ligne + c2.ligne;
   int co = c.colonne + c2.colonne;
   if (g->wrapping) {
-    if (li == -1 && co == -1) {
+    if (li == -1 && co == -1) {  // cas ou l'on cherche à regarder en haut à
+                                 // gauche de la case (0,0)
       li = g->nb_rows - 1;
       co = g->nb_cols - 1;
       return make_coor(li, co);
     }
-    if (li == -1 && co != -1) {
+    if (li == -1 && co != -1) {  // cas ou l'on cherche à regarder en haut d'une
+                                 // case situé sur la première ligne
       li = g->nb_rows - 1;
       co = co % g->nb_cols;
       return make_coor(li, co);
     }
-    if (li != -1 && co == -1) {
+    if (li != -1 && co == -1) {  // cas ou l'on cherche à regarder à gauche
+                                 // d'une case situé sur la première colonne
       li = li % g->nb_rows;
       co = g->nb_cols - 1;
       return make_coor(li, co);
-    } else if (li != -1 && co != -1) {
+    } else {
       li = li % g->nb_rows;
       co = co % g->nb_cols;
       return make_coor(li, co);

@@ -108,7 +108,7 @@ bool test_game_equal(void) {
   game g6 = game_new_ext(8, 8, squares, tentes_lig, tentes_col, false, false);
   game g7 = game_new_ext(8, 8, squares, tentes_lig, tentes_col, true, false);
   game g8 = game_copy(g7);
-  //g8->wrapping = true;
+  // g8->wrapping = true;
 
   if (game_equal(g8, g7) == false) {
     game_delete(g1);
