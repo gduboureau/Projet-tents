@@ -155,7 +155,9 @@ bool test_game_fill_grass_col() {
 
 bool test_game_restart() {
   game g = game_new_ext(8, 8, squares, tentes_lig, tentes_col, false, false);
-  game_set_square(g, 0, 0, TENT);
+  game_play_move(g, 0, 0, TENT);
+  game_undo(g);
+  game_redo(g);
   game_restart(g);
   if (!queue_is_empty(g->pile1) || queue_length(g->pile1) != 0) {
     return false;
