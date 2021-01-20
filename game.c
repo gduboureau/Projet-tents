@@ -36,9 +36,9 @@ typedef const struct game_s *cgame;
 game game_new_ext(uint nb_rows, uint nb_cols, square *squares,
                   uint *nb_tents_row, uint *nb_tents_col, bool wrapping,
                   bool diagadj) {
-  if (squares == NULL || nb_tents_row == NULL || nb_tents_col == NULL) {
-    exit(EXIT_FAILURE);
-  }
+  assert(squares);
+  assert(nb_tents_row);
+  assert(nb_tents_col);
   game g = game_new_empty_ext(nb_rows, nb_cols, wrapping, diagadj);
   g->nb_rows = nb_rows;
   g->nb_cols = nb_cols;
@@ -58,10 +58,7 @@ game game_new_ext(uint nb_rows, uint nb_cols, square *squares,
 game game_new_empty_ext(uint nb_rows, uint nb_cols, bool wrapping,
                         bool diagadj) {
   game g = malloc(sizeof(game_s));
-  if (g == NULL) {
-    fprintf(stderr, "Not enough memory!\n");
-    exit(EXIT_FAILURE);
-  }
+  assert(g);
   g->nb_rows = nb_rows;
   g->nb_cols = nb_cols;
   g->wrapping = wrapping;
@@ -69,15 +66,9 @@ game game_new_empty_ext(uint nb_rows, uint nb_cols, bool wrapping,
   g->pile1 = queue_new();
   g->pile2 = queue_new();
   g->nb_tents_row = malloc(sizeof(uint) * nb_rows);
-  if (g->nb_tents_row == NULL) {
-    fprintf(stderr, "not enough memory!\n");
-    exit(EXIT_FAILURE);
-  }
+  assert(g->nb_tents_row);
   g->nb_tents_col = malloc(sizeof(uint) * nb_cols);
-  if (g->nb_tents_col == NULL) {
-    fprintf(stderr, "not enough memory!\n");
-    exit(EXIT_FAILURE);
-  }
+  assert(g->nb_tents_col);
   for (uint i = 0; i < g->nb_rows; i++) {
     g->nb_tents_row[i] = 0;
   }
@@ -86,10 +77,7 @@ game game_new_empty_ext(uint nb_rows, uint nb_cols, bool wrapping,
   }
 
   g->squares = malloc(sizeof(square) * nb_rows * nb_cols);
-  if (g->squares == NULL) {
-    fprintf(stderr, "not enough memory!\n");
-    exit(EXIT_FAILURE);
-  }
+  assert(g->squares);
   for (uint j = 0; j < nb_rows * nb_cols; j++) {
     g->squares[j] = EMPTY;
   }
@@ -100,54 +88,46 @@ game game_new_empty_ext(uint nb_rows, uint nb_cols, bool wrapping,
 /********************* Guillaume *********************/
 
 uint game_nb_rows(cgame g) {
-  if (g == NULL) {
-    fprintf(stderr, "Parameter not valid!\n");
-    exit(EXIT_FAILURE);
-  }
+  assert(g);
   return g->nb_rows;
 }
 
 uint game_nb_cols(cgame g) {
-  if (g == NULL) {
-    fprintf(stderr, "Parameter not valid!\n");
-    exit(EXIT_FAILURE);
-  }
+  assert(g);
   return g->nb_cols;
 }
 
 /********************* Valentin *********************/
 
 bool game_is_wrapping(cgame g) {
-  if (g == NULL) {
-    fprintf(stderr, "Parameter not valid!\n");
-    exit(EXIT_FAILURE);
-  }
+  assert(g);
   return g->wrapping;
 }
 
 bool game_is_diagadj(cgame g) {
-  if (g == NULL) {
-    fprintf(stderr, "Parameter not valid!\n");
-    exit(EXIT_FAILURE);
-  }
+  assert(g);
   return g->diagadj;
 }
 
 /********************* Jennifer *********************/
 void game_undo(game g) {
   if (!queue_is_empty(g->pile1)) {
-    coup *data = (coup *)queue_pop_head(g->pile1);
-    queue_push_head(g->pile2, data);
-    coup *data0 = (coup *)queue_pop_head(g->pile1);
-    game_set_square(g, data0->i, data0->j, data0->s);
+    coup *data =
+        (coup *)queue_pop_head(g->pile1);  // on récupère le dernier coup joué
+    queue_push_head(g->pile2, data);  // On sauvegarde ce coup dans la pile2
+    coup *data0 =
+        (coup *)queue_pop_head(g->pile1);  // On récupère les données de la case
+                                           // avant de jouer le coup data
+    game_set_square(g, data0->i, data0->j, data0->s);  // On annule le coup data
     free(data0);
   }
 }
 
 void game_redo(game g) {
   if (!queue_is_empty(g->pile2)) {
-    coup *data = (coup *)queue_pop_head(g->pile2);
-    game_set_square(g, data->i, data->j, data->s);
+    coup *data =
+        (coup *)queue_pop_head(g->pile2);  // on récupère le dernier coup annulé
+    game_set_square(g, data->i, data->j, data->s);  // on rejoue le coup annulé
     free(data);
   }
 }
@@ -157,9 +137,9 @@ void game_redo(game g) {
 /********************* Jennifer *********************/
 
 game game_new(square *squares, uint *nb_tents_row, uint *nb_tents_col) {
-  if (squares == NULL || nb_tents_row == NULL || nb_tents_col == NULL) {
-    exit(EXIT_FAILURE);
-  }
+  assert(squares);
+  assert(nb_tents_row);
+  assert(nb_tents_col);
   game g = game_new_empty();
   for (uint i = 0; i < g->nb_rows; i++) {
     g->nb_tents_row[i] = nb_tents_row[i];
@@ -175,10 +155,7 @@ game game_new(square *squares, uint *nb_tents_row, uint *nb_tents_col) {
 
 game game_new_empty(void) {
   game g = malloc(sizeof(game_s));
-  if (g == NULL) {
-    fprintf(stderr, "not enough memory!\n");
-    exit(EXIT_FAILURE);
-  }
+  assert(g);
   g->nb_cols = DEFAULT_SIZE;
   g->nb_rows = DEFAULT_SIZE;
   g->wrapping = false;
@@ -186,24 +163,15 @@ game game_new_empty(void) {
   g->pile1 = queue_new();
   g->pile2 = queue_new();
   g->nb_tents_row = malloc(sizeof(uint) * DEFAULT_SIZE);
-  if (g->nb_tents_row == NULL) {
-    fprintf(stderr, "not enough memory!\n");
-    exit(EXIT_FAILURE);
-  }
+  assert(g->nb_tents_row);
   g->nb_tents_col = malloc(sizeof(uint) * DEFAULT_SIZE);
-  if (g->nb_tents_col == NULL) {
-    fprintf(stderr, "not enough memory!\n");
-    exit(EXIT_FAILURE);
-  }
+  assert(g->nb_tents_col);
   for (uint i = 0; i < DEFAULT_SIZE; i++) {
     g->nb_tents_row[i] = 0;
     g->nb_tents_col[i] = 0;
   }
   g->squares = malloc(sizeof(square) * DEFAULT_SIZE * DEFAULT_SIZE);
-  if (g->squares == NULL) {
-    fprintf(stderr, "not enough memory!\n");
-    exit(EXIT_FAILURE);
-  }
+  assert(g->squares);
   for (uint j = 0; j < DEFAULT_SIZE * DEFAULT_SIZE; j++) {
     g->squares[j] = EMPTY;
   }
@@ -211,10 +179,7 @@ game game_new_empty(void) {
 }
 
 game game_copy(cgame g) {
-  if (g == NULL) {
-    fprintf(stderr, "parameter not valid!\n");
-    exit(EXIT_FAILURE);
-  }
+  assert(g);
   game g1 = game_new_empty_ext(g->nb_rows, g->nb_cols, g->wrapping, g->diagadj);
   for (uint i = 0; i < g->nb_rows; i++) {
     g1->nb_tents_row[i] = game_get_expected_nb_tents_row(g, i);
@@ -227,10 +192,8 @@ game game_copy(cgame g) {
 }
 
 bool game_equal(cgame g1, cgame g2) {
-  if (g1 == NULL || g2 == NULL) {
-    fprintf(stderr, "at least one of the parameters isn't valid!\n");
-    exit(EXIT_FAILURE);
-  }
+  assert(g1);
+  assert(g2);
   if (g1->wrapping != g2->wrapping || g1->diagadj != g2->diagadj) {
     return false;
   }
@@ -253,10 +216,7 @@ bool game_equal(cgame g1, cgame g2) {
 }
 
 void game_delete(game g) {
-  if (g == NULL) {
-    fprintf(stderr, "parameter not valid!\n");
-    return;
-  }
+  assert(g);
   free(g->squares);
   g->squares = NULL;
   free(g->nb_tents_col);
@@ -282,63 +242,59 @@ void game_delete(game g) {
 }
 
 void game_set_square(game g, uint i, uint j, square s) {
-  if (g == NULL || i >= g->nb_rows || j >= g->nb_cols || i < 0 || j < 0) {
-    fprintf(stderr, "parameter not valid!\n");
-    exit(EXIT_FAILURE);
-  }
+  assert(g);
+  assert(i < g->nb_rows);
+  assert(i >= 0);
+  assert(j < g->nb_cols);
+  assert(j >= 0);
   g->squares[(i * g->nb_cols) + j] = s;
 }
 
 /********************* Hugo *********************/
 
 square game_get_square(cgame g, uint i, uint j) {
-  if (g == NULL || i >= g->nb_rows || j >= g->nb_cols || i < 0 || j < 0) {
-    fprintf(stderr, "parameter not valid!\n");
-    exit(EXIT_FAILURE);
-  }
+  assert(g);
+  assert(i < g->nb_rows);
+  assert(i >= 0);
+  assert(j < g->nb_cols);
+  assert(j >= 0);
   return g->squares[(i * g->nb_cols) + j];
 }
 
 void game_set_expected_nb_tents_row(game g, uint i, uint nb_tents) {
-  if (g == NULL || i >= g->nb_rows || i < 0) {
-    fprintf(stderr, "parameter not valid!\n");
-    exit(EXIT_FAILURE);
-  }
+  assert(g);
+  assert(i < g->nb_rows);
+  assert(i >= 0);
   g->nb_tents_row[i] = nb_tents;
   return;
 }
 
 void game_set_expected_nb_tents_col(game g, uint j, uint nb_tents) {
-  if (g == NULL || j >= g->nb_cols || j < 0) {
-    fprintf(stderr, "parameter not valid!\n");
-    exit(EXIT_FAILURE);
-  }
+  assert(g);
+  assert(j < g->nb_cols);
+  assert(j >= 0);
   g->nb_tents_col[j] = nb_tents;
   return;
 }
 
 uint game_get_expected_nb_tents_row(cgame g, uint i) {
-  if (g == NULL || i >= g->nb_rows || i < 0) {
-    fprintf(stderr, "parameter not valid!\n");
-    exit(EXIT_FAILURE);
-  }
+  assert(g);
+  assert(i < g->nb_rows);
+  assert(i >= 0);
   return g->nb_tents_row[i];
 }
 
 uint game_get_expected_nb_tents_col(cgame g, uint j) {
-  if (g == NULL || j >= g->nb_cols || j < 0) {
-    fprintf(stderr, "parameter not valid!\n");
-    exit(EXIT_FAILURE);
-  }
+  assert(g);
+  assert(j < g->nb_cols);
+  assert(j >= 0);
   return g->nb_tents_col[j];
 }
 
 /********************* Valentin *********************/
 
 uint game_get_expected_nb_tents_all(cgame g) {
-  if (g == NULL) {
-    exit(EXIT_FAILURE);
-  }
+  assert(g);
   uint cpt = 0;
   for (uint j = 0; j < g->nb_rows; j++) {
     cpt += game_get_expected_nb_tents_row(g, j);
@@ -347,9 +303,9 @@ uint game_get_expected_nb_tents_all(cgame g) {
 }
 
 uint game_get_current_nb_tents_row(cgame g, uint i) {
-  if (g == NULL || i >= g->nb_rows || i < 0) {
-    exit(EXIT_FAILURE);
-  }
+  assert(g);
+  assert(i < g->nb_rows);
+  assert(i >= 0);
   uint cpt = 0;
   for (uint k = 0; k < g->nb_cols; k++) {
     if (game_get_square(g, i, k) == TENT) {
@@ -360,9 +316,9 @@ uint game_get_current_nb_tents_row(cgame g, uint i) {
 }
 
 uint game_get_current_nb_tents_col(cgame g, uint j) {
-  if (g == NULL || j >= g->nb_cols || j < 0) {
-    exit(EXIT_FAILURE);
-  }
+  assert(g);
+  assert(j < g->nb_cols);
+  assert(j >= 0);
   uint cpt = 0;
   for (uint k = 0; k < g->nb_rows; k++) {
     if (game_get_square(g, k, j) == TENT) {
@@ -373,9 +329,7 @@ uint game_get_current_nb_tents_col(cgame g, uint j) {
 }
 
 uint game_get_current_nb_tents_all(cgame g) {
-  if (g == NULL) {
-    exit(EXIT_FAILURE);
-  }
+  assert(g);
   uint cpt = 0;
   for (uint j = 0; j < g->nb_rows; j++) {
     cpt += game_get_current_nb_tents_row(g, j);
@@ -671,10 +625,11 @@ static bool game_illegal(cgame g, uint x, uint y, square s) {
 }
 
 int game_check_move(cgame g, uint i, uint j, square s) {
-  if (g == NULL || i >= g->nb_rows || j >= g->nb_cols) {
-    fprintf(stderr, "parameter not valid!\n");
-    exit(EXIT_FAILURE);
-  }
+  assert(g);
+  assert(i < g->nb_rows);
+  assert(i >= 0);
+  assert(j < g->nb_cols);
+  assert(j >= 0);
   if (!game_illegal(g, i, j, s)) {
     return ILLEGAL;
   }
@@ -745,19 +700,15 @@ static bool tent_with_tree_all(cgame g) {
 }
 
 bool game_is_over(cgame g) {
-  if (g == NULL) {
-    fprintf(stderr, "parameter not valid!\n");
-    exit(EXIT_FAILURE);
-  }
+  assert(g);
   return tent_adj_tent_all(g) && nb_tents_ok(g) && tree_equal_tent(g) &&
          tent_with_tree_all(g);
 }
 
 void game_fill_grass_row(game g, uint i) {
-  if (g == NULL || i >= g->nb_cols) {
-    fprintf(stderr, "parameter not valid!\n");
-    exit(EXIT_FAILURE);
-  }
+  assert(g);
+  assert(i < g->nb_rows);
+  assert(i >= 0);
   for (uint j = 0; j < g->nb_cols; j++) {
     if (game_get_square(g, i, j) == EMPTY) {
       coup p0;
@@ -780,10 +731,9 @@ void game_fill_grass_row(game g, uint i) {
 }
 
 void game_fill_grass_col(game g, uint j) {
-  if (g == NULL || j >= g->nb_cols) {
-    fprintf(stderr, "parameter not valid!\n");
-    exit(EXIT_FAILURE);
-  }
+  assert(g);
+  assert(j < g->nb_cols);
+  assert(j >= 0);
   for (unsigned int i = 0; i < g->nb_rows; i++) {
     if (game_get_square(g, i, j) == EMPTY) {
       coup p0;
@@ -806,10 +756,7 @@ void game_fill_grass_col(game g, uint j) {
 }
 
 void game_restart(game g) {
-  if (g == NULL) {
-    fprintf(stderr, "parameter not valid!\n");
-    exit(EXIT_FAILURE);
-  }
+  assert(g);
   for (unsigned int i = 0; i < g->nb_rows; i++) {
     for (unsigned int j = 0; j < g->nb_cols; j++) {
       if (game_get_square(g, i, j) != TREE) {
