@@ -58,8 +58,7 @@ bool test_game_new_ext(void) {
     game_delete(g);
     return false;
   }
-  if (game_nb_cols(g) > 8 || game_nb_rows(g) > 8 || game_nb_cols(g) <= 0 ||
-      game_nb_rows(g) <= 0) {
+  if (game_nb_cols(g) != g->nb_cols || game_nb_rows(g) != g->nb_rows) {
     game_delete(g);
     return false;
   }
