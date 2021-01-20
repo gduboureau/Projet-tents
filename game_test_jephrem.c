@@ -3,7 +3,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "game.c"
+//#include "game.c"
 #include "game.h"
 #include "game_aux.h"
 #include "game_ext.h"
@@ -130,7 +130,7 @@ bool test_game_equal(void) {
     game_delete(g5);
     game_delete(g6);
     game_delete(g7);
-    //game_delete(g8);
+    // game_delete(g8);
     return false;
   }
   if (game_equal(g5, g7) == true) {
@@ -141,7 +141,7 @@ bool test_game_equal(void) {
     game_delete(g5);
     game_delete(g6);
     game_delete(g7);
-    //game_delete(g8);
+    // game_delete(g8);
     return false;
   }
 
@@ -152,7 +152,7 @@ bool test_game_equal(void) {
   game_delete(g5);
   game_delete(g6);
   game_delete(g7);
-  //game_delete(g8);
+  // game_delete(g8);
   return true;
 }
 /* *********************************************************** */
