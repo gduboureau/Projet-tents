@@ -131,7 +131,7 @@ bool test_game_equal(void) {
     game_delete(g7);
     game_delete(g8);
     return false;
-
+  }
     if (game_equal(g5, g6) == true) {
       game_delete(g1);
       game_delete(g2);
@@ -190,7 +190,7 @@ bool test_game_equal(void) {
           fprintf(stderr, "Error : the game is not empty!\n");
           game_delete(g);
           return false;
-        };
+        }
       }
     }
     game_delete(g);
