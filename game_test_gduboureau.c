@@ -106,12 +106,6 @@ bool test_game_fill_grass_row() {
   game g1 = game_new_ext(8, 8, squares, tentes_lig, tentes_col, false, false);
   for (unsigned int i = 0; i < game_nb_rows(g); i++) {
     game_fill_grass_row(g, i);
-    coup* head = queue_peek_head(g->pile1);
-    if (head->s != GRASS) {
-      game_delete(g);
-      game_delete(g1);
-      return false;
-    }
   }
 
   for (unsigned int i = 0; i < game_nb_rows(g); i++) {
@@ -138,12 +132,6 @@ bool test_game_fill_grass_col() {
   game g1 = game_new_ext(8, 8, squares, tentes_lig, tentes_col, false, false);
   for (unsigned int j = 0; j < game_nb_cols(g); j++) {
     game_fill_grass_col(g, j);
-    coup* head = queue_peek_head(g->pile1);
-    if (head->s != GRASS) {
-      game_delete(g);
-      game_delete(g1);
-      return false;
-    }
   }
 
   for (unsigned int i = 0; i < game_nb_rows(g); i++) {
@@ -168,13 +156,6 @@ bool test_game_fill_grass_col() {
 bool test_game_restart() {
   game g = game_new_ext(8, 8, squares, tentes_lig, tentes_col, false, false);
   game_set_square(g, 0, 0, TENT);
-  coup p0;
-  p0.s = TENT;
-  p0.i = 0;
-  p0.j = 0;
-  coup* data0 = (coup*)malloc(sizeof(coup));
-  *data0 = p0;
-  queue_push_head(g->pile1, data0);
   game_restart(g);
   if (!queue_is_empty(g->pile1) || queue_length(g->pile1) != 0) {
     return false;
