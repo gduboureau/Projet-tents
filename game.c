@@ -453,8 +453,25 @@ static coor next_coor(cgame g, coor c, coor c2) {
   int li = c.ligne + c2.ligne;
   int co = c.colonne + c2.colonne;
   if (g->wrapping) {
-    li = li % g->nb_rows;
-    co = co % g->nb_cols;
+    if (li == -1 && co == -1) {
+      li = g->nb_rows - 1;
+      co = g->nb_cols - 1;
+      return make_coor(li, co);
+    }
+    if (li == -1 && co != -1) {
+      li = g->nb_rows - 1;
+      co = co % g->nb_cols;
+      return make_coor(li, co);
+    }
+    if (li != -1 && co == -1) {
+      li = li % g->nb_rows;
+      co = g->nb_cols - 1;
+      return make_coor(li, co);
+    } else if (li != -1 && co != -1) {
+      li = li % g->nb_rows;
+      co = co % g->nb_cols;
+      return make_coor(li, co);
+    }
   }
   return make_coor(li, co);
 }
