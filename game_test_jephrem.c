@@ -190,18 +190,6 @@ bool test_game_new_empty(void) {
 /* *********************************************************** */
 
 bool test_game_new() {
-  uint tentes_lig[] = {3, 0, 4, 0, 4, 0, 1, 0};
-  uint tentes_col[] = {4, 0, 1, 2, 1, 1, 2, 1};
-
-  square squares[] = {EMPTY, EMPTY, EMPTY, EMPTY, TREE,  TREE,  EMPTY, EMPTY,
-                      TREE,  EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, TREE,
-                      EMPTY, EMPTY, EMPTY, EMPTY, TREE,  EMPTY, EMPTY, EMPTY,
-                      TREE,  EMPTY, EMPTY, EMPTY, EMPTY, TREE,  EMPTY, EMPTY,
-                      EMPTY, TREE,  EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY,
-                      TREE,  EMPTY, EMPTY, EMPTY, TREE,  EMPTY, TREE,  EMPTY,
-                      EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY,
-                      TREE,  EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY};
-
   game g = game_new_ext(8, 8, squares, tentes_lig, tentes_col, false, false);
   game_delete(g);
   return true;
