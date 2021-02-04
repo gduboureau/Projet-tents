@@ -2,11 +2,11 @@ cmake_minimum_required(VERSION 2.6)
 
 project("Game_Text" C)
 
-set(CMAKE_VERBOSE_MAKEFILE ON)
+set(CMAKE_VERBOSE_MAKEFILE OFF)
 
 set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wall -std=c99 -g --coverage")
 
-add_library(game game.c game_aux.c queue.c)
+add_library(game game.c game_aux.c queue.c game_tools.c)
 
 add_executable(game_text game_text.c)
 
