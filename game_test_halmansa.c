@@ -14,6 +14,16 @@ void usage(int argc, char *argv[]) {
 }
 
 /* *********************************************************** */
+
+bool test_game_load(void){
+  return true;
+}
+
+bool test_game_save(void){
+  return true;
+}
+
+/* *********************************************************** */
 uint tentes_lig[] = {3, 0, 4, 0, 4, 0, 1, 0};
 uint tentes_col[] = {4, 0, 1, 2, 1, 1, 2, 1};
 
@@ -290,6 +300,14 @@ int main(int argc, char *argv[]) {
 
   else if (strcmp("game_new_empty_ext", argv[1]) == 0) {
     ok = test_game_new_empty_ext();
+  }
+
+  else if (strcmp("game_load", argv[1]) == 0) {
+    ok = test_game_load();
+  }
+
+  else if (strcmp("game_save", argv[1]) == 0) {
+    ok = test_game_save();
   }
 
   else {

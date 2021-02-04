@@ -70,3 +70,5 @@ add_test(test_halmansa_game_get_expected_nb_tents_all ./game_test_halmansa game_
 add_test(test_halmansa_game_play_move ./game_test_halmansa game_play_move)
 add_test(test_halmansa_game_new_ext ./game_test_halmansa game_new_ext)
 add_test(test_halmansa_game_new_empty_ext ./game_test_halmansa game_new_empty_ext)
+add_test(test_halmansa_game_load ./game_test_halmansa game_load)
+add_test(test_halmansa_game_save ./game_test_halmansa game_save)
