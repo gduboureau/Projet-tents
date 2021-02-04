@@ -60,6 +60,8 @@ bool test_game_equal(void) {
       game_is_diagadj(g1) != game_is_diagadj(g2) ||
       game_nb_cols(g1) != game_nb_cols(g2) ||
       game_nb_rows(g1) != game_nb_rows(g2)) {
+    game_delete(g1);
+    game_delete(g2);
     return false;
   }
   if (game_equal(g1, g2) == false) {
@@ -119,19 +121,7 @@ bool test_game_equal(void) {
     game_delete(g8);
     return false;
   }
-  g8 = game_new_ext(8, 8, squares, tentes_lig, tentes_col, true, false);
 
-  if (game_equal(g8, g7) == false) {
-    game_delete(g1);
-    game_delete(g2);
-    game_delete(g3);
-    game_delete(g4);
-    game_delete(g5);
-    game_delete(g6);
-    game_delete(g7);
-    game_delete(g8);
-    return false;
-  }
   if (game_equal(g5, g6) == true) {
     game_delete(g1);
     game_delete(g2);
