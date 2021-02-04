@@ -4,6 +4,7 @@
 #include <string.h>
 
 #include "game.c"
+#include "game_tools.c"
 #include "game.h"
 #include "game_aux.h"
 #include "game_ext.h"
