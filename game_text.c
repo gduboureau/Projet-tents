@@ -18,8 +18,12 @@ square squares[] = {
     TREE,  EMPTY, TREE,  EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY,
     EMPTY, TREE,  EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY};
 
-int main(void) {
-  game g = game_load("test.txt");
+int main(int argc, char *argv[]) {
+  if (argc != 2){
+    fprintf(stderr,"Wrong number of arguments\n");
+    exit(EXIT_FAILURE);
+  }
+  game g = game_load(argv[1]);
   while (game_is_over(g) == false) {
     game_print(g);
     printf("> ? [h for help]\n");
@@ -95,6 +99,6 @@ int main(void) {
   }
   game_print(g);
   printf("Congratulations ! You win :-)\n");
-  game_save(g,"wesh.txt");
+  game_save(g,argv[1]);
   return EXIT_SUCCESS;
 }
