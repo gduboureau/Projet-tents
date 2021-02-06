@@ -26,7 +26,7 @@ game game_load(char *filename) {
     fscanf(f,"%d",&tent_col[j]);
   }
   for (uint z = 0; z <nb_lignes*nb_col; z++){
-    fscanf(f," '%c' ",&tab[z]);
+    fscanf(f,"%c",&tab[z]);
     if (tab[z] == 'x'){
       squares[z] = TREE;
     }else
@@ -62,16 +62,16 @@ void game_save(cgame g, char *filename) {
   for (unsigned int i = 0; i < game_nb_rows(g); i++) {
     for (unsigned int j = 0; j < game_nb_cols(g); j++) {
       if (game_get_square(g, i, j) == EMPTY) {
-        fprintf(f, "\' \'");
+        fprintf(f, " ");
       }
       if (game_get_square(g, i, j) == TREE) {
-        fprintf(f, "\'x\'");
+        fprintf(f, "x");
       }
       if (game_get_square(g, i, j) == TENT) {
-        fprintf(f, "\'*\'");
+        fprintf(f, "*");
       }
       if (game_get_square(g, i, j) == GRASS) {
-        fprintf(f, "\'-\'");
+        fprintf(f, "-");
       }
     }
   }
