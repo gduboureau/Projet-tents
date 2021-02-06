@@ -53,25 +53,25 @@ void game_save(cgame g, char *filename) {
           game_is_wrapping(g), game_is_diagadj(g));
   for (uint i = 0; i < game_nb_rows(g); i++) {
     fprintf(f, "%u ", game_get_expected_nb_tents_row(g, i));
-    fprintf(f, "\n");
   }
+  fprintf(f, "\n");
   for (uint i = 0; i < game_nb_cols(g); i++) {
     fprintf(f, "%u ", game_get_expected_nb_tents_col(g, i));
-    fprintf(f, "\n");
   }
+  fprintf(f, "\n");
   for (unsigned int i = 0; i < game_nb_rows(g); i++) {
     for (unsigned int j = 0; j < game_nb_cols(g); j++) {
       if (game_get_square(g, i, j) == EMPTY) {
-        fprintf(f, " ");
+        fprintf(f, "\' \'");
       }
       if (game_get_square(g, i, j) == TREE) {
-        fprintf(f, "x");
+        fprintf(f, "\'x\'");
       }
       if (game_get_square(g, i, j) == TENT) {
-        fprintf(f, "*");
+        fprintf(f, "\'*\'");
       }
       if (game_get_square(g, i, j) == GRASS) {
-        fprintf(f, "-");
+        fprintf(f, "\'-\'");
       }
     }
   }
