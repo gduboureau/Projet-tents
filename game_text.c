@@ -5,6 +5,7 @@
 #include "game_aux.c"
 #include "game_aux.h"
 #include "game_ext.h"
+#include "game_tools.h"
 
 uint tentes_lig[] = {3, 0, 4, 0, 4, 0, 1, 0};
 uint tentes_col[] = {4, 0, 1, 2, 1, 1, 2, 1};
@@ -18,7 +19,7 @@ square squares[] = {
     EMPTY, TREE,  EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY};
 
 int main(void) {
-  game g = game_new_ext(8, 8, squares, tentes_lig, tentes_col, false, false);
+  game g = game_load("test.txt");
   while (game_is_over(g) == false) {
     game_print(g);
     printf("> ? [h for help]\n");
@@ -42,6 +43,7 @@ int main(void) {
       printf("> action: restart\n");
     }
     if (command == 'q') {
+      game_save(g,"wesh.txt");
       game_delete(g);
       printf("> action: quit\nWhat a shame, you gave up :-(\n");
       return EXIT_SUCCESS;
@@ -93,5 +95,6 @@ int main(void) {
   }
   game_print(g);
   printf("Congratulations ! You win :-)\n");
+  game_save(g,"wesh.txt");
   return EXIT_SUCCESS;
 }
