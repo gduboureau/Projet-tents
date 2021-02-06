@@ -18,15 +18,15 @@ game game_load(char *filename) {
   uint tent_ligne[nb_lignes];
   uint tent_col[nb_col];
   square squares[nb_lignes*nb_col];
-  char tab[500];
+  char tab[nb_lignes*nb_col];
   for (uint i = 0; i<nb_lignes; i++){
-    fscanf(f,"%d",&tent_ligne[i]);
+    fscanf(f," %d ",&tent_ligne[i]);
   }
   for (uint j = 0; j<nb_col; j++){
-    fscanf(f,"%d",&tent_col[j]);
+    fscanf(f," %d ",&tent_col[j]);
   }
   for (uint z = 0; z <nb_lignes*nb_col; z++){
-    fscanf(f,"%c",&tab[z]);
+    fscanf(f," %c ",&tab[z]);
     if (tab[z] == 'x'){
       squares[z] = TREE;
     }else
@@ -74,6 +74,7 @@ void game_save(cgame g, char *filename) {
         fprintf(f, "-");
       }
     }
+    fprintf(f, "\n");
   }
   fprintf(f, "\n");
   fclose(f);
