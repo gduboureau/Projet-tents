@@ -19,11 +19,14 @@ square squares[] = {
     EMPTY, TREE,  EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY};
 
 int main(int argc, char *argv[]) {
-  if (argc != 2) {
+  game g = game_new_ext(8, 8, squares, tentes_lig, tentes_col, false, false);
+  if (argc != 1 && argc != 2) {
     fprintf(stderr, "Wrong number of arguments\n");
     exit(EXIT_FAILURE);
   }
-  game g = game_load(argv[1]);
+  if (argc == 2) {
+    g = game_load(argv[1]);
+  }
   while (game_is_over(g) == false) {
     game_print(g);
     printf("> ? [h for help]\n");
@@ -35,8 +38,8 @@ int main(int argc, char *argv[]) {
       printf("- press 't <i> <j>' to put a tent at square (i,j) \n");
       printf("- press 'g <i> <j>' to put a grass at square (i,j) \n");
       printf("- press 'e <i> <j>' to erase square (i,j) \n");
-      printf(" - press 'z' to undo the last move \n");
-      printf(" - press 'y' to redo the last move \n");
+      printf("- press 'z' to undo the last move \n");
+      printf("- press 'y' to redo the last move \n");
       printf("- press 'r' to restart \n");
       printf("- press 'q' to quit \n");
       game_print(g);
@@ -47,7 +50,6 @@ int main(int argc, char *argv[]) {
       printf("> action: restart\n");
     }
     if (command == 'q') {
-      game_save(g, argv[1]);
       game_delete(g);
       printf("> action: quit\nWhat a shame, you gave up :-(\n");
       return EXIT_SUCCESS;
@@ -99,6 +101,5 @@ int main(int argc, char *argv[]) {
   }
   game_print(g);
   printf("Congratulations ! You win :-)\n");
-  game_save(g, argv[1]);
   return EXIT_SUCCESS;
 }
