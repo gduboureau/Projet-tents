@@ -25,21 +25,18 @@ game game_load(char *filename) {
   for (uint j = 0; j < nb_col; j++) {
     fscanf(f, "%d ", &tent_col[j]);
   }
+  fseek(f, 10 + (nb_col * 2) + (nb_lignes * 2), 0);
   for (uint z = 0; z < nb_lignes * nb_col; z++) {
     fscanf(f, "%c", &tab[z]);
     if (tab[z] == ' ') {
-      printf("z=%u et je print un ' '\n", z);
       squares[z] = EMPTY;
     } else if (tab[z] == '-') {
-      printf("z=%u et je print un '-'\n", z);
       squares[z] = GRASS;
     } else if (tab[z] == '*') {
-      printf("z=%u et je print un '*'\n", z);
       squares[z] = TENT;
     } else if (tab[z] == 'x') {
-      printf("z=%u et je print un 'x'\n", z);
       squares[z] = TREE;
-    } else if (z < nb_lignes * nb_col - 1) {
+    } else if (z < nb_lignes * nb_col) {
       z--;
     }
   }
