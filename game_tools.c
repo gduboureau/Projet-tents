@@ -7,41 +7,46 @@
 #include "game.h"
 #include "game_ext.h"
 
-game game_load(char *filename) {  
+game game_load(char *filename) {
   FILE *f;
-  f = fopen(filename,"r");
-  if (f == NULL){
+  f = fopen(filename, "r");
+  if (f == NULL) {
     exit(EXIT_FAILURE);
   }
   uint nb_lignes, nb_col, wrap, diag;
-  fscanf(f,"%u %u %u %u",&nb_lignes,&nb_col,&wrap,&diag);
+  fscanf(f, "%u %u %u %u", &nb_lignes, &nb_col, &wrap, &diag);
   uint tent_ligne[nb_lignes];
   uint tent_col[nb_col];
-  square squares[nb_lignes*nb_col];
-  char tab[nb_lignes*nb_col];
-  for (uint i = 0; i<nb_lignes; i++){
-    fscanf(f," %d ",&tent_ligne[i]);
+  square squares[nb_lignes * nb_col];
+  char tab[nb_lignes * nb_col];
+  for (uint i = 0; i < nb_lignes; i++) {
+    fscanf(f, "%d ", &tent_ligne[i]);
   }
-  for (uint j = 0; j<nb_col; j++){
-    fscanf(f," %d ",&tent_col[j]);
+  for (uint j = 0; j < nb_col; j++) {
+    fscanf(f, "%d ", &tent_col[j]);
   }
-  for (uint z = 0; z <nb_lignes*nb_col; z++){
-    fscanf(f," %c ",&tab[z]);
-    if (tab[z] == 'x'){
-      squares[z] = TREE;
-    }else
-    if (tab[z] == '-'){
-      squares[z] = GRASS;
-    }else
-    if (tab[z] == '*'){
-      squares[z] = TENT;
-    }else{
+  for (uint z = 0; z < nb_lignes * nb_col; z++) {
+    fscanf(f, "%c", &tab[z]);
+    if (tab[z] == ' ') {
+      printf("z=%u et je print un ' '\n", z);
       squares[z] = EMPTY;
+    } else if (tab[z] == '-') {
+      printf("z=%u et je print un '-'\n", z);
+      squares[z] = GRASS;
+    } else if (tab[z] == '*') {
+      printf("z=%u et je print un '*'\n", z);
+      squares[z] = TENT;
+    } else if (tab[z] == 'x') {
+      printf("z=%u et je print un 'x'\n", z);
+      squares[z] = TREE;
+    } else if (z < nb_lignes * nb_col - 1) {
+      z--;
     }
   }
   fclose(f);
-  game g = game_new_ext(nb_lignes,nb_col,squares,tent_ligne,tent_col,wrap,diag);
-  return g; 
+  game g = game_new_ext(nb_lignes, nb_col, squares, tent_ligne, tent_col, wrap,
+                        diag);
+  return g;
 }
 
 void game_save(cgame g, char *filename) {
