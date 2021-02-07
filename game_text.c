@@ -19,8 +19,8 @@ square squares[] = {
     EMPTY, TREE,  EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY};
 
 int main(int argc, char *argv[]) {
-  if (argc != 2){
-    fprintf(stderr,"Wrong number of arguments\n");
+  if (argc != 2) {
+    fprintf(stderr, "Wrong number of arguments\n");
     exit(EXIT_FAILURE);
   }
   game g = game_load(argv[1]);
@@ -47,7 +47,7 @@ int main(int argc, char *argv[]) {
       printf("> action: restart\n");
     }
     if (command == 'q') {
-      game_save(g,argv[1]);
+      game_save(g, argv[1]);
       game_delete(g);
       printf("> action: quit\nWhat a shame, you gave up :-(\n");
       return EXIT_SUCCESS;
@@ -99,6 +99,6 @@ int main(int argc, char *argv[]) {
   }
   game_print(g);
   printf("Congratulations ! You win :-)\n");
-  game_save(g,argv[1]);
+  game_save(g, argv[1]);
   return EXIT_SUCCESS;
 }
