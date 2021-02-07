@@ -4,10 +4,10 @@
 #include <string.h>
 
 #include "game.c"
-#include "game_tools.c"
 #include "game.h"
 #include "game_aux.h"
 #include "game_ext.h"
+#include "game_tools.c"
 
 void usage(int argc, char *argv[]) {
   fprintf(stderr, "Usage: %s <testname> [<...>]\n", argv[0]);
@@ -16,13 +16,9 @@ void usage(int argc, char *argv[]) {
 
 /* *********************************************************** */
 
-bool test_game_load(void){
-  return true;
-}
+bool test_game_load(void) { return true; }
 
-bool test_game_save(void){
-  return true;
-}
+bool test_game_save(void) { return true; }
 
 /* *********************************************************** */
 uint tentes_lig[] = {3, 0, 4, 0, 4, 0, 1, 0};
