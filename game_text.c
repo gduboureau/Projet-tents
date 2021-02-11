@@ -50,6 +50,7 @@ int main(int argc, char *argv[]) {
       printf("> action: restart\n");
     }
     if (command == 'q') {
+      game_save(g,argv[1]);
       game_delete(g);
       printf("> action: quit\nWhat a shame, you gave up :-(\n");
       return EXIT_SUCCESS;
@@ -101,5 +102,6 @@ int main(int argc, char *argv[]) {
   }
   game_print(g);
   printf("Congratulations ! You win :-)\n");
+  game_save(g,argv[1]);
   return EXIT_SUCCESS;
 }
