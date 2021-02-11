@@ -7,7 +7,6 @@
 #include "game.h"
 #include "game_aux.h"
 #include "game_ext.h"
-#include "game_tools.c"
 #include "game_tools.h"
 
 void usage(int argc, char *argv[]) {
