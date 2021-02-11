@@ -80,3 +80,10 @@ void game_save(cgame g, char *filename) {
   }
   fclose(f);
 }
+
+bool game_solve(game g) {  // dire si il existe une solution du jeu en param. et
+                           // modifier le jeu si il y en a une
+  return 0;
+}
+
+uint game_nb_solutions(game g) { return 0; }
