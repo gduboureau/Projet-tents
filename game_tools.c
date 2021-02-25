@@ -81,9 +81,20 @@ void game_save(cgame g, char *filename) {
   fclose(f);
 }
 
-bool game_solve(game g) {  // dire si il existe une solution du jeu en param. et
-                           // modifier le jeu si il y en a une
-  return 0;
+// dire si il existe une solution du jeu en param. et
+// modifier le jeu si il y en a une
+bool game_solve(game g) {
+  for (unsigned int i = 0; i < game_nb_rows(g); i++) {
+    for (unsigned int j = 0; j < game_nb_cols(g); j++) {
+      if (game_check_move(g,i,j,TENT)==REGULAR){
+        game_play_move(g,i,j,TENT);
+      }
+      else{
+        game_play_move(g,i,j,GRASS);
+      }
+    }
+  }
+  return game_is_over(g);
 }
 
 uint game_nb_solutions(game g) { return 0; }
