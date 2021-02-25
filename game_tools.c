@@ -87,10 +87,10 @@ bool game_solve(game g) {
   for (unsigned int i = 0; i < game_nb_rows(g); i++) {
     for (unsigned int j = 0; j < game_nb_cols(g); j++) {
       if (game_check_move(g,i,j,TENT)==REGULAR){
-        game_play_move(g,i,j,TENT);
+        game_set_square(g,i,j,TENT);
       }
-      else{
-        game_play_move(g,i,j,GRASS);
+      else if(game_check_move(g,i,j,TENT)==LOSING){
+        game_set_square(g,i,j,GRASS);
       }
     }
   }

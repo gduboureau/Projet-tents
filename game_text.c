@@ -42,12 +42,17 @@ int main(int argc, char *argv[]) {
       printf("- press 'y' to redo the last move \n");
       printf("- press 'r' to restart \n");
       printf("- press 'q' to quit \n");
+      printf("- press 's' to resolve the game \n");
       game_print(g);
     }
     if (command == 'r') {
       game_restart(g);
       game_print(g);
       printf("> action: restart\n");
+    }
+    if (command == 's') {
+        game_solve(g);
+        game_print(g);
     }
     if (command == 'q') {
       game_delete(g);
