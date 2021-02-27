@@ -86,7 +86,7 @@ void game_save(cgame g, char *filename) {
 bool game_solve(game g) {
   for (unsigned int i = 0; i < game_nb_rows(g); i++) {
     for (unsigned int j = 0; j < game_nb_cols(g); j++) {
-      if (game_check_move(g,i,j,TENT)==REGULAR){
+      if (game_check_move(g,i,j,TENT)==REGULAR && game_get_current_nb_tents_row(g,i) < game_get_expected_nb_tents_row(g,i) && game_get_current_nb_tents_col(g,j) < game_get_expected_nb_tents_col(g,j)){
         game_set_square(g,i,j,TENT);
       }
       else if(game_check_move(g,i,j,TENT)==LOSING){

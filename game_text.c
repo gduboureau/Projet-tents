@@ -51,8 +51,13 @@ int main(int argc, char *argv[]) {
       printf("> action: restart\n");
     }
     if (command == 's') {
+      if (game_solve(g) == true){
         game_solve(g);
         game_print(g);
+        break;
+      }else{
+        printf("there are no solution");
+      }
     }
     if (command == 'q') {
       game_delete(g);
