@@ -641,10 +641,42 @@ static bool r5_tree_non_entoure_grass(cgame g, uint x, uint y, square s) {
   return true;
 }
 
+static bool r6_one_tent_with_one_tree(cgame g, uint x, uint y, square s) {
+  if (s == TENT) {
+    for (int i = -1; i < 2; i++) {
+      for (int j = -1; j < 2; j++) {
+        if ((i == 0 || j == 0) &&
+            (i + j != 0) &&  // test pour ne pas parcourir la case (x,y) et les
+                             // diagonales
+            (correct_next_coor(g, make_coor(x, y),
+                               coor_to_dir(make_coor(i, j))))) {
+          coor coo_next = next_coor(g, make_coor(x, y), make_coor(i, j));
+          if (game_get_square(g, coo_next.ligne, coo_next.colonne) == TREE) {
+            for (int i = -1; i < 2; i++) {
+              for (int j = -1; j < 2; j++) {
+                if ((i == 0 || j == 0) &&
+                    (i + j != 0) && (correct_next_coor(g, make_coor(coo_next.ligne, coo_next.colonne),
+                    coor_to_dir(make_coor(i, j))))) {
+                  coor coo_next2 = next_coor(g, make_coor(coo_next.ligne, coo_next.colonne), make_coor(i, j));
+                  if (game_get_square(g, coo_next2.ligne, coo_next2.colonne)==TENT && (i + coo_next2.ligne != coo_next.ligne ||
+                    j + coo_next2.colonne != coo_next.colonne) && !r3_tent_next_to_tree(g, coo_next2.ligne, coo_next2.colonne, TENT)){
+                    return false;
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+  return true;
+}
+
 static bool game_correct(cgame g, uint x, uint y, square s) {
   return r2_nb_tent_respecte(g, x, y, s) && r1_tent_adj_tent(g, x, y, s) &&
          r3_tent_next_to_tree(g, x, y, s) && r4_nb_tent_grass(g, x, y, s) &&
-         r5_tree_non_entoure_grass(g, x, y, s);
+         r5_tree_non_entoure_grass(g, x, y, s) && r6_one_tent_with_one_tree(g, x, y, s);
 }
 
 static bool game_illegal(cgame g, uint x, uint y, square s) {
