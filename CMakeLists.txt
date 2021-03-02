@@ -9,8 +9,11 @@ set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wall -std=c99 -g --coverage")
 add_library(game game.c game_aux.c queue.c game_tools.c)
 
 add_executable(game_text game_text.c)
+add_executable(game_solve game_solve.c)
+
 
 target_link_libraries(game_text game)
+target_link_libraries(game_solve game)
 
 #-----------------------------------------------------#
 include(CTest)
