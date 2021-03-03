@@ -229,6 +229,7 @@ static bool correct_next_coor(cgame g, coor c, dir d) {
 // modifier le jeu si il y en a une
 
 static bool game_s1(game g) {
+  game_restart(g);
   for (unsigned int i = 0; i < game_nb_rows(g); i++) {
     for (unsigned int j = 0; j < game_nb_cols(g); j++) {
       if (game_get_square(g, i, j) == TREE) {
@@ -258,6 +259,7 @@ static bool game_s1(game g) {
 }
 
 static bool game_s2(game g) {
+  game_restart(g);
   for (unsigned int i = game_nb_rows(g) - 1; i >= 1; i--) {
     for (unsigned int j = game_nb_cols(g) - 1; j >= 1; j--) {
       if (game_get_square(g, i, j) == TREE) {
@@ -287,6 +289,7 @@ static bool game_s2(game g) {
 }
 
 static bool game_s3(game g) {
+  game_restart(g);
   for (unsigned int i = game_nb_rows(g) - 1; i >= 1; i--) {
     for (unsigned int j = 0; j < game_nb_cols(g); j++) {
       if (game_get_square(g, i, j) == TREE) {
@@ -316,6 +319,7 @@ static bool game_s3(game g) {
 }
 
 static bool game_s4(game g) {
+  game_restart(g);
   for (unsigned int i = 0; i < game_nb_rows(g); i++) {
     for (unsigned int j = game_nb_cols(g) - 1; j >= 1; j--) {
       if (game_get_square(g, i, j) == TREE) {
