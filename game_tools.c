@@ -348,7 +348,6 @@ static bool game_s4(game g) {
   return game_is_over(g);
 }
 
-
 bool game_solve(game g) {
   return game_s1(g) || game_s2(g) || game_s3(g) || game_s4(g);
 }
