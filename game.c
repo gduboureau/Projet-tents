@@ -547,7 +547,17 @@ static bool r3_tent_next_to_tree(cgame g, uint x, uint y, square s) {
 #define INDEX(g, i, j) ((i) * (g->nb_cols) + (j))
 #define SQUARE(g, i, j) ((g)->squares[(INDEX(g, i, j))])
 
-typedef enum { HERE, UP, DOWN, LEFT, RIGHT, UP_LEFT, UP_RIGHT, DOWN_LEFT, DOWN_RIGHT } direction;
+typedef enum {
+  HERE,
+  UP,
+  DOWN,
+  LEFT,
+  RIGHT,
+  UP_LEFT,
+  UP_RIGHT,
+  DOWN_LEFT,
+  DOWN_RIGHT
+} direction;
 
 char _square2str(square s) {
   if (s == EMPTY)
@@ -585,7 +595,8 @@ bool _inside(cgame g, int i, int j) {
     i = (i + game_nb_rows(g)) % game_nb_rows(g);
     j = (j + game_nb_cols(g)) % game_nb_cols(g);
   }
-  if (i < 0 || j < 0 || i >= (int)g->nb_rows || j >= (int)g->nb_cols) return false;
+  if (i < 0 || j < 0 || i >= (int)g->nb_rows || j >= (int)g->nb_cols)
+    return false;
   return true;
 }
 
@@ -740,7 +751,6 @@ uint _nb_squares(cgame g, square s) {
   return nb_squares;
 }
 
-
 int game_check_move(cgame g, uint i, uint j, square s) {
   assert(g);
   assert(i < g->nb_rows);
@@ -768,9 +778,10 @@ int game_check_move(cgame g, uint i, uint j, square s) {
   int nb_tent_squares_col = _nb_squares_col(g, j, TENT) + delta_tent_squares;
   int nb_tent_squares_all = _nb_squares(g, TENT) + delta_tent_squares;
   int delta_grass_squares = ((s == GRASS) ? 1 : 0) - ((cs == GRASS) ? 1 : 0);
-  // int nb_grass_squares_row = _nb_squares_row(g, i, GRASS) + delta_grass_squares;
-  // int nb_grass_squares_col = _nb_squares_col(g, j, GRASS) + delta_grass_squares;
-  // int nb_grass_squares_all = _nb_squares(g, GRASS) + delta_grass_squares;
+  // int nb_grass_squares_row = _nb_squares_row(g, i, GRASS) +
+  // delta_grass_squares; int nb_grass_squares_col = _nb_squares_col(g, j,
+  // GRASS) + delta_grass_squares; int nb_grass_squares_all = _nb_squares(g,
+  // GRASS) + delta_grass_squares;
 
   // === check rule 1 === //
 
@@ -789,8 +800,10 @@ int game_check_move(cgame g, uint i, uint j, square s) {
   // 2.2) not enough empty squares in a row or col
   // just check this rule, if I play GRASS
   if (s == GRASS) {
-    if ((nb_empty_squares_row + nb_tent_squares_row) < g->nb_tents_row[i]) return LOSING;
-    if ((nb_empty_squares_col + nb_tent_squares_col) < g->nb_tents_col[j]) return LOSING;
+    if ((nb_empty_squares_row + nb_tent_squares_row) < g->nb_tents_row[i])
+      return LOSING;
+    if ((nb_empty_squares_col + nb_tent_squares_col) < g->nb_tents_col[j])
+      return LOSING;
   }
 
   // === check rule 3 === //
@@ -804,7 +817,8 @@ int game_check_move(cgame g, uint i, uint j, square s) {
   // 3.2) not enough empty squares to place all tents
   // just check this rule, if I play GRASS
   if (s == GRASS) {
-    if ((nb_empty_squares_all + nb_tent_squares_all) < _nb_squares(g, TREE)) return LOSING;
+    if ((nb_empty_squares_all + nb_tent_squares_all) < _nb_squares(g, TREE))
+      return LOSING;
   }
 
   // === check rule 4 === //
@@ -818,16 +832,20 @@ int game_check_move(cgame g, uint i, uint j, square s) {
   // least a tent in its neighborhood...
   if (s == GRASS) {
     if (_test_neigh(g, i, j, TREE, UP) &&
-        ((_neigh_count(g, i - 1, j, GRASS, false) + delta_grass_squares) == _neigh_size(g, i - 1, j, false)))
+        ((_neigh_count(g, i - 1, j, GRASS, false) + delta_grass_squares) ==
+         _neigh_size(g, i - 1, j, false)))
       return LOSING;
     if (_test_neigh(g, i, j, TREE, DOWN) &&
-        ((_neigh_count(g, i + 1, j, GRASS, false) + delta_grass_squares) == _neigh_size(g, i + 1, j, false)))
+        ((_neigh_count(g, i + 1, j, GRASS, false) + delta_grass_squares) ==
+         _neigh_size(g, i + 1, j, false)))
       return LOSING;
     if (_test_neigh(g, i, j, TREE, LEFT) &&
-        ((_neigh_count(g, i, j - 1, GRASS, false) + delta_grass_squares) == _neigh_size(g, i, j - 1, false)))
+        ((_neigh_count(g, i, j - 1, GRASS, false) + delta_grass_squares) ==
+         _neigh_size(g, i, j - 1, false)))
       return LOSING;
     if (_test_neigh(g, i, j, TREE, RIGHT) &&
-        ((_neigh_count(g, i, j + 1, GRASS, false) + delta_grass_squares) == _neigh_size(g, i, j + 1, false)))
+        ((_neigh_count(g, i, j + 1, GRASS, false) + delta_grass_squares) ==
+         _neigh_size(g, i, j + 1, false)))
       return LOSING;
   }
   return REGULAR;  // regular move
