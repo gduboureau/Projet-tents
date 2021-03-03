@@ -31,5 +31,6 @@ int main(int argc, char *argv[]) {
         fprintf(stderr,"please enter s for solve the game or c to find the number of solution");
         exit(EXIT_FAILURE);
     }
+    game_delete(g);
     return EXIT_SUCCESS;
 }
