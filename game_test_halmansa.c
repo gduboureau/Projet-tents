@@ -19,18 +19,25 @@ void usage(int argc, char *argv[]) {
 bool test_game_load(void) {
   game g = game_default();
   game_save(g, "fichier");
-  if (!game_equal(g, game_load("fichier"))) {
+  game g0 = game_load("fichier");
+  if (!game_equal(g, g0)) {
+    game_delete(g0);
     game_delete(g);
     return false;
   }
   game g1 = game_new_empty_ext(4, 2, false, false);
   game_save(g1, "fichier2");
-  if ((game_nb_rows(g1) != game_nb_rows(game_load("fichier2"))) ||
-      (game_nb_cols(g1) != game_nb_cols(game_load("fichier2")))) {
+  game g2 = game_load("fichier2");
+  if ((game_nb_rows(g1) != game_nb_rows(g2)) ||
+      (game_nb_cols(g1) != game_nb_cols(g2))) {
+    game_delete(g0);
+    game_delete(g2);
     game_delete(g);
     game_delete(g1);
     return false;
   }
+  game_delete(g0);
+  game_delete(g2);
   game_delete(g);
   game_delete(g1);
   return true;
@@ -39,32 +46,49 @@ bool test_game_load(void) {
 bool test_game_save(void) {
   game g = game_default();
   game_save(g, "fichier");
+  game l = game_load("fichier");
   game g1 = game_default();
   game_save(g1, "fichier2");
-  if (!game_equal(game_load("fichier"), game_load("fichier2"))) {
+  game l1 = game_load("fichier2");
+  if (!game_equal(l, l1)) {
     game_delete(g);
     game_delete(g1);
+    game_delete(l);
+    game_delete(l1);
     return false;
   }
   game_set_square(g1, 0, 0, TENT);
   game_save(g1, "fichier2");
-  if (game_equal(game_load("fichier"), game_load("fichier2"))) {
+  game l2 = game_load("fichier2");
+  if (game_equal(l1, l2)) {
     game_delete(g);
     game_delete(g1);
+    game_delete(l);
+    game_delete(l1);
+    game_delete(l2);
     return false;
   }
   game g2 = game_new_empty_ext(4, 2, false, false);
   game_save(g2, "fichier3");
-  if ((game_nb_rows(g2) != game_nb_rows(game_load("fichier3"))) ||
-      (game_nb_cols(g2) != game_nb_cols(game_load("fichier3")))) {
+  game l3 = game_load("fichier3");
+  if ((game_nb_rows(g2) != game_nb_rows(l3)) ||
+      (game_nb_cols(g2) != game_nb_cols(l3))) {
     game_delete(g);
     game_delete(g1);
     game_delete(g2);
+    game_delete(l);
+    game_delete(l1);
+    game_delete(l2);
+    game_delete(l3);
     return false;
   }
   game_delete(g);
   game_delete(g1);
   game_delete(g2);
+  game_delete(l);
+  game_delete(l1);
+  game_delete(l2);
+  game_delete(l3);
   return true;
 }
 
