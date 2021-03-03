@@ -514,24 +514,6 @@ static bool r1_tent_adj_tent(cgame g, uint x, uint y, square s) {
   return true;
 }
 
-static bool r2_nb_tent_respecte(cgame g, uint x, uint y, square s) {
-  if (s == TENT && (game_get_expected_nb_tents_col(g, y) == 0 ||
-                    game_get_expected_nb_tents_row(g, x) == 0)) {
-    return false;
-  }
-  if (s == TENT && ((game_get_expected_nb_tents_row(g, x) <=
-                     game_get_current_nb_tents_row(g, x)) ||
-                    (game_get_expected_nb_tents_col(g, y) <=
-                     game_get_current_nb_tents_col(g, y)))) {
-    return false;
-  }
-  if (s == TENT &&
-      (game_get_expected_nb_tents_all(g) <= game_get_current_nb_tents_all(g))) {
-    return false;
-  }
-  return true;
-}
-
 static bool r3_tent_next_to_tree(cgame g, uint x, uint y, square s) {
   int cpt = 0;  // compteur de case != arbre
   int cpt_case_correcte = 0;
@@ -562,152 +544,293 @@ static bool r3_tent_next_to_tree(cgame g, uint x, uint y, square s) {
          4;  // return true si il y a au moins un arbre autour de la case (x,y)
 }
 
-static bool r4_nb_tent_grass(cgame g, uint x, uint y, square s) {
-  /*Compteur de EMPTY colonne*/
-  uint cpt_c = 0;
-  for (uint i = 0; i < game_nb_rows(g); i++) {
-    if (game_get_square(g, i, y) == EMPTY) {
-      cpt_c++;
-    }
-  }
-  /*Compteur de EMPTY ligne*/
-  uint cpt_l = 0;
-  for (uint j = 0; j < game_nb_cols(g); j++) {
-    if (game_get_square(g, x, j) == EMPTY) {
-      cpt_l++;
-    }
-  }
+#define INDEX(g, i, j) ((i) * (g->nb_cols) + (j))
+#define SQUARE(g, i, j) ((g)->squares[(INDEX(g, i, j))])
 
-  if (s == GRASS && ((cpt_l <= (game_get_expected_nb_tents_row(g, x) -
-                                game_get_current_nb_tents_row(g, x))) ||
-                     (cpt_c <= (game_get_expected_nb_tents_col(g, y) -
-                                game_get_current_nb_tents_col(g, y))))) {
-    return false;
+typedef enum { HERE, UP, DOWN, LEFT, RIGHT, UP_LEFT, UP_RIGHT, DOWN_LEFT, DOWN_RIGHT } direction;
+
+char _square2str(square s) {
+  if (s == EMPTY)
+    return ' ';
+  else if (s == TREE)
+    return 'x';
+  else if (s == TENT)
+    return '*';
+  else if (s == GRASS)
+    return '-';
+  else
+    return '?';
+}
+
+/* ************************************************************************** */
+
+int _str2square(char c) {
+  if (c == ' ')
+    return EMPTY;
+  else if (c == 'x')
+    return TREE;
+  else if (c == '*')
+    return TENT;
+  else if (c == '-')
+    return GRASS;
+  else
+    return -1;  // invalid
+}
+
+/* ************************************************************************** */
+
+bool _inside(cgame g, int i, int j) {
+  assert(g);
+  if (game_is_wrapping(g)) {
+    i = (i + game_nb_rows(g)) % game_nb_rows(g);
+    j = (j + game_nb_cols(g)) % game_nb_cols(g);
   }
+  if (i < 0 || j < 0 || i >= (int)g->nb_rows || j >= (int)g->nb_cols) return false;
   return true;
 }
 
-static bool arbre_entoure_grass(cgame g, uint x, uint y, uint x1, uint y1) {
-  int cpt = 0;  // compteur de grass
-  int cpt_case_correcte = 0;
-  for (int k = -1; k < 2; k++) {
-    for (int l = -1; l < 2; l++) {
-      if (correct_next_coor(g, make_coor(x, y), coor_to_dir(make_coor(k, l)))) {
-        coor coo_next = next_coor(g, make_coor(x, y), make_coor(k, l));
-        if ((k == 0 || l == 0) &&
-            (k + l != 0) &&  // test pour ne pas parcourir la case (x,y) et les
-                             // diagonales
-            (x + k != x1 ||
-             y + l != y1)) {  // test pour ne pas parcourir la case (x1,y1)
-          cpt_case_correcte++;
-          if (game_get_square(g, coo_next.ligne, coo_next.colonne) == GRASS) {
-            cpt++;
-          }
-        }
-      }
-    }
-  }
-  if (cpt_case_correcte == 1) {
-    return cpt == 1;
-  }
-  if (cpt_case_correcte == 2) {
-    return cpt == 2;
-  }
-  if (cpt_case_correcte == 3) {
-    return cpt == 3;
-  }
-  return cpt == 4;  // return true si l'arbre est entouré de grass
+/* ************************************************************************** */
+
+bool _inside_neigh(cgame g, int i, int j, direction dir) {
+  if (dir == HERE) return _inside(g, i, j);
+  if (dir == UP) return _inside(g, i - 1, j);
+  if (dir == DOWN) return _inside(g, i + 1, j);
+  if (dir == LEFT) return _inside(g, i, j - 1);
+  if (dir == RIGHT) return _inside(g, i, j + 1);
+  if (dir == UP_LEFT) return _inside(g, i - 1, j - 1);
+  if (dir == UP_RIGHT) return _inside(g, i - 1, j + 1);
+  if (dir == DOWN_LEFT) return _inside(g, i + 1, j - 1);
+  if (dir == DOWN_RIGHT) return _inside(g, i + 1, j + 1);
+  return false;
 }
 
-static bool r5_tree_non_entoure_grass(cgame g, uint x, uint y, square s) {
-  if (s == GRASS) {
-    for (int i = -1; i < 2; i++) {
-      for (int j = -1; j < 2; j++) {
-        if (correct_next_coor(g, make_coor(x, y),
-                              coor_to_dir(make_coor(i, j)))) {
-          coor coo_next = next_coor(g, make_coor(x, y), make_coor(i, j));
-          if ((i == 0 || j == 0) &&
-              (i + j != 0) &&  // test pour ne pas parcourir la case (x,y) et
-                               // les diagonales
-              game_get_square(g, coo_next.ligne, coo_next.colonne) == TREE) {
-            if (arbre_entoure_grass(g, coo_next.ligne, coo_next.colonne, x,
-                                    y)) {
-              return false;
-            }
-          }
-        }
-      }
-    }
+/* ************************************************************************** */
+
+bool _test(cgame g, int i, int j, square s) {
+  assert(g);
+  assert(s == EMPTY || s == TREE || s == TENT || s == GRASS);
+  if (game_is_wrapping(g)) {
+    i = (i + game_nb_rows(g)) % game_nb_rows(g);
+    j = (j + game_nb_cols(g)) % game_nb_cols(g);
   }
-  return true;
+  if (!_inside(g, i, j)) return false;
+  return (SQUARE(g, i, j) == s);
 }
 
-static bool r6_one_tent_with_one_tree(cgame g, uint x, uint y, square s) {
-  if (s == TENT) {
-    for (int i = -1; i < 2; i++) {
-      for (int j = -1; j < 2; j++) {
-        if ((i == 0 || j == 0) &&
-            (i + j != 0) &&  // test pour ne pas parcourir la case (x,y) et les
-                             // diagonales
-            (correct_next_coor(g, make_coor(x, y),
-                               coor_to_dir(make_coor(i, j))))) {
-          coor coo_next = next_coor(g, make_coor(x, y), make_coor(i, j));
-          if (game_get_square(g, coo_next.ligne, coo_next.colonne) == TREE) {
-            for (int a = -1; a < 2; a++) {
-              for (int b = -1; b < 2; b++) {
-                if ((a == 0 || b == 0) && (a + b != 0) &&
-                    (correct_next_coor(
-                        g, make_coor(coo_next.ligne, coo_next.colonne),
-                        coor_to_dir(make_coor(a, b))))) {
-                  coor coo_next2 =
-                      next_coor(g, make_coor(coo_next.ligne, coo_next.colonne),
-                                make_coor(a, b));
-                  if (game_get_square(g, coo_next2.ligne, coo_next2.colonne) ==
-                          TENT &&
-                      ((a + coo_next2.ligne != coo_next.ligne) ||
-                       (b + coo_next2.colonne != coo_next.colonne)) &&
-                      r3_tent_next_to_tree(g, coo_next2.ligne,
-                                           coo_next2.colonne, TENT) == false) {
-                    return false;
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
-    }
-  }
-  return true;
+/* ************************************************************************** */
+
+bool _test_neigh(cgame g, int i, int j, square s, direction dir) {
+  if (dir == HERE) return _test(g, i, j, s);
+  if (dir == UP) return _test(g, i - 1, j, s);
+  if (dir == DOWN) return _test(g, i + 1, j, s);
+  if (dir == LEFT) return _test(g, i, j - 1, s);
+  if (dir == RIGHT) return _test(g, i, j + 1, s);
+  if (dir == UP_LEFT) return _test(g, i - 1, j - 1, s);
+  if (dir == UP_RIGHT) return _test(g, i - 1, j + 1, s);
+  if (dir == DOWN_LEFT) return _test(g, i + 1, j - 1, s);
+  if (dir == DOWN_RIGHT) return _test(g, i + 1, j + 1, s);
+  return false;
 }
 
-static bool game_correct(cgame g, uint x, uint y, square s) {
-  return r2_nb_tent_respecte(g, x, y, s) && r1_tent_adj_tent(g, x, y, s) &&
-         r3_tent_next_to_tree(g, x, y, s) && r4_nb_tent_grass(g, x, y, s) &&
-         r5_tree_non_entoure_grass(g, x, y, s) &&
-         r6_one_tent_with_one_tree(g, x, y, s);
+/* ************************************************************************** */
+
+bool _neigh(cgame g, uint i, uint j, square s, bool diag) {
+  assert(g);
+  // assert(i < g->nb_rows && j < g->nb_cols);
+  assert(s == EMPTY || s == TREE || s == TENT || s == GRASS);
+
+  // orthogonally
+  if (_test_neigh(g, i, j, s, UP)) return true;
+  if (_test_neigh(g, i, j, s, DOWN)) return true;
+  if (_test_neigh(g, i, j, s, LEFT)) return true;
+  if (_test_neigh(g, i, j, s, RIGHT)) return true;
+
+  // diagonally
+  if (diag) {
+    if (_test_neigh(g, i, j, s, UP_LEFT)) return true;
+    if (_test_neigh(g, i, j, s, UP_RIGHT)) return true;
+    if (_test_neigh(g, i, j, s, DOWN_LEFT)) return true;
+    if (_test_neigh(g, i, j, s, DOWN_RIGHT)) return true;
+  }
+
+  return false;
 }
 
-static bool game_illegal(cgame g, uint x, uint y, square s) {
-  if (game_get_square(g, x, y) == TREE || s == TREE) {
-    return false;
+/* ************************************************************************** */
+
+uint _neigh_size(cgame g, uint i, uint j, bool diag) {
+  assert(g);
+  // assert(i < g->nb_rows && j < g->nb_cols);
+
+  uint size = 0;
+
+  // orthogonally
+  if (_inside_neigh(g, i, j, UP)) size++;
+  if (_inside_neigh(g, i, j, DOWN)) size++;
+  if (_inside_neigh(g, i, j, LEFT)) size++;
+  if (_inside_neigh(g, i, j, RIGHT)) size++;
+
+  // diagonally
+  if (diag) {
+    if (_inside_neigh(g, i, j, UP_LEFT)) size++;
+    if (_inside_neigh(g, i, j, UP_RIGHT)) size++;
+    if (_inside_neigh(g, i, j, DOWN_LEFT)) size++;
+    if (_inside_neigh(g, i, j, DOWN_RIGHT)) size++;
   }
-  return true;
+
+  return size;
 }
+
+/* ************************************************************************** */
+
+uint _neigh_count(cgame g, uint i, uint j, square s, bool diag) {
+  assert(g);
+  // assert(i < g->nb_rows && j < g->nb_cols);
+
+  uint count = 0;
+
+  // orthogonally
+  if (_test_neigh(g, i, j, s, UP)) count++;
+  if (_test_neigh(g, i, j, s, DOWN)) count++;
+  if (_test_neigh(g, i, j, s, LEFT)) count++;
+  if (_test_neigh(g, i, j, s, RIGHT)) count++;
+
+  // diagonally
+  if (diag) {
+    if (_test_neigh(g, i, j, s, UP_LEFT)) count++;
+    if (_test_neigh(g, i, j, s, UP_RIGHT)) count++;
+    if (_test_neigh(g, i, j, s, DOWN_LEFT)) count++;
+    if (_test_neigh(g, i, j, s, DOWN_RIGHT)) count++;
+  }
+
+  return count;
+}
+
+/* ************************************************************************** */
+
+uint _nb_squares_row(cgame g, uint i, square s) {
+  assert(g);
+  assert(i < g->nb_rows);
+  uint nb_squares = 0;
+  for (uint j = 0; j < g->nb_cols; j++)
+    if (SQUARE(g, i, j) == s) nb_squares++;
+  return nb_squares;
+}
+
+/* ************************************************************************** */
+
+uint _nb_squares_col(cgame g, uint j, square s) {
+  assert(g);
+  assert(j < g->nb_cols);
+  uint nb_squares = 0;
+  for (uint i = 0; i < g->nb_rows; i++)
+    if (SQUARE(g, i, j) == s) nb_squares++;
+  return nb_squares;
+}
+
+/* ************************************************************************** */
+
+uint _nb_squares(cgame g, square s) {
+  assert(g);
+  assert(s == EMPTY || s == TREE || s == TENT || s == GRASS);
+  uint nb_squares = 0;
+  for (uint i = 0; i < g->nb_rows; i++)
+    for (uint j = 0; j < g->nb_cols; j++)
+      if (SQUARE(g, i, j) == s) nb_squares++;
+  return nb_squares;
+}
+
 
 int game_check_move(cgame g, uint i, uint j, square s) {
   assert(g);
   assert(i < g->nb_rows);
-  assert(i >= 0);
   assert(j < g->nb_cols);
-  assert(j >= 0);
-  if (!game_illegal(g, i, j, s)) {
-    return ILLEGAL;
+  assert(s == EMPTY || s == TREE || s == TENT || s == GRASS);
+  square cs = SQUARE(g, i, j);  // current square at direction (i,j)
+
+  // === check rule 0 === //
+
+  if (s == TREE) return ILLEGAL;
+  if (cs == TREE) return ILLEGAL;
+
+  // No need to check rules, if I play an EMPTY move!
+  if (s == EMPTY) return REGULAR;
+
+  // Nota Bene: starting from this line, s is either TENT or GRASS.
+
+  // update nb empty & tent squares, after playig move s
+  int delta_empty_squares = ((s == EMPTY) ? 1 : 0) - ((cs == EMPTY) ? 1 : 0);
+  int nb_empty_squares_row = _nb_squares_row(g, i, EMPTY) + delta_empty_squares;
+  int nb_empty_squares_col = _nb_squares_col(g, j, EMPTY) + delta_empty_squares;
+  int nb_empty_squares_all = _nb_squares(g, EMPTY) + delta_empty_squares;
+  int delta_tent_squares = ((s == TENT) ? 1 : 0) - ((cs == TENT) ? 1 : 0);
+  int nb_tent_squares_row = _nb_squares_row(g, i, TENT) + delta_tent_squares;
+  int nb_tent_squares_col = _nb_squares_col(g, j, TENT) + delta_tent_squares;
+  int nb_tent_squares_all = _nb_squares(g, TENT) + delta_tent_squares;
+  int delta_grass_squares = ((s == GRASS) ? 1 : 0) - ((cs == GRASS) ? 1 : 0);
+  // int nb_grass_squares_row = _nb_squares_row(g, i, GRASS) + delta_grass_squares;
+  // int nb_grass_squares_col = _nb_squares_col(g, j, GRASS) + delta_grass_squares;
+  // int nb_grass_squares_all = _nb_squares(g, GRASS) + delta_grass_squares;
+
+  // === check rule 1 === //
+
+  // no two tents are adjacent, even diagonally
+  if ((s == TENT) && _neigh(g, i, j, TENT, !g->diagadj)) return LOSING;
+
+  // === check rule 2 === //
+
+  // 2.1) too much tents in a row or col
+  // just check this rule, if I play TENT
+  if (s == TENT) {
+    if (nb_tent_squares_row > g->nb_tents_row[i]) return LOSING;
+    if (nb_tent_squares_col > g->nb_tents_col[j]) return LOSING;
   }
-  if (!game_correct(g, i, j, s)) {
-    return LOSING;
+
+  // 2.2) not enough empty squares in a row or col
+  // just check this rule, if I play GRASS
+  if (s == GRASS) {
+    if ((nb_empty_squares_row + nb_tent_squares_row) < g->nb_tents_row[i]) return LOSING;
+    if ((nb_empty_squares_col + nb_tent_squares_col) < g->nb_tents_col[j]) return LOSING;
   }
-  return REGULAR;
+
+  // === check rule 3 === //
+
+  // 3.1) too much tents
+  // just check this rule, if I play TENT
+  if (s == TENT) {
+    if (nb_tent_squares_all > _nb_squares(g, TREE)) return LOSING;
+  }
+
+  // 3.2) not enough empty squares to place all tents
+  // just check this rule, if I play GRASS
+  if (s == GRASS) {
+    if ((nb_empty_squares_all + nb_tent_squares_all) < _nb_squares(g, TREE)) return LOSING;
+  }
+
+  // === check rule 4 === //
+
+  // 4.1) each tent must be orthogonally adjacent to at least one tree.
+  if ((s == TENT) && !_neigh(g, i, j, TREE, false)) return LOSING;
+
+  // 4.2) each tree must be orthogonally adjacent to at least one tent.
+
+  // So, if I play grass, it should not prevent an adjacent tree to have at
+  // least a tent in its neighborhood...
+  if (s == GRASS) {
+    if (_test_neigh(g, i, j, TREE, UP) &&
+        ((_neigh_count(g, i - 1, j, GRASS, false) + delta_grass_squares) == _neigh_size(g, i - 1, j, false)))
+      return LOSING;
+    if (_test_neigh(g, i, j, TREE, DOWN) &&
+        ((_neigh_count(g, i + 1, j, GRASS, false) + delta_grass_squares) == _neigh_size(g, i + 1, j, false)))
+      return LOSING;
+    if (_test_neigh(g, i, j, TREE, LEFT) &&
+        ((_neigh_count(g, i, j - 1, GRASS, false) + delta_grass_squares) == _neigh_size(g, i, j - 1, false)))
+      return LOSING;
+    if (_test_neigh(g, i, j, TREE, RIGHT) &&
+        ((_neigh_count(g, i, j + 1, GRASS, false) + delta_grass_squares) == _neigh_size(g, i, j + 1, false)))
+      return LOSING;
+  }
+  return REGULAR;  // regular move
 }
 
 static bool tent_adj_tent_all(cgame g) {
