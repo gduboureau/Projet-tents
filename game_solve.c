@@ -26,7 +26,10 @@ int main(int argc, char *argv[]) {
       exit(EXIT_FAILURE);
     }
   } else if (strcmp(argv[1], "-c") == 0) {
-    printf("n'existe pas encore\n");
+    FILE *f = fopen(argv[3], "w");
+    assert(f);
+    fprintf(f, "%u\n", game_nb_solutions(g));
+    fclose(f);
   } else {
     fprintf(stderr,
             "please enter s for solve the game or c to find the number of "

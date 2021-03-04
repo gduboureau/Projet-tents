@@ -352,6 +352,34 @@ bool game_solve(game g) {
   return game_s1(g) || game_s2(g) || game_s3(g) || game_s4(g);
 }
 
+uint game_nb_solutions(game g) {
+  uint cpt = 0;
+  game g1 = game_copy(g);
+  game g2 = game_copy(g);
+  game g3 = game_copy(g);
+  bool s1 = game_s1(g);
+  bool s2 = game_s2(g1);
+  bool s3 = game_s3(g2);
+  bool s4 = game_s4(g3);
+  if (s1 == true && !game_equal(g, g1) && !game_equal(g, g2) &&
+      !game_equal(g, g3)) {
+    cpt += 1;
+  }
+  if (s2 == true && !game_equal(g1, g) && !game_equal(g1, g2) &&
+      !game_equal(g1, g3)) {
+    cpt += 1;
+  }
+  if (s3 == true && !game_equal(g2, g1) && !game_equal(g2, g) &&
+      !game_equal(g2, g3)) {
+    cpt += 1;
+  }
+  if (s4 == true && !game_equal(g3, g1) && !game_equal(g3, g2) &&
+      !game_equal(g, g3)) {
+    cpt += 1;
+  }
+  return cpt;
+}
+
 // bool game_solve(game g) {
 //   for (unsigned int i = 0; i < game_nb_rows(g); i++) {
 //   for (unsigned int j = 0; j < game_nb_rows(g); j++) {
@@ -408,20 +436,5 @@ bool game_solve(game g) {
 //     }
 //   }
 // }
-//   return cpt;
-// }
-
-// uint game_nb_solutions(game g) {
-//   uint cpt;
-//   for (unsigned int i = 0; i < game_nb_rows(g); i++) {
-//     for (unsigned int j = 0; j < game_nb_cols(g); j++) {
-//       if(game_get_square(g,i,j)==TREE){
-//         for(unsigned int k = 0; k < nb_tentes_posables(g,i,j)+1; k++){
-//           game k= game_copy(g);
-//           cpt += 1;
-//         }
-//       }
-//     }
-//   }
 //   return cpt;
 // }
