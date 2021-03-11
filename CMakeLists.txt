@@ -6,17 +6,27 @@ set(CMAKE_VERBOSE_MAKEFILE OFF)
 
 set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wall -std=c99 -g --coverage")
 
+## use a CMake3 package to solve SDL2 dependencies
+find_package(SDL2 REQUIRED)
+set(SDL2_ALL_INC ${SDL2_INCLUDE_DIRS})
+set(SDL2_ALL_LIBS ${SDL2_LIBRARIES} -lSDL2_ttf -lSDL2_image) # add extra SDL2 libraries
+
+## print this 
+message(STATUS "SDL2 include dir: ${SDL2_ALL_INC}")
+message(STATUS "SDL2 all libraries: ${SDL2_ALL_LIBS}")
+
 add_library(game game.c game_aux.c queue.c game_tools.c)
 include_directories(${SDL2_ALL_INC})
 
 add_executable(game_text game_text.c)
 add_executable(game_solve game_solve.c)
-add_executable(game_sdl game_sdl.c)
+add_executable(game_sdl game_sdl.c model.c)
 
 
 target_link_libraries(game_sdl ${SDL2_ALL_LIBS} m)
 target_link_libraries(game_text game)
 target_link_libraries(game_solve game)
+target_link_libraries(game_sdl game)
 
 #-----------------------------------------------------#
 include(CTest)
