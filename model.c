@@ -46,7 +46,7 @@ Env *init(SDL_Window *win, SDL_Renderer *ren, int argc, char *argv[]) {
     int c = game_nb_cols(g);
     int w1=w/(c+2); // 60 pour DS
     int h1=h/(r+2); // 60 pour DS
-    SDL_SetRenderDrawColor(ren, 0, 0, 0, SDL_ALPHA_OPAQUE);
+    SDL_SetRenderDrawColor(ren, 255, 255, 255, SDL_ALPHA_OPAQUE);
     SDL_RenderDrawLine(ren, w1, h1, w-w1, h1);
     SDL_RenderDrawLine(ren, w1, h1, w1, h-h1);
     SDL_RenderDrawLine(ren, w-w1, h-h1, w-w1, h1);
@@ -72,12 +72,30 @@ Env *init(SDL_Window *win, SDL_Renderer *ren, int argc, char *argv[]) {
 /* **************************************************************** */
 
 void render(SDL_Window *win, SDL_Renderer *ren,
-            Env *env) { /* PUT YOUR CODE HERE TO RENDER TEXTURES, ... */
+            Env *env) {
+  SDL_Rect rect;
+  
+  /* get current window size */
+  int w, h;
+  SDL_GetWindowSize(win, &w, &h);
+
+  /* render background texture */
+  SDL_RenderCopy(ren, env->background, NULL, NULL); /* stretch it */
+
+
+  /* render tree texture */
+  SDL_QueryTexture(env->tree, NULL, NULL, &rect.w, &rect.h);
+  rect.x = env->tree_x - rect.w / 2;
+  rect.y = env->tree_y - rect.h / 2;
+  SDL_RenderCopy(ren, env->tree, NULL, &rect);
 }
 
 /* **************************************************************** */
 
 bool process(SDL_Window *win, SDL_Renderer *ren, Env *env, SDL_Event *e) {
+  int w, h;
+  SDL_GetWindowSize(win, &w, &h);
+  
   if (e->type == SDL_QUIT) {
     return true;
   }
@@ -90,8 +108,12 @@ bool process(SDL_Window *win, SDL_Renderer *ren, Env *env, SDL_Event *e) {
 /* **************************************************************** */
 
 void clean(SDL_Window *win, SDL_Renderer *ren, Env *env) {
-  /* PUT YOUR CODE HERE TO CLEAN MEMORY */
-
+  SDL_DestroyTexture(env->background);
+  SDL_DestroyTexture(env->tree);
+  SDL_DestroyTexture(env->tent);
+  SDL_DestroyTexture(env->grass);
+  SDL_DestroyTexture(env->empty);
+  SDL_DestroyTexture(env->text);
   free(env);
 }
 
