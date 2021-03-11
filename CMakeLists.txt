@@ -7,11 +7,14 @@ set(CMAKE_VERBOSE_MAKEFILE OFF)
 set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wall -std=c99 -g --coverage")
 
 add_library(game game.c game_aux.c queue.c game_tools.c)
+include_directories(${SDL2_ALL_INC})
 
 add_executable(game_text game_text.c)
 add_executable(game_solve game_solve.c)
+add_executable(game_sdl game_sdl.c)
 
 
+target_link_libraries(game_sdl ${SDL2_ALL_LIBS} m)
 target_link_libraries(game_text game)
 target_link_libraries(game_solve game)
 
