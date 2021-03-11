@@ -8,6 +8,8 @@
 #include <game.h>
 #include <game_aux.h>
 
+#define TREE "tree.png"
+#define BACKGROUND "background.png"
 
 /* **************************************************************** */
 
@@ -39,10 +41,10 @@ Env *init(SDL_Window *win, SDL_Renderer *ren, int argc, char *argv[]) {
     game g = game_default;
     w = SCREEN_WIDTH;
     h = SCREEN_HEIGHT;
-    r = game_nb_rows(g);
-    c = game_nb_cols(g);
-    w1=w/(c+2); // 60 pour DS
-    h1=h/(r+2); // 60 pour DS
+    uint r = game_nb_rows(g);
+    uint c = game_nb_cols(g);
+    uint w1=w/(c+2); // 60 pour DS
+    uint h1=h/(r+2); // 60 pour DS
     SDL_SetRenderDrawColor(ren, 0, 0, 0, SDL_ALPHA_OPAQUE);
     SDL_RenderDrawLine(ren, w1, h1, w-w1, h1);
     SDL_RenderDrawLine(ren, w1, h1, w1, h-h1);
