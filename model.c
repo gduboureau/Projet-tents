@@ -7,8 +7,9 @@
 #include <stdlib.h>
 #include "game.h"
 #include "game_aux.h"
+#include "game_ext.h"
 
-#define TREE "tree.png"
+#define ImTree "tree.png"
 #define BACKGROUND "background.png"
 
 /* **************************************************************** */
@@ -38,13 +39,13 @@ Env *init(SDL_Window *win, SDL_Renderer *ren, int argc, char *argv[]) {
   if (!env->background) ERROR("IMG_LoadTexture: %s\n", BACKGROUND);
 
   if(argc==1){
-    game g = game_default;
+    game g = game_default();
     w = SCREEN_WIDTH;
     h = SCREEN_HEIGHT;
-    uint r = game_nb_rows(g);
-    uint c = game_nb_cols(g);
-    uint w1=w/(c+2); // 60 pour DS
-    uint h1=h/(r+2); // 60 pour DS
+    int r = game_nb_rows(g);
+    int c = game_nb_cols(g);
+    int w1=w/(c+2); // 60 pour DS
+    int h1=h/(r+2); // 60 pour DS
     SDL_SetRenderDrawColor(ren, 0, 0, 0, SDL_ALPHA_OPAQUE);
     SDL_RenderDrawLine(ren, w1, h1, w-w1, h1);
     SDL_RenderDrawLine(ren, w1, h1, w1, h-h1);
@@ -59,8 +60,8 @@ Env *init(SDL_Window *win, SDL_Renderer *ren, int argc, char *argv[]) {
         if(game_get_square(g,i,j)==TREE){
           env->tree_x = 60*j+60;
           env->tree_y = 60*i+60;
-          env->tree = IMG_LoadTexture(ren, TREE);
-          if (!env->tree) ERROR("IMG_LoadTexture: %s\n", TREE);
+          env->tree = IMG_LoadTexture(ren, ImTree);
+          if (!env->tree) ERROR("IMG_LoadTexture: %s\n", ImTree);
         }
       }
     }
