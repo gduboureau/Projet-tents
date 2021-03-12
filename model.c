@@ -30,11 +30,7 @@ struct Env_t {
   int grass_x, grass_y;
   int empty_x, empty_y;
   int tree_x, tree_y;
-  square *squares;
-  uint *nb_tents_row;
-  uint *nb_tents_col;
-  uint nb_rows;
-  uint nb_cols;
+  game g;
 };
 
 /* **************************************************************** */
@@ -42,43 +38,9 @@ struct Env_t {
 Env *init(SDL_Window *win, SDL_Renderer *ren, int argc, char *argv[]) {
   Env *env = malloc(sizeof(struct Env_t));
   if (argc == 2){
-    game g = game_load(argv[1]);
-    env->nb_rows = game_nb_rows(g);
-    env->nb_cols = game_nb_cols(g);
-    env->nb_tents_row = malloc(sizeof(uint) * env->nb_rows);
-    for (uint i = 0; i < game_nb_rows(g); i++) {
-      env->nb_tents_row[i] = game_get_expected_nb_tents_row(g,i);
-    }
-    env->nb_tents_col = malloc(sizeof(uint) * env->nb_cols);
-    for (uint i = 0; i < game_nb_cols(g); i++) {
-      env->nb_tents_col[i] = game_get_expected_nb_tents_col(g,i);
-    }
-    env->squares = malloc(sizeof(uint) * (env->nb_cols)* (env->nb_rows));
-    for (uint i = 0; i < game_nb_rows(g); i++) {
-      for (uint j = 0; j < game_nb_cols(g); j++){
-      env->squares[(i * env->nb_cols + j)] = game_get_square(g,i,j);
-      }
-    }
-    game_delete(g);
+    env->g = game_load(argv[1]);
   }else{
-    game g = game_default();
-    env->nb_rows = game_nb_rows(g);
-    env->nb_cols = game_nb_cols(g);
-    env->nb_tents_row = malloc(sizeof(uint) * env->nb_rows);
-    for (uint i = 0; i < game_nb_rows(g); i++) {
-      env->nb_tents_row[i] = game_get_expected_nb_tents_row(g,i);
-    }
-    env->nb_tents_col = malloc(sizeof(uint) * env->nb_cols);
-    for (uint i = 0; i < game_nb_cols(g); i++) {
-      env->nb_tents_col[i] = game_get_expected_nb_tents_col(g,i);
-    }
-    env->squares = malloc(sizeof(uint) * (env->nb_cols)* (env->nb_rows));
-    for (uint i = 0; i < game_nb_rows(g); i++) {
-      for (uint j = 0; j < game_nb_cols(g); j++){
-      env->squares[(i * env->nb_cols + j)] = game_get_square(g,i,j);
-      }
-    }
-    game_delete(g);
+    env->g = game_default();
   }
   int w, h;
   SDL_GetWindowSize(win, &w, &h);
@@ -106,8 +68,8 @@ void render(SDL_Window *win, SDL_Renderer *ren, Env *env) {
   /* render background texture */
   SDL_RenderCopy(ren, env->background, NULL, NULL); /* stretch it */
 
-  int w1 = w / ((env->nb_rows)+2);  // taille des cases
-  int h1 = h / ((env->nb_cols)+2);
+  int w1 = w / ((game_nb_rows(env->g))+2);  // taille des cases
+  int h1 = h / ((game_nb_cols(env->g))+2);
 
   SDL_SetRenderDrawColor(ren, 0, 0, 0, SDL_ALPHA_OPAQUE);
   SDL_RenderDrawLine(ren, w1, h1, w - w1, h1);
@@ -116,14 +78,14 @@ void render(SDL_Window *win, SDL_Renderer *ren, Env *env) {
   SDL_RenderDrawLine(ren, w - w1, h - h1, w1, h - h1);
 
   /* render tree texture */
-  for (uint i = 0; i < env->nb_rows; i++) {
-    for (uint j = 0; j < env->nb_cols; j++) {
+  for (uint i = 0; i < game_nb_rows(env->g); i++) {
+    for (uint j = 0; j < game_nb_cols(env->g); j++) {
       /* render text texture */
       SDL_Color color = {0, 0, 0, 0}; /* black color in RGBA */
       TTF_Font *font = TTF_OpenFont(FONT, FONTSIZE);
       if (!font) ERROR("TTF_OpenFont: %s\n", FONT);
       TTF_SetFontStyle(font, TTF_STYLE_BOLD);
-      char chaine[env->nb_rows];
+      char chaine[game_nb_rows(env->g)];
       sprintf(chaine, "%d", i); 
       SDL_Surface *surf = TTF_RenderText_Blended(font, chaine, color);
       env->text = SDL_CreateTextureFromSurface(ren, surf);
@@ -139,7 +101,7 @@ void render(SDL_Window *win, SDL_Renderer *ren, Env *env) {
       rect.y = h1/2 - rect.h / 2;
       SDL_RenderCopy(ren, env->text, NULL, &rect);
 
-      sprintf(chaine, "%d", env->nb_tents_row[i]); 
+      sprintf(chaine, "%d", game_get_expected_nb_tents_row(env->g,i)); 
       SDL_Surface *surf2 = TTF_RenderText_Blended(font, chaine, color);
       env->text = SDL_CreateTextureFromSurface(ren, surf2);
       SDL_FreeSurface(surf2);
@@ -148,7 +110,7 @@ void render(SDL_Window *win, SDL_Renderer *ren, Env *env) {
       rect.y = i * h1 + h1+h1/2 - rect.h / 2;
       SDL_RenderCopy(ren, env->text, NULL, &rect);
 
-      sprintf(chaine, "%d", env->nb_tents_col[i]); 
+      sprintf(chaine, "%d", game_get_expected_nb_tents_col(env->g,i)); 
       SDL_Surface *surf3 = TTF_RenderText_Blended(font, chaine, color);
       env->text = SDL_CreateTextureFromSurface(ren, surf3);
       SDL_FreeSurface(surf3);
@@ -159,7 +121,7 @@ void render(SDL_Window *win, SDL_Renderer *ren, Env *env) {
       SDL_RenderCopy(ren, env->text, NULL, &rect);
 
       /* render tree texture */
-      if (env->squares[(i * env->nb_cols + j)] == TREE) {
+      if (game_get_square(env->g,i,j) == TREE) {
         SDL_QueryTexture(env->tree, NULL, NULL, &rect.w, &rect.h);
         rect.x = w1 * j + w1+w1/2 - rect.w / 2;
         rect.y = h1 * i + h1+h1/2 - rect.h / 2;
@@ -168,7 +130,7 @@ void render(SDL_Window *win, SDL_Renderer *ren, Env *env) {
     }
   }
 
-  for (uint i = 0; i < env->nb_rows-1; i++) {
+  for (uint i = 0; i < game_nb_rows(env->g); i++) {
     SDL_RenderDrawLine(ren, w1 * 2 + i * w1, h1, w1 * 2 + i * w1, h - h1);
     SDL_RenderDrawLine(ren, w1, h1 * 2 + i * h1, w - w1, h1 * 2 + i * h1);
   }
@@ -198,6 +160,7 @@ void clean(SDL_Window *win, SDL_Renderer *ren, Env *env) {
   SDL_DestroyTexture(env->grass);
   SDL_DestroyTexture(env->empty);
   SDL_DestroyTexture(env->text);
+  game_delete(env->g);
   free(env);
 }
 
