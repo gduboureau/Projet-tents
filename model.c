@@ -122,8 +122,10 @@ void render(SDL_Window *win, SDL_Renderer *ren, Env *env) {
       SDL_Color color = {0, 0, 0, 0}; /* black color in RGBA */
       TTF_Font *font = TTF_OpenFont(FONT, FONTSIZE);
       if (!font) ERROR("TTF_OpenFont: %s\n", FONT);
-      TTF_SetFontStyle(font, TTF_STYLE_BOLD); 
-      SDL_Surface *surf = TTF_RenderText_Blended(font, "0", color);
+      TTF_SetFontStyle(font, TTF_STYLE_BOLD);
+      char chaine[16];
+      sprintf(chaine, "%d", i); 
+      SDL_Surface *surf = TTF_RenderText_Blended(font, chaine, color);
       env->text = SDL_CreateTextureFromSurface(ren, surf);
       SDL_FreeSurface(surf);
       TTF_CloseFont(font);
