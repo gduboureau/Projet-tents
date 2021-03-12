@@ -44,34 +44,18 @@ Env *init(SDL_Window *win, SDL_Renderer *ren, int argc, char *argv[]) {
     ERROR("IMG_LoadTexture: %s\n", BACKGROUND);
   }
 
-  // if(argc==1){
-  //  game g = game_default();
-  //  int r = game_nb_rows(g);
-  //  int c = game_nb_cols(g);
-  //  int w1=w/(c+2);
-  //  int h1=h/(r+2);
-  // SDL_SetRenderDrawColor(ren, 255, 0, 0, SDL_ALPHA_OPAQUE);
-  // SDL_RenderDrawLine(ren, w1, h1, w-w1, h1);
-  // SDL_RenderDrawLine(ren, w1, h1, w1, h-h1);
-  // SDL_RenderDrawLine(ren, w-w1, h-h1, w-w1, h1);
-  // SDL_RenderDrawLine(ren, w-w1, h-h1, w1, h-h1);
-  // for(uint i; i<game_nb_rows(g); i++){
-  //     SDL_RenderDrawLine(ren, w1*2+i*w1, h1, w1*2+i*w1, h-h1);
-  //     SDL_RenderDrawLine(ren, w1, h1*2+i*h1, w-w1, h1*2+i*h1);
-  // }
-  //   for(uint i; i<game_nb_rows(g); i++){
-  //     for(uint j; j<game_nb_cols(g); j++){
-  //       if(game_get_square(g,i,j)==TREE){
-  //         env->tree_x = 60*j+90;
-  //         env->tree_y = 60*i+90;
-  //         env->tree = IMG_LoadTexture(ren, ImTree);
-  //         if (!env->tree){
-  //           ERROR("IMG_LoadTexture: %s\n", ImTree);
-  //         }
-  //       }
-  //     }
-  //   }
-  // }
+  /* init text texture using Arial font */
+      SDL_Color color = {0, 0, 0, 0}; /* black color in RGBA */
+      TTF_Font *font = TTF_OpenFont(FONT, FONTSIZE);
+      if (!font) ERROR("TTF_OpenFont: %s\n", FONT);
+      TTF_SetFontStyle(font, TTF_STYLE_BOLD);
+      SDL_Surface *surf = TTF_RenderText_Blended(font, "0", color);
+      env->text = SDL_CreateTextureFromSurface(ren, surf);
+      SDL_FreeSurface(surf);
+      TTF_CloseFont(font);
+  
+  /* init tree texture from PNG image */
+  env->tree = IMG_LoadTexture(ren, ImTree);
 
   return env;
 }
@@ -91,6 +75,7 @@ void render(SDL_Window *win, SDL_Renderer *ren, Env *env) {
 
   int w1 = w / 10;  // 60 pour DS
   int h1 = h / 10;  // 60 pour DS
+
   SDL_SetRenderDrawColor(ren, 0, 0, 0, SDL_ALPHA_OPAQUE);
   SDL_RenderDrawLine(ren, w1, h1, w - w1, h1);
   SDL_RenderDrawLine(ren, w1, h1, w1, h - h1);
@@ -100,39 +85,25 @@ void render(SDL_Window *win, SDL_Renderer *ren, Env *env) {
   /* render tree texture */
   for (uint i = 0; i < game_nb_rows(g); i++) {
     for (uint j = 0; j < game_nb_cols(g); j++) {
-      /* init text texture using Arial font */
-      SDL_Color color = {0, 0, 0, 0}; /* black color in RGBA */
-      TTF_Font *font = TTF_OpenFont(FONT, FONTSIZE);
-      if (!font) ERROR("TTF_OpenFont: %s\n", FONT);
-      TTF_SetFontStyle(font, TTF_STYLE_BOLD);
-      SDL_Surface *surf = TTF_RenderText_Blended(font, "0", color);
-      env->text = SDL_CreateTextureFromSurface(ren, surf);
-      SDL_FreeSurface(surf);
-      TTF_CloseFont(font);
-
       /* render text texture */
       SDL_QueryTexture(env->text, NULL, NULL, &rect.w, &rect.h);
       rect.x = 30 - rect.w / 2;
       rect.y = i * 60 + 90 - rect.h / 2;
       SDL_RenderCopy(ren, env->text, NULL, &rect);
 
-      SDL_QueryTexture(env->text, NULL, NULL, &rect.w, &rect.h);
       rect.x = i * 60 + 90 - rect.w / 2;
       rect.y = 30 - rect.h / 2;
       SDL_RenderCopy(ren, env->text, NULL, &rect);
 
-      SDL_QueryTexture(env->text, NULL, NULL, &rect.w, &rect.h);
       rect.x = 570 - rect.w / 2;
       rect.y = i * 60 + 90 - rect.h / 2;
       SDL_RenderCopy(ren, env->text, NULL, &rect);
 
-      SDL_QueryTexture(env->text, NULL, NULL, &rect.w, &rect.h);
       rect.x = i * 60 + 90 - rect.w / 2;
       rect.y = 570 - rect.h / 2;
       SDL_RenderCopy(ren, env->text, NULL, &rect);
 
       if (game_get_square(g, i, j) == TREE) {
-        env->tree = IMG_LoadTexture(ren, ImTree);
         SDL_QueryTexture(env->tree, NULL, NULL, &rect.w, &rect.h);
         rect.x = 60 * j + 90 - rect.w / 2;
         rect.y = 60 * i + 90 - rect.h / 2;
