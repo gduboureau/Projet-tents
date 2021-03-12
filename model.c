@@ -59,6 +59,7 @@ Env *init(SDL_Window *win, SDL_Renderer *ren, int argc, char *argv[]) {
       env->squares[(i * env->nb_cols + j)] = game_get_square(g,i,j);
       }
     }
+    game_delete(g);
   }else{
     game g = game_default();
     env->nb_rows = game_nb_rows(g);
@@ -77,6 +78,7 @@ Env *init(SDL_Window *win, SDL_Renderer *ren, int argc, char *argv[]) {
       env->squares[(i * env->nb_cols + j)] = game_get_square(g,i,j);
       }
     }
+    game_delete(g);
   }
   int w, h;
   SDL_GetWindowSize(win, &w, &h);
