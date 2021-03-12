@@ -85,16 +85,6 @@ Env *init(SDL_Window *win, SDL_Renderer *ren, int argc, char *argv[]) {
   if (!env->background) {
     ERROR("IMG_LoadTexture: %s\n", BACKGROUND);
   }
-
-  /* init text texture using Arial font */
-      SDL_Color color = {0, 0, 0, 0}; /* black color in RGBA */
-      TTF_Font *font = TTF_OpenFont(FONT, FONTSIZE);
-      if (!font) ERROR("TTF_OpenFont: %s\n", FONT);
-      TTF_SetFontStyle(font, TTF_STYLE_BOLD);
-      SDL_Surface *surf = TTF_RenderText_Blended(font, "0", color);
-      env->text = SDL_CreateTextureFromSurface(ren, surf);
-      SDL_FreeSurface(surf);
-      TTF_CloseFont(font);
   
   /* init tree texture from PNG image */
   env->tree = IMG_LoadTexture(ren, ImTree);
@@ -129,9 +119,13 @@ void render(SDL_Window *win, SDL_Renderer *ren, Env *env) {
       /* render text texture */
       SDL_Color color = {0, 0, 0, 0}; /* black color in RGBA */
       TTF_Font *font = TTF_OpenFont(FONT, FONTSIZE);
+      if (!font) ERROR("TTF_OpenFont: %s\n", FONT);
+      TTF_SetFontStyle(font, TTF_STYLE_BOLD); 
       SDL_Surface *surf = TTF_RenderText_Blended(font, "0", color);
       env->text = SDL_CreateTextureFromSurface(ren, surf);
       SDL_FreeSurface(surf);
+      TTF_CloseFont(font);
+
       SDL_QueryTexture(env->text, NULL, NULL, &rect.w, &rect.h);
       rect.x = w1/2 - rect.w / 2;
       rect.y = i * h1 + h1+h1/2 - rect.h / 2;
