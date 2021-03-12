@@ -114,8 +114,8 @@ void render(SDL_Window *win, SDL_Renderer *ren, Env *env) {
   /* render background texture */
   SDL_RenderCopy(ren, env->background, NULL, NULL); /* stretch it */
 
-  int w1 = w / ((env->nb_cols)+2);  // 60 pour DS
-  int h1 = h / ((env->nb_cols)+2);  // 60 pour DS
+  int w1 = w / ((env->nb_rows)+2);  // taille des cases
+  int h1 = h / ((env->nb_cols)+2);
 
   SDL_SetRenderDrawColor(ren, 0, 0, 0, SDL_ALPHA_OPAQUE);
   SDL_RenderDrawLine(ren, w1, h1, w - w1, h1);
@@ -132,7 +132,6 @@ void render(SDL_Window *win, SDL_Renderer *ren, Env *env) {
       SDL_Surface *surf = TTF_RenderText_Blended(font, "0", color);
       env->text = SDL_CreateTextureFromSurface(ren, surf);
       SDL_FreeSurface(surf);
-      //if(i<game_nb_rows(g)-1 && j<game_nb_cols(g)-1){
       SDL_QueryTexture(env->text, NULL, NULL, &rect.w, &rect.h);
       rect.x = w1/2 - rect.w / 2;
       rect.y = i * h1 + h1+h1/2 - rect.h / 2;
@@ -149,7 +148,6 @@ void render(SDL_Window *win, SDL_Renderer *ren, Env *env) {
       rect.x = i * w1 + w1+w1/2 - rect.w / 2;
       rect.y = h-h1/2 - rect.h / 2;
       SDL_RenderCopy(ren, env->text, NULL, &rect);
-      //}
       /* render tree texture */
       if (env->squares[(i * env->nb_cols + j)] == TREE) {
         SDL_QueryTexture(env->tree, NULL, NULL, &rect.w, &rect.h);
@@ -160,7 +158,7 @@ void render(SDL_Window *win, SDL_Renderer *ren, Env *env) {
     }
   }
 
-  for (uint i = 0; i < env->nb_rows; i++) {
+  for (uint i = 0; i < env->nb_rows-1; i++) {
     SDL_RenderDrawLine(ren, w1 * 2 + i * w1, h1, w1 * 2 + i * w1, h - h1);
     SDL_RenderDrawLine(ren, w1, h1 * 2 + i * h1, w - w1, h1 * 2 + i * h1);
   }
