@@ -114,8 +114,8 @@ void render(SDL_Window *win, SDL_Renderer *ren, Env *env) {
   /* render background texture */
   SDL_RenderCopy(ren, env->background, NULL, NULL); /* stretch it */
 
-  int w1 = w / 10;  // 60 pour DS
-  int h1 = h / 10;  // 60 pour DS
+  int w1 = w / ((env->nb_cols)+2);  // 60 pour DS
+  int h1 = h / ((env->nb_cols)+2);  // 60 pour DS
 
   SDL_SetRenderDrawColor(ren, 0, 0, 0, SDL_ALPHA_OPAQUE);
   SDL_RenderDrawLine(ren, w1, h1, w - w1, h1);
@@ -127,27 +127,34 @@ void render(SDL_Window *win, SDL_Renderer *ren, Env *env) {
   for (uint i = 0; i < env->nb_rows; i++) {
     for (uint j = 0; j < env->nb_cols; j++) {
       /* render text texture */
+      SDL_Color color = {0, 0, 0, 0}; /* black color in RGBA */
+      TTF_Font *font = TTF_OpenFont(FONT, FONTSIZE);
+      SDL_Surface *surf = TTF_RenderText_Blended(font, "0", color);
+      env->text = SDL_CreateTextureFromSurface(ren, surf);
+      SDL_FreeSurface(surf);
+      //if(i<game_nb_rows(g)-1 && j<game_nb_cols(g)-1){
       SDL_QueryTexture(env->text, NULL, NULL, &rect.w, &rect.h);
-      rect.x = 30 - rect.w / 2;
-      rect.y = i * 60 + 90 - rect.h / 2;
+      rect.x = w1/2 - rect.w / 2;
+      rect.y = i * h1 + h1+h1/2 - rect.h / 2;
       SDL_RenderCopy(ren, env->text, NULL, &rect);
 
-      rect.x = i * 60 + 90 - rect.w / 2;
-      rect.y = 30 - rect.h / 2;
+      rect.x = i * w1 + w1+w1/2 - rect.w / 2;
+      rect.y = h1/2 - rect.h / 2;
       SDL_RenderCopy(ren, env->text, NULL, &rect);
 
-      rect.x = 570 - rect.w / 2;
-      rect.y = i * 60 + 90 - rect.h / 2;
+      rect.x = w-w1/2 - rect.w / 2;
+      rect.y = i * h1 + h1+h1/2 - rect.h / 2;
       SDL_RenderCopy(ren, env->text, NULL, &rect);
 
-      rect.x = i * 60 + 90 - rect.w / 2;
-      rect.y = 570 - rect.h / 2;
+      rect.x = i * w1 + w1+w1/2 - rect.w / 2;
+      rect.y = h-h1/2 - rect.h / 2;
       SDL_RenderCopy(ren, env->text, NULL, &rect);
-
-      if (env->squares[(i * env->nb_cols) + j] == TREE) {
+      //}
+      /* render tree texture */
+      if (env->squares[(i * env->nb_cols + j)] == TREE) {
         SDL_QueryTexture(env->tree, NULL, NULL, &rect.w, &rect.h);
-        rect.x = 60 * j + 90 - rect.w / 2;
-        rect.y = 60 * i + 90 - rect.h / 2;
+        rect.x = w1 * j + w1+w1/2 - rect.w / 2;
+        rect.y = h1 * i + h1+h1/2 - rect.h / 2;
         SDL_RenderCopy(ren, env->tree, NULL, &rect);
       }
     }
