@@ -8,6 +8,7 @@
 #include "game.h"
 #include "game_aux.h"
 #include "game_ext.h"
+#include "game_tools.h"
 
 #include "model.h"
 
@@ -29,13 +30,54 @@ struct Env_t {
   int grass_x, grass_y;
   int empty_x, empty_y;
   int tree_x, tree_y;
+  square *squares;
+  uint *nb_tents_row;
+  uint *nb_tents_col;
+  uint nb_rows;
+  uint nb_cols;
 };
 
 /* **************************************************************** */
 
 Env *init(SDL_Window *win, SDL_Renderer *ren, int argc, char *argv[]) {
   Env *env = malloc(sizeof(struct Env_t));
-
+  if (argc == 2){
+    game g = game_load(argv[1]);
+    env->nb_rows = game_nb_rows(g);
+    env->nb_cols = game_nb_cols(g);
+    env->nb_tents_row = malloc(sizeof(uint) * env->nb_rows);
+    for (uint i = 0; i < game_nb_rows(g); i++) {
+      env->nb_tents_row[i] = game_get_expected_nb_tents_row(g,i);
+    }
+    env->nb_tents_col = malloc(sizeof(uint) * env->nb_cols);
+    for (uint i = 0; i < game_nb_cols(g); i++) {
+      env->nb_tents_col[i] = game_get_expected_nb_tents_col(g,i);
+    }
+    env->squares = malloc(sizeof(uint) * (env->nb_cols)* (env->nb_rows));
+    for (uint i = 0; i < game_nb_rows(g); i++) {
+      for (uint j = 0; j < game_nb_cols(g); j++){
+      env->squares[(i * env->nb_cols + j)] = game_get_square(g,i,j);
+      }
+    }
+  }else{
+    game g = game_default();
+    env->nb_rows = game_nb_rows(g);
+    env->nb_cols = game_nb_cols(g);
+    env->nb_tents_row = malloc(sizeof(uint) * env->nb_rows);
+    for (uint i = 0; i < game_nb_rows(g); i++) {
+      env->nb_tents_row[i] = game_get_expected_nb_tents_row(g,i);
+    }
+    env->nb_tents_col = malloc(sizeof(uint) * env->nb_cols);
+    for (uint i = 0; i < game_nb_cols(g); i++) {
+      env->nb_tents_col[i] = game_get_expected_nb_tents_col(g,i);
+    }
+    env->squares = malloc(sizeof(uint) * (env->nb_cols)* (env->nb_rows));
+    for (uint i = 0; i < game_nb_rows(g); i++) {
+      for (uint j = 0; j < game_nb_cols(g); j++){
+      env->squares[(i * env->nb_cols + j)] = game_get_square(g,i,j);
+      }
+    }
+  }
   int w, h;
   SDL_GetWindowSize(win, &w, &h);
 
@@ -64,7 +106,6 @@ Env *init(SDL_Window *win, SDL_Renderer *ren, int argc, char *argv[]) {
 
 void render(SDL_Window *win, SDL_Renderer *ren, Env *env) {
   SDL_Rect rect;
-  game g = game_default();
 
   /* get current window size */
   int w, h;
@@ -83,8 +124,8 @@ void render(SDL_Window *win, SDL_Renderer *ren, Env *env) {
   SDL_RenderDrawLine(ren, w - w1, h - h1, w1, h - h1);
 
   /* render tree texture */
-  for (uint i = 0; i < game_nb_rows(g); i++) {
-    for (uint j = 0; j < game_nb_cols(g); j++) {
+  for (uint i = 0; i < env->nb_rows; i++) {
+    for (uint j = 0; j < env->nb_cols; j++) {
       /* render text texture */
       SDL_QueryTexture(env->text, NULL, NULL, &rect.w, &rect.h);
       rect.x = 30 - rect.w / 2;
@@ -103,7 +144,7 @@ void render(SDL_Window *win, SDL_Renderer *ren, Env *env) {
       rect.y = 570 - rect.h / 2;
       SDL_RenderCopy(ren, env->text, NULL, &rect);
 
-      if (game_get_square(g, i, j) == TREE) {
+      if (env->squares[(i * env->nb_cols) + j] == TREE) {
         SDL_QueryTexture(env->tree, NULL, NULL, &rect.w, &rect.h);
         rect.x = 60 * j + 90 - rect.w / 2;
         rect.y = 60 * i + 90 - rect.h / 2;
@@ -112,7 +153,7 @@ void render(SDL_Window *win, SDL_Renderer *ren, Env *env) {
     }
   }
 
-  for (uint i = 0; i < game_nb_rows(g); i++) {
+  for (uint i = 0; i < env->nb_rows; i++) {
     SDL_RenderDrawLine(ren, w1 * 2 + i * w1, h1, w1 * 2 + i * w1, h - h1);
     SDL_RenderDrawLine(ren, w1, h1 * 2 + i * h1, w - w1, h1 * 2 + i * h1);
   }
