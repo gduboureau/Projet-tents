@@ -123,12 +123,12 @@ void render(SDL_Window *win, SDL_Renderer *ren, Env *env) {
       TTF_Font *font = TTF_OpenFont(FONT, FONTSIZE);
       if (!font) ERROR("TTF_OpenFont: %s\n", FONT);
       TTF_SetFontStyle(font, TTF_STYLE_BOLD);
-      char chaine[16];
+      char chaine[env->nb_rows];
       sprintf(chaine, "%d", i); 
       SDL_Surface *surf = TTF_RenderText_Blended(font, chaine, color);
       env->text = SDL_CreateTextureFromSurface(ren, surf);
       SDL_FreeSurface(surf);
-      TTF_CloseFont(font);
+      //TTF_CloseFont(font);
 
       SDL_QueryTexture(env->text, NULL, NULL, &rect.w, &rect.h);
       rect.x = w1/2 - rect.w / 2;
@@ -139,13 +139,25 @@ void render(SDL_Window *win, SDL_Renderer *ren, Env *env) {
       rect.y = h1/2 - rect.h / 2;
       SDL_RenderCopy(ren, env->text, NULL, &rect);
 
+      sprintf(chaine, "%d", env->nb_tents_row[i]); 
+      SDL_Surface *surf2 = TTF_RenderText_Blended(font, chaine, color);
+      env->text = SDL_CreateTextureFromSurface(ren, surf2);
+      SDL_FreeSurface(surf2);
+
       rect.x = w-w1/2 - rect.w / 2;
       rect.y = i * h1 + h1+h1/2 - rect.h / 2;
       SDL_RenderCopy(ren, env->text, NULL, &rect);
 
+      sprintf(chaine, "%d", env->nb_tents_col[i]); 
+      SDL_Surface *surf3 = TTF_RenderText_Blended(font, chaine, color);
+      env->text = SDL_CreateTextureFromSurface(ren, surf3);
+      SDL_FreeSurface(surf3);
+      TTF_CloseFont(font);
+
       rect.x = i * w1 + w1+w1/2 - rect.w / 2;
       rect.y = h-h1/2 - rect.h / 2;
       SDL_RenderCopy(ren, env->text, NULL, &rect);
+
       /* render tree texture */
       if (env->squares[(i * env->nb_cols + j)] == TREE) {
         SDL_QueryTexture(env->tree, NULL, NULL, &rect.w, &rect.h);
