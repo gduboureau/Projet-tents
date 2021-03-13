@@ -125,6 +125,8 @@ void render(SDL_Window *win, SDL_Renderer *ren, Env *env) {
         SDL_QueryTexture(env->tree, NULL, NULL, &rect.w, &rect.h);
         rect.x = w1 * j + w1+w1/2 - rect.w / 2;
         rect.y = h1 * i + h1+h1/2 - rect.h / 2;
+        rect.w = rect.w*(8/game_nb_rows(env->g));
+        rect.h = rect.h*(8/game_nb_cols(env->g));
         SDL_RenderCopy(ren, env->tree, NULL, &rect);
       }
     }
