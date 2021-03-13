@@ -13,7 +13,7 @@
 #include "model.h"
 
 #define FONT "arial.ttf"
-#define FONTSIZE 36
+#define FONTSIZE 16
 #define ImTree "tree.png"
 #define BACKGROUND "background.png"
 
@@ -81,7 +81,7 @@ void render(SDL_Window *win, SDL_Renderer *ren, Env *env) {
   for (uint i = 0; i < game_nb_rows(env->g); i++) {
       /* render text texture */
       SDL_Color color = {0, 0, 0, 0}; /* black color in RGBA */
-      TTF_Font *font = TTF_OpenFont(FONT, FONTSIZE*(8/game_nb_rows(env->g)));
+      TTF_Font *font = TTF_OpenFont(FONT, FONTSIZE*(w/(double)SCREEN_WIDTH));
       if (!font) ERROR("TTF_OpenFont: %s\n", FONT);
       TTF_SetFontStyle(font, TTF_STYLE_BOLD);
       char chaine[game_nb_rows(env->g)];
@@ -100,7 +100,7 @@ void render(SDL_Window *win, SDL_Renderer *ren, Env *env) {
       env->text = SDL_CreateTextureFromSurface(ren, surf2);
       SDL_FreeSurface(surf2);
       TTF_CloseFont(font);
-      
+
       rect.x = w-w1/2 - rect.w / 2;
       rect.y = i * h1 + h1+h1/2 - rect.h / 2;
       SDL_RenderCopy(ren, env->text, NULL, &rect);
@@ -108,7 +108,7 @@ void render(SDL_Window *win, SDL_Renderer *ren, Env *env) {
     for (uint j = 0; j < game_nb_cols(env->g); j++) {
       /* render text texture */
       SDL_Color color = {0, 0, 0, 0}; /* black color in RGBA */
-      TTF_Font *font = TTF_OpenFont(FONT, FONTSIZE*(8/game_nb_cols(env->g)));
+      TTF_Font *font = TTF_OpenFont(FONT, FONTSIZE*(h/(double)SCREEN_HEIGHT));
       if (!font) ERROR("TTF_OpenFont: %s\n", FONT);
       TTF_SetFontStyle(font, TTF_STYLE_BOLD);
       char chaine[game_nb_cols(env->g)];
@@ -136,10 +136,10 @@ void render(SDL_Window *win, SDL_Renderer *ren, Env *env) {
       /* render tree texture */
       if (game_get_square(env->g,i,j) == TREE) {
         SDL_QueryTexture(env->tree, NULL, NULL, &rect.w, &rect.h);
+        rect.w = (w/(double)SCREEN_WIDTH)*rect.w*((double)DEFAULT_SIZE/game_nb_rows(env->g));
+        rect.h = (h/(double)SCREEN_HEIGHT)*rect.h*((double)DEFAULT_SIZE/game_nb_cols(env->g));
         rect.x = w1 * j + w1+w1/2 - rect.w / 2;
         rect.y = h1 * i + h1+h1/2 - rect.h / 2;
-        rect.w = rect.w*(8/game_nb_rows(env->g));
-        rect.h = rect.h*(8/game_nb_cols(env->g));
         SDL_RenderCopy(ren, env->tree, NULL, &rect);
       }
     }
