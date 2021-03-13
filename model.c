@@ -81,7 +81,7 @@ void render(SDL_Window *win, SDL_Renderer *ren, Env *env) {
   for (uint i = 0; i < game_nb_rows(env->g); i++) {
       /* render text texture */
       SDL_Color color = {0, 0, 0, 0}; /* black color in RGBA */
-      TTF_Font *font = TTF_OpenFont(FONT, FONTSIZE);
+      TTF_Font *font = TTF_OpenFont(FONT, FONTSIZE*(8/game_nb_rows(env->g)));
       if (!font) ERROR("TTF_OpenFont: %s\n", FONT);
       TTF_SetFontStyle(font, TTF_STYLE_BOLD);
       char chaine[game_nb_rows(env->g)];
@@ -99,7 +99,8 @@ void render(SDL_Window *win, SDL_Renderer *ren, Env *env) {
       SDL_Surface *surf2 = TTF_RenderText_Blended(font, chaine, color);
       env->text = SDL_CreateTextureFromSurface(ren, surf2);
       SDL_FreeSurface(surf2);
-
+      TTF_CloseFont(font);
+      
       rect.x = w-w1/2 - rect.w / 2;
       rect.y = i * h1 + h1+h1/2 - rect.h / 2;
       SDL_RenderCopy(ren, env->text, NULL, &rect);
@@ -107,7 +108,7 @@ void render(SDL_Window *win, SDL_Renderer *ren, Env *env) {
     for (uint j = 0; j < game_nb_cols(env->g); j++) {
       /* render text texture */
       SDL_Color color = {0, 0, 0, 0}; /* black color in RGBA */
-      TTF_Font *font = TTF_OpenFont(FONT, FONTSIZE);
+      TTF_Font *font = TTF_OpenFont(FONT, FONTSIZE*(8/game_nb_cols(env->g)));
       if (!font) ERROR("TTF_OpenFont: %s\n", FONT);
       TTF_SetFontStyle(font, TTF_STYLE_BOLD);
       char chaine[game_nb_cols(env->g)];
