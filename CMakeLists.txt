@@ -21,17 +21,20 @@ include_directories(${SDL2_ALL_INC})
 add_executable(game_text game_text.c)
 add_executable(game_solve game_solve.c)
 add_executable(game_sdl game_sdl.c model.c)
+add_executable(minimal minimal.c)
 
 
 target_link_libraries(game_sdl ${SDL2_ALL_LIBS} m)
 target_link_libraries(game_text game)
 target_link_libraries(game_solve game)
 target_link_libraries(game_sdl game)
-add_executable(minimal minimal.c)
+
 target_link_libraries(minimal ${SDL2_ALL_LIBS} m)
-add_executable(model game_sdl.c model.c)
-target_link_libraries(model ${SDL2_ALL_LIBS} m)
-target_link_libraries(model game)
+
+## copy useful data files in build dir
+foreach(file "tree.png" "tent.png" "grass.png" "empty.png" "losing.png" "background.png" "arial.ttf")
+  file(COPY ${file} DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
+endforeach(file)
 
 #-----------------------------------------------------#
 include(CTest)
