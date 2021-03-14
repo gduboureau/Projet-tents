@@ -144,6 +144,19 @@ void render(SDL_Window *win, SDL_Renderer *ren, Env *env) {
       }
     }
   }
+  for (uint i = 0; i < game_nb_rows(env->g); i++) {
+    for (uint j = 0; j < game_nb_cols(env->g); j++) {
+      /* render tree texture */
+      if (game_get_square(env->g,i,j) == TENT) {
+        SDL_QueryTexture(env->tent, NULL, NULL, &rect.w, &rect.h);
+        rect.w = (w/(double)SCREEN_WIDTH)*rect.w*((double)DEFAULT_SIZE/game_nb_rows(env->g));
+        rect.h = (h/(double)SCREEN_HEIGHT)*rect.h*((double)DEFAULT_SIZE/game_nb_cols(env->g));
+        rect.x = w1 * j + w1+w1/2 - rect.w / 2;
+        rect.y = h1 * i + h1+h1/2 - rect.h / 2;
+        SDL_RenderCopy(ren, env->tent, NULL, &rect);
+      }
+    }
+  }
 
   if(game_nb_cols(env->g)>game_nb_rows(env->g)){
     for (uint i = 0; i < game_nb_cols(env->g)-1; i++) {
