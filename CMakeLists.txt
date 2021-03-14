@@ -23,7 +23,6 @@ add_executable(game_solve game_solve.c)
 add_executable(game_sdl game_sdl.c model.c)
 add_executable(minimal minimal.c)
 
-
 target_link_libraries(game_sdl ${SDL2_ALL_LIBS} m)
 target_link_libraries(game_text game)
 target_link_libraries(game_solve game)
