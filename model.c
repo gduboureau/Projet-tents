@@ -28,6 +28,7 @@ struct Env_t {
   SDL_Texture *empty;
   SDL_Texture *text;
   int tent_x, tent_y;
+  SDL_Rect rect_t;
   game g;
 };
 
@@ -61,7 +62,6 @@ Env *init(SDL_Window *win, SDL_Renderer *ren, int argc, char *argv[]) {
 
 void render(SDL_Window *win, SDL_Renderer *ren, Env *env) {
   SDL_Rect rect;
-  
   /* get current window size */
   int w, h;
   SDL_GetWindowSize(win, &w, &h);
@@ -157,41 +157,35 @@ void render(SDL_Window *win, SDL_Renderer *ren, Env *env) {
       SDL_RenderDrawLine(ren, w1, h1 * 2 + i * h1, w - w1, h1 * 2 + i * h1);
     }
   }
+  SDL_RenderCopy(ren, env->tent, NULL, &env->rect_t);
 }
 
 /* **************************************************************** */
 
 bool process(SDL_Window *win, SDL_Renderer *ren, Env *env, SDL_Event *e) {
-  SDL_Rect rect;
+  
   int w, h;
   SDL_GetWindowSize(win, &w, &h);
   int w1 = w / ((game_nb_cols(env->g))+2);  // taille des cases
   int h1 = h / ((game_nb_rows(env->g))+2);
   
-  
   if (e->type == SDL_QUIT) {
     return true;
   }
 
-
   else if (e->type == SDL_MOUSEBUTTONDOWN) {
     SDL_Point mouse;
     SDL_GetMouseState(&mouse.x, &mouse.y);
-    
     if(mouse.x<=w-w1 && mouse.x>=w1 && mouse.y<=h-h1 && mouse.y>=h1){
-      if(mouse.x<=w1*2 && mouse.x>=w1 && mouse.y<=h1*2 && mouse.y>=h1){
-        SDL_QueryTexture(env->tent, NULL, NULL, &rect.w, &rect.h);
-        rect.w = (w/(double)SCREEN_WIDTH)*rect.w*((double)DEFAULT_SIZE/game_nb_rows(env->g));
-        rect.h = (h/(double)SCREEN_HEIGHT)*rect.h*((double)DEFAULT_SIZE/game_nb_cols(env->g));
-        rect.x = 90 - rect.w / 2;
-        rect.y = 90 - rect.h / 2;
-        SDL_RenderCopy(ren, env->tent, NULL, &rect);
-        SDL_RenderPresent(ren);
-      } 
+        if(mouse.x<=w1*2 && mouse.x>=w1 && mouse.y<=h1*2 && mouse.y>=h1){
+          SDL_QueryTexture(env->tent, NULL, NULL, &env->rect_t.w, &env->rect_t.h);
+          env->rect_t.w = (w/(double)SCREEN_WIDTH)*env->rect_t.w*((double)DEFAULT_SIZE/game_nb_rows(env->g));
+          env->rect_t.h = (h/(double)SCREEN_HEIGHT)*env->rect_t.h*((double)DEFAULT_SIZE/game_nb_cols(env->g));
+          env->rect_t.x = 90 - env->rect_t.w / 2;
+          env->rect_t.y = 90 - env->rect_t.h / 2;
+        }
     }
   }
-  
-
   return false;
 }
 
