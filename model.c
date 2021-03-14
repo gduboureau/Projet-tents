@@ -308,11 +308,26 @@ bool process(SDL_Window *win, SDL_Renderer *ren, Env *env, SDL_Event *e) {
         env->rect_t.y = h1 * i + h1 + h1 / 2 - env->rect_t.h / 2;
       }
     }
+  }else if (e->type == SDL_KEYDOWN) {
+    switch (e->key.keysym.sym) {
+    case SDLK_r:
+      game_restart(env->g);
+      break;
+    case SDLK_z:
+      game_undo(env->g);
+      break;
+    case SDLK_y:
+      game_redo(env->g);
+      break;
+    case SDLK_s:
+      game_solve(env->g);
+      break;
+    case SDLK_q:
+      return true;
+    }
   }
 
-  if (game_is_over(env->g)) {
-    return true;
-  }
+
 
   return false;
 }
