@@ -16,6 +16,9 @@
 #define FONTSIZE 16
 #define ImTree "tree.png"
 #define ImTent "tent.png"
+#define ImGrass "grass.png"
+#define ImEmpty "empty.png"
+#define ImLosing "losing.png"
 #define BACKGROUND "background.png"
 
 /* **************************************************************** */
@@ -26,9 +29,10 @@ struct Env_t {
   SDL_Texture *tent;
   SDL_Texture *grass;
   SDL_Texture *empty;
+  SDL_Texture *losing;
   SDL_Texture *text;
-  int tent_x, tent_y;
   SDL_Rect rect_t;
+  SDL_Rect rect_l;
   game g;
 };
 
@@ -54,6 +58,15 @@ Env *init(SDL_Window *win, SDL_Renderer *ren, int argc, char *argv[]) {
 
   /* init tent texture from PNG image */
   env->tent = IMG_LoadTexture(ren, ImTent);
+
+   /* init grass texture from PNG image */
+  env->grass = IMG_LoadTexture(ren, ImGrass);
+     
+    /* init empty texture from PNG image */
+  env->empty = IMG_LoadTexture(ren, ImEmpty);
+
+      /* init losing texture from PNG image */
+  env->losing = IMG_LoadTexture(ren, ImLosing);
 
   return env;
 }
@@ -145,16 +158,37 @@ void render(SDL_Window *win, SDL_Renderer *ren, Env *env) {
         SDL_RenderCopy(ren, env->tree, NULL, &rect);
       }
       if (game_get_square(env->g, i, j) == TENT) {
-        SDL_QueryTexture(env->tent, NULL, NULL, &rect.w, &rect.h);
-        rect.w = (w / (double)SCREEN_WIDTH) * rect.w *
+        if(game_check_move(env->g, i, j, TENT)==LOSING){
+        SDL_QueryTexture(env->losing, NULL, NULL, &env->rect_l.w, &env->rect_l.h);
+        env->rect_l.w = (w / (double)SCREEN_WIDTH) * env->rect_l.w *
                  ((double)DEFAULT_SIZE / game_nb_rows(env->g));
-        rect.h = (h / (double)SCREEN_HEIGHT) * rect.h *
+        env->rect_l.h = (h / (double)SCREEN_HEIGHT) * env->rect_l.h *
                  ((double)DEFAULT_SIZE / game_nb_cols(env->g));
-        rect.x = w1 * j + w1 + w1 / 2 - rect.w / 2;
-        rect.y = h1 * i + h1 + h1 / 2 - rect.h / 2;
-        SDL_RenderCopy(ren, env->tent, NULL, &rect);
+        env->rect_l.x = w1 * j + w1 + w1 / 2 - env->rect_l.w / 2;
+        env->rect_l.y = h1 * i + h1 + h1 / 2 - env->rect_l.h / 2;
+        SDL_RenderCopy(ren, env->losing, NULL, &env->rect_l);
+      }
+
+        SDL_QueryTexture(env->tent, NULL, NULL, &env->rect_t.w, &env->rect_t.h);
+        env->rect_t.w = (w / (double)SCREEN_WIDTH) * env->rect_t.w *
+                 ((double)DEFAULT_SIZE / game_nb_rows(env->g));
+        env->rect_t.h = (h / (double)SCREEN_HEIGHT) * env->rect_t.h *
+                 ((double)DEFAULT_SIZE / game_nb_cols(env->g));
+        env->rect_t.x = w1 * j + w1 + w1 / 2 - env->rect_t.w / 2;
+        env->rect_t.y = h1 * i + h1 + h1 / 2 - env->rect_t.h / 2;
+        SDL_RenderCopy(ren, env->tent, NULL, &env->rect_t);
       }
       if (game_get_square(env->g, i, j) == GRASS) {
+        if(game_check_move(env->g, i, j, GRASS)==LOSING){
+        SDL_QueryTexture(env->losing, NULL, NULL, &env->rect_l.w, &env->rect_l.h);
+        env->rect_l.w = (w / (double)SCREEN_WIDTH) * env->rect_l.w *
+                 ((double)DEFAULT_SIZE / game_nb_rows(env->g));
+        env->rect_l.h = (h / (double)SCREEN_HEIGHT) * env->rect_l.h *
+                 ((double)DEFAULT_SIZE / game_nb_cols(env->g));
+        env->rect_l.x = w1 * j + w1 + w1 / 2 - env->rect_l.w / 2;
+        env->rect_l.y = h1 * i + h1 + h1 / 2 - env->rect_l.h / 2;
+        SDL_RenderCopy(ren, env->losing, NULL, &env->rect_l);
+      }
         SDL_QueryTexture(env->grass, NULL, NULL, &rect.w, &rect.h);
         rect.w = (w / (double)SCREEN_WIDTH) * rect.w *
                  ((double)DEFAULT_SIZE / game_nb_rows(env->g));
@@ -206,6 +240,70 @@ bool process(SDL_Window *win, SDL_Renderer *ren, Env *env, SDL_Event *e) {
       uint j = (mouse.x + env->rect_t.w / 2 - w1 / 2 - w1) / w1;
       if (game_check_move(env->g, i, j, TENT) == REGULAR) {
         game_play_move(env->g, i, j, TENT);
+        env->rect_t.x = w1 * j + w1 + w1 / 2 - env->rect_t.w / 2;
+        env->rect_t.y = h1 * i + h1 + h1 / 2 - env->rect_t.h / 2;
+      }
+      if (game_check_move(env->g, i, j, TENT) == LOSING) {
+        game_play_move(env->g, i, j, TENT);
+        SDL_QueryTexture(env->losing, NULL, NULL, &env->rect_l.w, &env->rect_l.h);
+      env->rect_l.w = (w / (double)SCREEN_WIDTH) * env->rect_l.w *
+                      ((double)DEFAULT_SIZE / game_nb_rows(env->g));
+      env->rect_l.h = (h / (double)SCREEN_HEIGHT) * env->rect_l.h *
+                      ((double)DEFAULT_SIZE / game_nb_cols(env->g));
+      uint i = (mouse.y + env->rect_l.h / 2 - h1 / 2 - h1) / h1;
+      uint j = (mouse.x + env->rect_l.w / 2 - w1 / 2 - w1) / w1;
+
+        env->rect_t.x = w1 * j + w1 + w1 / 2 - env->rect_t.w / 2;
+        env->rect_t.y = h1 * i + h1 + h1 / 2 - env->rect_t.h / 2;
+      }
+    }
+  }
+  if (e->type == SDL_MOUSEBUTTONDOWN && e->button.button == SDL_BUTTON_RIGHT) {
+    SDL_Point mouse;
+    SDL_GetMouseState(&mouse.x, &mouse.y);
+    if (mouse.x <= w - w1 && mouse.x >= w1 && mouse.y <= h - h1 &&
+        mouse.y >= h1) {
+      SDL_QueryTexture(env->grass, NULL, NULL, &env->rect_t.w, &env->rect_t.h);
+      env->rect_t.w = (w / (double)SCREEN_WIDTH) * env->rect_t.w *
+                      ((double)DEFAULT_SIZE / game_nb_rows(env->g));
+      env->rect_t.h = (h / (double)SCREEN_HEIGHT) * env->rect_t.h *
+                      ((double)DEFAULT_SIZE / game_nb_cols(env->g));
+      uint i = (mouse.y + env->rect_t.h / 2 - h1 / 2 - h1) / h1;
+      uint j = (mouse.x + env->rect_t.w / 2 - w1 / 2 - w1) / w1;
+      if (game_check_move(env->g, i, j, GRASS) == REGULAR) {
+        game_play_move(env->g, i, j, GRASS);
+        env->rect_t.x = w1 * j + w1 + w1 / 2 - env->rect_t.w / 2;
+        env->rect_t.y = h1 * i + h1 + h1 / 2 - env->rect_t.h / 2;
+      }
+      if (game_check_move(env->g, i, j, GRASS) == LOSING) {
+        game_play_move(env->g, i, j, GRASS);
+        SDL_QueryTexture(env->losing, NULL, NULL, &env->rect_l.w, &env->rect_l.h);
+      env->rect_l.w = (w / (double)SCREEN_WIDTH) * env->rect_l.w *
+                      ((double)DEFAULT_SIZE / game_nb_rows(env->g));
+      env->rect_l.h = (h / (double)SCREEN_HEIGHT) * env->rect_l.h *
+                      ((double)DEFAULT_SIZE / game_nb_cols(env->g));
+      uint i = (mouse.y + env->rect_l.h / 2 - h1 / 2 - h1) / h1;
+      uint j = (mouse.x + env->rect_l.w / 2 - w1 / 2 - w1) / w1;
+
+        env->rect_t.x = w1 * j + w1 + w1 / 2 - env->rect_t.w / 2;
+        env->rect_t.y = h1 * i + h1 + h1 / 2 - env->rect_t.h / 2;
+      }
+    }
+  }
+    if (e->type == SDL_MOUSEBUTTONDOWN && e->button.button == SDL_BUTTON_MIDDLE) {
+    SDL_Point mouse;
+    SDL_GetMouseState(&mouse.x, &mouse.y);
+    if (mouse.x <= w - w1 && mouse.x >= w1 && mouse.y <= h - h1 &&
+        mouse.y >= h1) {
+      SDL_QueryTexture(env->empty, NULL, NULL, &env->rect_t.w, &env->rect_t.h);
+      env->rect_t.w = (w / (double)SCREEN_WIDTH) * env->rect_t.w *
+                      ((double)DEFAULT_SIZE / game_nb_rows(env->g));
+      env->rect_t.h = (h / (double)SCREEN_HEIGHT) * env->rect_t.h *
+                      ((double)DEFAULT_SIZE / game_nb_cols(env->g));
+      uint i = (mouse.y + env->rect_t.h / 2 - h1 / 2 - h1) / h1;
+      uint j = (mouse.x + env->rect_t.w / 2 - w1 / 2 - w1) / w1;
+      if (game_check_move(env->g, i, j, EMPTY) == REGULAR && game_get_square(env->g, i, j)!=EMPTY){
+        game_play_move(env->g, i, j, EMPTY);
         env->rect_t.x = w1 * j + w1 + w1 / 2 - env->rect_t.w / 2;
         env->rect_t.y = h1 * i + h1 + h1 / 2 - env->rect_t.h / 2;
       }
