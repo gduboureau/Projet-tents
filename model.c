@@ -163,7 +163,6 @@ void render(SDL_Window *win, SDL_Renderer *ren, Env *env) {
 /* **************************************************************** */
 
 bool process(SDL_Window *win, SDL_Renderer *ren, Env *env, SDL_Event *e) {
-  
   int w, h;
   SDL_GetWindowSize(win, &w, &h);
   int w1 = w / ((game_nb_cols(env->g))+2);  // taille des cases
@@ -173,19 +172,27 @@ bool process(SDL_Window *win, SDL_Renderer *ren, Env *env, SDL_Event *e) {
     return true;
   }
 
-  else if (e->type == SDL_MOUSEBUTTONDOWN) {
-    SDL_Point mouse;
-    SDL_GetMouseState(&mouse.x, &mouse.y);
-    if(mouse.x<=w-w1 && mouse.x>=w1 && mouse.y<=h-h1 && mouse.y>=h1){
-        if(mouse.x<=w1*2 && mouse.x>=w1 && mouse.y<=h1*2 && mouse.y>=h1){
-          SDL_QueryTexture(env->tent, NULL, NULL, &env->rect_t.w, &env->rect_t.h);
-          env->rect_t.w = (w/(double)SCREEN_WIDTH)*env->rect_t.w*((double)DEFAULT_SIZE/game_nb_rows(env->g));
-          env->rect_t.h = (h/(double)SCREEN_HEIGHT)*env->rect_t.h*((double)DEFAULT_SIZE/game_nb_cols(env->g));
-          env->rect_t.x = 90 - env->rect_t.w / 2;
-          env->rect_t.y = 90 - env->rect_t.h / 2;
-        }
+  if (e->type == SDL_MOUSEBUTTONDOWN && e->button.button == SDL_BUTTON_LEFT) {
+      SDL_Point mouse;
+      SDL_GetMouseState(&mouse.x, &mouse.y);
+      if(mouse.x<=w-w1 && mouse.x>=w1 && mouse.y<=h-h1 && mouse.y>=h1){
+            SDL_QueryTexture(env->tent, NULL, NULL, &env->rect_t.w, &env->rect_t.h);
+            env->rect_t.w = (w/(double)SCREEN_WIDTH)*env->rect_t.w*((double)DEFAULT_SIZE/game_nb_rows(env->g));
+            env->rect_t.h = (h/(double)SCREEN_HEIGHT)*env->rect_t.h*((double)DEFAULT_SIZE/game_nb_cols(env->g));
+            uint i = (mouse.y + env->rect_t.h/2 -h1/2 -h1)/ h1;
+            uint j = (mouse.x + env->rect_t.w/2 -w1/2 -w1)/ w1;
+            if(game_check_move(env->g, i, j, TENT)==REGULAR){
+              game_play_move(env->g, i, j, TENT);
+              env->rect_t.x = w1 * j + w1+w1/2 - env->rect_t.w / 2;
+              env->rect_t.y = h1 * i + h1+h1/2 - env->rect_t.h / 2;
+            }
+      }
     }
+
+  if (game_is_over(env->g)){
+    return true;
   }
+
   return false;
 }
 
