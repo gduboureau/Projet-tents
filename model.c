@@ -48,6 +48,17 @@ Env *init(SDL_Window *win, SDL_Renderer *ren, int argc, char *argv[]) {
   int w, h;
   SDL_GetWindowSize(win, &w, &h);
 
+  PRINT("Help for commands :\n");
+  PRINT("- Click the left mouse button to place a tent.\n");
+  PRINT("- Click the right mouse button to place a grass.\n");
+  PRINT("- Click the mouse wheel button to erase a square.\n");
+  PRINT("- Press 'Z' on the keyboard to undo the last move.\n");
+  PRINT("- Press 'Y' on the keyboard to redo the last move.\n");
+  PRINT("- Press 'R' on the keyboard to restart the game.\n");
+  PRINT("- Press 'S' on the keyboard to solve the game.\n");
+  PRINT("- Press 'Q' on the keyboard to quit the game.\n");
+  PRINT("Good luck and enjoy this game :) \n");
+
   env->background = IMG_LoadTexture(ren, BACKGROUND);
   if (!env->background) {
     ERROR("IMG_LoadTexture: %s\n", BACKGROUND);
@@ -96,15 +107,15 @@ void aux(SDL_Window *win, SDL_Renderer *ren, Env *env, uint i, uint j,
   int h1 = (double)h / ((game_nb_rows(env->g)) + 2);
   if (game_check_move(env->g, i, j, squares) == LOSING) {
     SDL_QueryTexture(env->losing, NULL, NULL, &env->rect_l.w, &env->rect_l.h);
-    env->rect_l.w = (w / (double)SCREEN_WIDTH) * (w1-1);
-    env->rect_l.h = (h / (double)SCREEN_HEIGHT) * (h1-1);
+    env->rect_l.w = w1-1;
+    env->rect_l.h = h1-1;
     env->rect_l.x = w1 * j + w1 + w1 / 2 - env->rect_l.w / 2;
     env->rect_l.y = h1 * i + h1 + h1 / 2 - env->rect_l.h / 2;
     SDL_RenderCopy(ren, env->losing, NULL, &env->rect_l);
   }
   SDL_QueryTexture(text, NULL, NULL, &rect.w, &rect.h);
-  rect.w = (w / (double)SCREEN_WIDTH) * w1;
-  rect.h = (h / (double)SCREEN_HEIGHT) * h1;
+  rect.w = w1;
+  rect.h = h1;
   rect.x = w1 * j + w1 + w1 / 2 - rect.w / 2;
   rect.y = h1 * i + h1 + h1 / 2 - rect.h / 2;
   SDL_RenderCopy(ren, text, NULL, &rect);
@@ -220,8 +231,8 @@ void aux2(SDL_Window *win, SDL_Renderer *ren, Env *env, square squares,
   if (mouse.x <= w - w1 && mouse.x >= w1 && mouse.y <= h - h1 &&
       mouse.y >= h1) {
     SDL_QueryTexture(text, NULL, NULL, &env->rect_t.w, &env->rect_t.h);
-    env->rect_t.w = (w / (double)SCREEN_WIDTH) * w1;
-    env->rect_t.h = (h / (double)SCREEN_HEIGHT) * h1;
+    env->rect_t.w = w1;
+    env->rect_t.h = h1;
     uint i = (mouse.y + env->rect_t.h / 2 - h1 / 2 - h1) / h1;
     uint j = (mouse.x + env->rect_t.w / 2 - w1 / 2 - w1) / w1;
     if (game_check_move(env->g, i, j, squares) == REGULAR) {
@@ -232,8 +243,8 @@ void aux2(SDL_Window *win, SDL_Renderer *ren, Env *env, square squares,
     if (game_check_move(env->g, i, j, squares) == LOSING) {
       game_play_move(env->g, i, j, squares);
       SDL_QueryTexture(env->losing, NULL, NULL, &env->rect_l.w, &env->rect_l.h);
-      env->rect_l.w = (w / (double)SCREEN_WIDTH) * (w1-1);
-      env->rect_l.h = (h / (double)SCREEN_HEIGHT) * (h1-1);
+      env->rect_l.w = w1-1;
+      env->rect_l.h = h1-1;
       uint i = (mouse.y + env->rect_l.h / 2 - h1 / 2 - h1) / h1;
       uint j = (mouse.x + env->rect_l.w / 2 - w1 / 2 - w1) / w1;
       env->rect_l.x = w1 * j + w1 + w1 / 2 - env->rect_l.w / 2;
@@ -254,7 +265,7 @@ bool process(SDL_Window *win, SDL_Renderer *ren, Env *env, SDL_Event *e) {
   if (e->type == SDL_MOUSEBUTTONDOWN && e->button.button == SDL_BUTTON_RIGHT) {
     aux2(win, ren, env, GRASS, env->grass);
   }
-  if (e->type == SDL_MOUSEBUTTONDOWN && e->button.button == SDL_BUTTON_MIDDLE) {
+  if (e->type == SDL_MOUSEWHEEL && e->wheel.y < 0 ) {
     aux2(win, ren, env, EMPTY, env->empty);
 
   } else if (e->type == SDL_KEYDOWN) {
