@@ -12,8 +12,8 @@
 
 #include "model.h"
 
-#define FONT "arial.ttf"
-#define FONTSIZE 16
+#define FONT "Police.ttf"
+#define FONTSIZE 23
 #define ImTree "tree.png"
 #define ImTent "tent.png"
 #define ImGrass "grass.png"
@@ -105,6 +105,14 @@ void aux(SDL_Window *win, SDL_Renderer *ren, Env *env, uint i, uint j,
   SDL_GetWindowSize(win, &w, &h);
   int w1 = (double)w / ((game_nb_cols(env->g)) + 2);
   int h1 = (double)h / ((game_nb_rows(env->g)) + 2);
+  if (game_check_move(env->g, i, j, squares) == REGULAR) {
+    SDL_QueryTexture(env->grass, NULL, NULL, &env->rect_l.w, &env->rect_l.h);
+    env->rect_l.w = w1 - 1;
+    env->rect_l.h = h1 - 1;
+    env->rect_l.x = w1 * j + w1 + w1 / 2 - env->rect_l.w / 2;
+    env->rect_l.y = h1 * i + h1 + h1 / 2 - env->rect_l.h / 2;
+    SDL_RenderCopy(ren, env->grass, NULL, &env->rect_l);
+  }
   if (game_check_move(env->g, i, j, squares) == LOSING) {
     SDL_QueryTexture(env->losing, NULL, NULL, &env->rect_l.w, &env->rect_l.h);
     env->rect_l.w = w1 - 1;
@@ -141,10 +149,10 @@ void render(SDL_Window *win, SDL_Renderer *ren, Env *env) {
 
   /* render text texture */
   for (uint i = 0; i < game_nb_rows(env->g); i++) {
-    SDL_Color color = {0, 0, 0, 0}; /* black color in RGBA */
+    SDL_Color color = {40, 44, 52, 255}; /* ~black color in RGBA */
     TTF_Font *font = TTF_OpenFont(FONT, FONTSIZE * (w / (double)SCREEN_WIDTH));
     if (!font) ERROR("TTF_OpenFont: %s\n", FONT);
-    TTF_SetFontStyle(font, TTF_STYLE_BOLD);
+    /*TTF_SetFontStyle(font, TTF_STYLE_BOLD);*/
     char chaine[game_nb_rows(env->g)];
     sprintf(chaine, "%d", i);
     SDL_Surface *surf = TTF_RenderText_Blended(font, chaine, color);
@@ -168,10 +176,10 @@ void render(SDL_Window *win, SDL_Renderer *ren, Env *env) {
   }
   for (uint j = 0; j < game_nb_cols(env->g); j++) {
     /* render text texture */
-    SDL_Color color = {0, 0, 0, 0}; /* black color in RGBA */
+    SDL_Color color = {40, 44, 52, 255}; /* black color in RGBA */
     TTF_Font *font = TTF_OpenFont(FONT, FONTSIZE * (h / (double)SCREEN_HEIGHT));
     if (!font) ERROR("TTF_OpenFont: %s\n", FONT);
-    TTF_SetFontStyle(font, TTF_STYLE_BOLD);
+    /*TTF_SetFontStyle(font, TTF_STYLE_BOLD);*/
     char chaine[game_nb_cols(env->g)];
     sprintf(chaine, "%d", j);
     SDL_Surface *surf = TTF_RenderText_Blended(font, chaine, color);
@@ -219,8 +227,8 @@ void render(SDL_Window *win, SDL_Renderer *ren, Env *env) {
   }
   if (game_is_over(env->g)) {
     /* init text texture using Arial font */
-    SDL_Color color_y = {0, 0, 0, 255}; /* blue color in RGBA */
-    TTF_Font *fontt = TTF_OpenFont(FONT, 38);
+    SDL_Color color_y = {40, 44, 52, 255}; /* blue color in RGBA */
+    TTF_Font *fontt = TTF_OpenFont(FONT, 30);
     if (!fontt) ERROR("TTF_OpenFont: %s\n", FONT);
     TTF_SetFontStyle(fontt,
                      TTF_STYLE_BOLD);  // TTF_STYLE_ITALIC | TTF_STYLE_NORMAL
@@ -256,6 +264,7 @@ void aux2(SDL_Window *win, SDL_Renderer *ren, Env *env, square squares,
     uint j = (mouse.x + env->rect_t.w / 2 - w1 / 2 - w1) / w1;
     if (game_check_move(env->g, i, j, squares) == REGULAR) {
       game_play_move(env->g, i, j, squares);
+      SDL_QueryTexture(env->grass, NULL, NULL, &env->rect_l.w, &env->rect_l.h);
       env->rect_t.x = w1 * j + w1 + w1 / 2 - env->rect_t.w / 2;
       env->rect_t.y = h1 * i + h1 + h1 / 2 - env->rect_t.h / 2;
     }
