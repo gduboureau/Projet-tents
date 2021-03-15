@@ -51,7 +51,7 @@ Env *init(SDL_Window *win, SDL_Renderer *ren, int argc, char *argv[]) {
   PRINT("Help for commands :\n");
   PRINT("- Click the left mouse button to place a tent.\n");
   PRINT("- Click the right mouse button to place a grass.\n");
-  PRINT("- Click the mouse wheel button to erase a square.\n");
+  PRINT("- Press or Scroll down the mouse wheel button to erase a square.\n");
   PRINT("- Press 'Z' on the keyboard to undo the last move.\n");
   PRINT("- Press 'Y' on the keyboard to redo the last move.\n");
   PRINT("- Press 'R' on the keyboard to restart the game.\n");
@@ -265,7 +265,7 @@ bool process(SDL_Window *win, SDL_Renderer *ren, Env *env, SDL_Event *e) {
   if (e->type == SDL_MOUSEBUTTONDOWN && e->button.button == SDL_BUTTON_RIGHT) {
     aux2(win, ren, env, GRASS, env->grass);
   }
-  if (e->type == SDL_MOUSEWHEEL && e->wheel.y < 0 ) {
+  if ((e->type == SDL_MOUSEWHEEL && e->wheel.y < 0) || (e->type == SDL_MOUSEBUTTONDOWN && e->button.button == SDL_BUTTON_MIDDLE)) {
     aux2(win, ren, env, EMPTY, env->empty);
 
   } else if (e->type == SDL_KEYDOWN) {
