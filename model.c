@@ -107,8 +107,8 @@ void aux(SDL_Window *win, SDL_Renderer *ren, Env *env, uint i, uint j,
   int h1 = (double)h / ((game_nb_rows(env->g)) + 2);
   if (game_check_move(env->g, i, j, squares) == LOSING) {
     SDL_QueryTexture(env->losing, NULL, NULL, &env->rect_l.w, &env->rect_l.h);
-    env->rect_l.w = w1-1;
-    env->rect_l.h = h1-1;
+    env->rect_l.w = w1 - 1;
+    env->rect_l.h = h1 - 1;
     env->rect_l.x = w1 * j + w1 + w1 / 2 - env->rect_l.w / 2;
     env->rect_l.y = h1 * i + h1 + h1 / 2 - env->rect_l.h / 2;
     SDL_RenderCopy(ren, env->losing, NULL, &env->rect_l);
@@ -217,6 +217,25 @@ void render(SDL_Window *win, SDL_Renderer *ren, Env *env) {
       SDL_RenderDrawLine(ren, w1, h1 * 2 + i * h1, w - w1, h1 * 2 + i * h1);
     }
   }
+  if (game_is_over(env->g)) {
+    /* init text texture using Arial font */
+    SDL_Color color_y = {0, 0, 0, 255}; /* blue color in RGBA */
+    TTF_Font *fontt = TTF_OpenFont(FONT, 38);
+    if (!fontt) ERROR("TTF_OpenFont: %s\n", FONT);
+    TTF_SetFontStyle(fontt,
+                     TTF_STYLE_BOLD);  // TTF_STYLE_ITALIC | TTF_STYLE_NORMAL
+    SDL_Surface *surff = TTF_RenderText_Blended(
+        fontt, "Congratulations ! You Win :)",
+        color_y);  // blended rendering for ultra nice text
+    env->text = SDL_CreateTextureFromSurface(ren, surff);
+    SDL_FreeSurface(surff);
+    TTF_CloseFont(fontt);
+    /* render text texture */
+    SDL_QueryTexture(env->text, NULL, NULL, &rect.w, &rect.h);
+    rect.x = w / 2 - rect.w / 2;
+    rect.y = h / 2 - rect.h / 2;
+    SDL_RenderCopy(ren, env->text, NULL, &rect);
+  }
 }
 
 /* **************************************************************** */
@@ -243,8 +262,8 @@ void aux2(SDL_Window *win, SDL_Renderer *ren, Env *env, square squares,
     if (game_check_move(env->g, i, j, squares) == LOSING) {
       game_play_move(env->g, i, j, squares);
       SDL_QueryTexture(env->losing, NULL, NULL, &env->rect_l.w, &env->rect_l.h);
-      env->rect_l.w = w1-1;
-      env->rect_l.h = h1-1;
+      env->rect_l.w = w1 - 1;
+      env->rect_l.h = h1 - 1;
       uint i = (mouse.y + env->rect_l.h / 2 - h1 / 2 - h1) / h1;
       uint j = (mouse.x + env->rect_l.w / 2 - w1 / 2 - w1) / w1;
       env->rect_l.x = w1 * j + w1 + w1 / 2 - env->rect_l.w / 2;
@@ -265,7 +284,9 @@ bool process(SDL_Window *win, SDL_Renderer *ren, Env *env, SDL_Event *e) {
   if (e->type == SDL_MOUSEBUTTONDOWN && e->button.button == SDL_BUTTON_RIGHT) {
     aux2(win, ren, env, GRASS, env->grass);
   }
-  if ((e->type == SDL_MOUSEWHEEL && e->wheel.y < 0) || (e->type == SDL_MOUSEBUTTONDOWN && e->button.button == SDL_BUTTON_MIDDLE)) {
+  if ((e->type == SDL_MOUSEWHEEL && e->wheel.y < 0) ||
+      (e->type == SDL_MOUSEBUTTONDOWN &&
+       e->button.button == SDL_BUTTON_MIDDLE)) {
     aux2(win, ren, env, EMPTY, env->empty);
 
   } else if (e->type == SDL_KEYDOWN) {
