@@ -112,14 +112,6 @@ void aux(SDL_Window *win, SDL_Renderer *ren, Env *env, uint i, uint j,
   SDL_GetWindowSize(win, &w, &h);
   double w1 = (double)w / ((game_nb_cols(env->g)) + 2);
   double h1 = (double)h / ((game_nb_rows(env->g)) + 2);
-  if (game_check_move(env->g, i, j, squares) == LOSING) {
-    SDL_QueryTexture(env->losing, NULL, NULL, &env->rect_l.w, &env->rect_l.h);
-    env->rect_l.w = w1 - 1;
-    env->rect_l.h = h1 - 1;
-    env->rect_l.x = w1 * j + w1 + w1 / 2 - env->rect_l.w / 2;
-    env->rect_l.y = h1 * i + h1 + h1 / 2 - env->rect_l.h / 2;
-    SDL_RenderCopy(ren, env->losing, NULL, &env->rect_l);
-  }
   if (game_check_move(env->g, i, j, squares) == REGULAR) {
     SDL_QueryTexture(env->grass, NULL, NULL, &env->rect_l.w, &env->rect_l.h);
     env->rect_l.w = w1 - 1;
@@ -128,12 +120,23 @@ void aux(SDL_Window *win, SDL_Renderer *ren, Env *env, uint i, uint j,
     env->rect_l.y = h1 * i + h1 + h1 / 2 - env->rect_l.h / 2;
     SDL_RenderCopy(ren, env->grass, NULL, &env->rect_l);
   }
+  if (game_check_move(env->g, i, j, squares) == LOSING) {
+    SDL_QueryTexture(env->losing, NULL, NULL, &env->rect_l.w, &env->rect_l.h);
+    env->rect_l.w = w1 - 1;
+    env->rect_l.h = h1 - 1;
+    env->rect_l.x = w1 * j + w1 + w1 / 2 - env->rect_l.w / 2;
+    env->rect_l.y = h1 * i + h1 + h1 / 2 - env->rect_l.h / 2;
+    SDL_RenderCopy(ren, env->losing, NULL, &env->rect_l);
+  }
+  
+  if(game_get_square(env->g,i,j)!=GRASS){
   SDL_QueryTexture(text, NULL, NULL, &rect.w, &rect.h);
   rect.w = w1;
   rect.h = h1;
   rect.x = w1 * j + w1 + w1 / 2 - rect.w / 2;
   rect.y = h1 * i + h1 + h1 / 2 - rect.h / 2;
   SDL_RenderCopy(ren, text, NULL, &rect);
+  }
 }
 
 void render(SDL_Window *win, SDL_Renderer *ren, Env *env) {
