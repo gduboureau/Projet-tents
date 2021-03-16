@@ -20,10 +20,12 @@
 #define ImEmpty "empty.png"
 #define ImLosing "losing.png"
 #define BACKGROUND "background.png"
+#define encadre "fin.png"
 
 /* **************************************************************** */
 
 struct Env_t {
+  SDL_Texture *fin;
   SDL_Texture *background;
   SDL_Texture *tree;
   SDL_Texture *tent;
@@ -62,6 +64,11 @@ Env *init(SDL_Window *win, SDL_Renderer *ren, int argc, char *argv[]) {
   env->background = IMG_LoadTexture(ren, BACKGROUND);
   if (!env->background) {
     ERROR("IMG_LoadTexture: %s\n", BACKGROUND);
+  }
+
+  env->fin = IMG_LoadTexture(ren, encadre);
+  if (!env->fin) {
+    ERROR("IMG_LoadTexture: %s\n", encadre);
   }
 
   /* init tree texture from PNG image */
@@ -229,14 +236,19 @@ void render(SDL_Window *win, SDL_Renderer *ren, Env *env) {
     }
   }
   if (game_is_over(env->g)) {
-    /*rectangle*/
+    SDL_QueryTexture(env->fin, NULL, NULL, &env->rect_l.w, &env->rect_l.h);
+    env->rect_l.w = w * 4 / 6;
+    env->rect_l.h = h / 6;
+    env->rect_l.x = w / 6;
+    env->rect_l.y = (h * 3 / 7) - 7;
+    SDL_RenderCopy(ren, env->fin, NULL, &env->rect_l);
 
-    /* init text texture using Arial font */
-    SDL_Color color_y = {40, 44, 52, 255}; /* blue color in RGBA */
+    /* init text texture using font */
+    SDL_Color color_y = {40, 44, 52, 255}; /* ~black color in RGBA */
     TTF_Font *fontt = TTF_OpenFont(FONT, 30);
     if (!fontt) ERROR("TTF_OpenFont: %s\n", FONT);
     TTF_SetFontStyle(fontt,
-                     TTF_STYLE_BOLD);  // TTF_STYLE_ITALIC | TTF_STYLE_NORMAL
+                     TTF_STYLE_NORMAL);  // TTF_STYLE_ITALIC | TTF_STYLE_NORMAL
     SDL_Surface *surff = TTF_RenderText_Blended(
         fontt, "Congratulations ! You Win :)",
         color_y);  // blended rendering for ultra nice text
@@ -333,6 +345,7 @@ void clean(SDL_Window *win, SDL_Renderer *ren, Env *env) {
   SDL_DestroyTexture(env->grass);
   SDL_DestroyTexture(env->empty);
   SDL_DestroyTexture(env->text);
+  SDL_DestroyTexture(env->fin);
   game_delete(env->g);
   free(env);
 }
