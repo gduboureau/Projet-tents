@@ -170,6 +170,7 @@ void render(SDL_Window *win, SDL_Renderer *ren, Env *env) {
     SDL_FreeSurface(surf2);
     TTF_CloseFont(font);
 
+    SDL_QueryTexture(env->text, NULL, NULL, &rect.w, &rect.h);
     rect.x = w - w1 / 2 - rect.w / 2;
     rect.y = i * h1 + h1 + h1 / 2 - rect.h / 2;
     SDL_RenderCopy(ren, env->text, NULL, &rect);
@@ -186,6 +187,7 @@ void render(SDL_Window *win, SDL_Renderer *ren, Env *env) {
     env->text = SDL_CreateTextureFromSurface(ren, surf);
     SDL_FreeSurface(surf);
 
+    SDL_QueryTexture(env->text, NULL, NULL, &rect.w, &rect.h);
     rect.x = j * w1 + w1 + w1 / 2 - rect.w / 2;
     rect.y = h1 / 2 - rect.h / 2;
     SDL_RenderCopy(ren, env->text, NULL, &rect);
@@ -196,6 +198,7 @@ void render(SDL_Window *win, SDL_Renderer *ren, Env *env) {
     SDL_FreeSurface(surf3);
     TTF_CloseFont(font);
 
+    SDL_QueryTexture(env->text, NULL, NULL, &rect.w, &rect.h);
     rect.x = j * w1 + w1 + w1 / 2 - rect.w / 2;
     rect.y = h - h1 / 2 - rect.h / 2;
     SDL_RenderCopy(ren, env->text, NULL, &rect);
@@ -226,6 +229,8 @@ void render(SDL_Window *win, SDL_Renderer *ren, Env *env) {
     }
   }
   if (game_is_over(env->g)) {
+    /*rectangle*/
+
     /* init text texture using Arial font */
     SDL_Color color_y = {40, 44, 52, 255}; /* blue color in RGBA */
     TTF_Font *fontt = TTF_OpenFont(FONT, 30);
