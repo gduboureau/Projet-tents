@@ -53,17 +53,6 @@ Env *init(SDL_Window *win, SDL_Renderer *ren, int argc, char *argv[]) {
   int w, h;
   SDL_GetWindowSize(win, &w, &h);
 
-  PRINT("Help for commands :\n");
-  PRINT("- Click the left mouse button to place a tent.\n");
-  PRINT("- Click the right mouse button to place a grass.\n");
-  PRINT("- Press or Scroll down the mouse wheel button to erase a square.\n");
-  PRINT("- Press 'Z' on the keyboard to undo the last move.\n");
-  PRINT("- Press 'Y' on the keyboard to redo the last move.\n");
-  PRINT("- Press 'R' on the keyboard to restart the game.\n");
-  PRINT("- Press 'S' on the keyboard to solve the game.\n");
-  PRINT("- Press 'Q' on the keyboard to quit the game.\n");
-  PRINT("Good luck and enjoy this game :) \n");
-
   env->background = IMG_LoadTexture(ren, BACKGROUND);
   if (!env->background) {
     ERROR("IMG_LoadTexture: %s\n", BACKGROUND);
@@ -109,6 +98,11 @@ Env *init(SDL_Window *win, SDL_Renderer *ren, int argc, char *argv[]) {
   if (!env->aide) {
     ERROR("IMG_LoadTexture: %s\n", AIDE);
   }
+  
+  SDL_QueryTexture(env->aide, NULL, NULL, &env->rect_h.w, &env->rect_h.h);
+    env->rect_h.x = (double)w/75;
+    env->rect_h.y = (double)h/3.75;
+    SDL_RenderCopy(ren, env->aide, NULL, &env->rect_h);
 
   return env;
 }
