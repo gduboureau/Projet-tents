@@ -20,6 +20,7 @@
 #define ImEmpty "empty.png"
 #define ImLosing "losing.png"
 #define BACKGROUND "background.png"
+#define AIDE "aide.png"
 #define encadre "fin.png"
 
 /* **************************************************************** */
@@ -32,9 +33,11 @@ struct Env_t {
   SDL_Texture *grass;
   SDL_Texture *empty;
   SDL_Texture *losing;
+  SDL_Texture *aide;
   SDL_Texture *text;
   SDL_Rect rect_t;
   SDL_Rect rect_l;
+  SDL_Rect rect_h;
   game g;
 };
 
@@ -99,6 +102,12 @@ Env *init(SDL_Window *win, SDL_Renderer *ren, int argc, char *argv[]) {
   env->losing = IMG_LoadTexture(ren, ImLosing);
   if (!env->losing) {
     ERROR("IMG_LoadTexture: %s\n", ImLosing);
+  }
+
+  /* init aide texture from PNG image */
+  env->aide = IMG_LoadTexture(ren, AIDE);
+  if (!env->aide) {
+    ERROR("IMG_LoadTexture: %s\n", AIDE);
   }
 
   return env;
@@ -264,6 +273,8 @@ void render(SDL_Window *win, SDL_Renderer *ren, Env *env) {
     rect.y = h / 2 - rect.h / 2;
     SDL_RenderCopy(ren, env->text, NULL, &rect);
   }
+  /* render aide texture */
+    SDL_RenderCopy(ren, env->aide, NULL, &env->rect_h);
 }
 
 /* **************************************************************** */
@@ -304,6 +315,8 @@ void aux2(SDL_Window *win, SDL_Renderer *ren, Env *env, square squares,
 }
 
 bool process(SDL_Window *win, SDL_Renderer *ren, Env *env, SDL_Event *e) {
+  int w, h;
+  SDL_GetWindowSize(win, &w, &h);
   if (e->type == SDL_QUIT) {
     return true;
   }
@@ -332,6 +345,18 @@ bool process(SDL_Window *win, SDL_Renderer *ren, Env *env, SDL_Event *e) {
       case SDLK_s:
         game_solve(env->g);
         break;
+      case SDLK_h:
+        SDL_QueryTexture(env->aide, NULL, NULL, &env->rect_h.w, &env->rect_h.h);
+        env->rect_h.w = env->rect_h.w * (double)w/SCREEN_WIDTH;
+        env->rect_h.h = env->rect_h.h * (double)h/SCREEN_HEIGHT;
+        env->rect_h.x = (double)w/75;
+        env->rect_h.y = (double)h/3.75;
+        break;
+      case SDLK_ESCAPE:
+        SDL_QueryTexture(env->aide, NULL, NULL, &env->rect_h.w, &env->rect_h.h);
+        env->rect_h.w = 0;
+        env->rect_h.h = 0;
+        break;
       case SDLK_q:
         return true;
     }
@@ -348,6 +373,7 @@ void clean(SDL_Window *win, SDL_Renderer *ren, Env *env) {
   SDL_DestroyTexture(env->grass);
   SDL_DestroyTexture(env->empty);
   SDL_DestroyTexture(env->text);
+  SDL_DestroyTexture(env->aide);
   SDL_DestroyTexture(env->fin);
   game_delete(env->g);
   free(env);

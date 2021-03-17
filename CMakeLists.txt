@@ -31,7 +31,7 @@ target_link_libraries(game_sdl game)
 target_link_libraries(minimal ${SDL2_ALL_LIBS} m)
 
 ## copy useful data files in build dir
-foreach(file "tree.png" "tent.png" "grass.png" "empty.png" "losing.png" "background.png" "Police.ttf" "fin.png")
+foreach(file "tree.png" "tent.png" "grass.png" "empty.png" "losing.png" "background.png" "Police.ttf" "fin.png" "aide.png")
   file(COPY ${file} DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
 endforeach(file)
 
