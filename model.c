@@ -21,6 +21,7 @@
 #define ImLosing "losing.png"
 #define BACKGROUND "background.png"
 #define AIDE "aide.png"
+#define QUIT "quit.png"
 #define encadre "fin.png"
 
 /* **************************************************************** */
@@ -35,9 +36,11 @@ struct Env_t {
   SDL_Texture *losing;
   SDL_Texture *aide;
   SDL_Texture *text;
+  SDL_Texture *quit;
   SDL_Rect rect_t;
   SDL_Rect rect_l;
   SDL_Rect rect_h;
+  SDL_Rect rect_q;
   game g;
 };
 
@@ -97,6 +100,12 @@ Env *init(SDL_Window *win, SDL_Renderer *ren, int argc, char *argv[]) {
   env->aide = IMG_LoadTexture(ren, AIDE);
   if (!env->aide) {
     ERROR("IMG_LoadTexture: %s\n", AIDE);
+  }
+
+  /* init quit texture from PNG image */
+  env->quit = IMG_LoadTexture(ren, QUIT);
+  if (!env->quit) {
+    ERROR("IMG_LoadTexture: %s\n", QUIT);
   }
   
   SDL_QueryTexture(env->aide, NULL, NULL, &env->rect_h.w, &env->rect_h.h);
@@ -312,7 +321,20 @@ bool process(SDL_Window *win, SDL_Renderer *ren, Env *env, SDL_Event *e) {
   int w, h;
   SDL_GetWindowSize(win, &w, &h);
   if (e->type == SDL_QUIT) {
-    return true;
+    if(!game_is_over(env->g)){
+      SDL_QueryTexture(env->quit, NULL, NULL, &env->rect_q.w, &env->rect_q.h);
+      env->rect_q.w = env->rect_q.w * (double)w/SCREEN_WIDTH;
+      env->rect_q.h = env->rect_q.h * (double)h/SCREEN_HEIGHT;
+      env->rect_q.x = (double)w*0.05;
+      env->rect_q.y = (double)h*0.3;
+      SDL_RenderCopy(ren, env->quit, NULL, &env->rect_q);
+      SDL_RenderPresent(ren);
+      SDL_Delay(2000);
+      return true;
+    }
+    else{
+      return true;
+    }
   }
   if (e->type == SDL_MOUSEBUTTONDOWN && e->button.button == SDL_BUTTON_LEFT) {
     aux2(win, ren, env, TENT, env->tent);
@@ -352,7 +374,20 @@ bool process(SDL_Window *win, SDL_Renderer *ren, Env *env, SDL_Event *e) {
         env->rect_h.h = 0;
         break;
       case SDLK_q:
+        if(!game_is_over(env->g)){
+          SDL_QueryTexture(env->quit, NULL, NULL, &env->rect_q.w, &env->rect_q.h);
+          env->rect_q.w = env->rect_q.w * (double)w/SCREEN_WIDTH;
+          env->rect_q.h = env->rect_q.h * (double)h/SCREEN_HEIGHT;
+          env->rect_q.x = (double)w*0.05;
+          env->rect_q.y = (double)h*0.3;
+          SDL_RenderCopy(ren, env->quit, NULL, &env->rect_q);
+          SDL_RenderPresent(ren);
+          SDL_Delay(2000);
+          return true;
+        }
+        else{
         return true;
+        }
     }
   }
   return false;
