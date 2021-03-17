@@ -131,8 +131,8 @@ void aux(SDL_Window *win, SDL_Renderer *ren, Env *env, uint i, uint j,
   
   if(game_get_square(env->g,i,j)!=GRASS){
   SDL_QueryTexture(text, NULL, NULL, &rect.w, &rect.h);
-  rect.w = w1;
-  rect.h = h1;
+  rect.w = w1-1;
+  rect.h = h1-1;
   rect.x = w1 * j + w1 + w1 / 2 - rect.w / 2;
   rect.y = h1 * i + h1 + h1 / 2 - rect.h / 2;
   SDL_RenderCopy(ren, text, NULL, &rect);
@@ -278,8 +278,8 @@ void aux2(SDL_Window *win, SDL_Renderer *ren, Env *env, square squares,
   if (mouse.x <= w - w1 && mouse.x >= w1 && mouse.y <= h - h1 &&
       mouse.y >= h1) {
     SDL_QueryTexture(text, NULL, NULL, &env->rect_t.w, &env->rect_t.h);
-    env->rect_t.w = w1;
-    env->rect_t.h = h1;
+    env->rect_t.w = w1-1;
+    env->rect_t.h = h1-1;
     uint i = (mouse.y + env->rect_t.h / 2 - h1 / 2 - h1) / h1;
     uint j = (mouse.x + env->rect_t.w / 2 - w1 / 2 - w1) / w1;
     if (game_check_move(env->g, i, j, squares) == LOSING) {
