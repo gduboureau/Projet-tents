@@ -383,8 +383,10 @@ bool process(SDL_Window *win, SDL_Renderer *ren, Env *env, SDL_Event *e) {
           SDL_RenderCopy(ren, env->quit, NULL, &env->rect_q);
           SDL_RenderPresent(ren);
           SDL_Delay(2000);
+          game_save(env->g, "../game_save.tnt");
           return true;
         } else {
+          game_save(env->g, "../game_save.tnt");
           return true;
         }
     }
