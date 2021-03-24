@@ -107,11 +107,11 @@ Env *init(SDL_Window *win, SDL_Renderer *ren, int argc, char *argv[]) {
   if (!env->quit) {
     ERROR("IMG_LoadTexture: %s\n", QUIT);
   }
-  
+
   SDL_QueryTexture(env->aide, NULL, NULL, &env->rect_h.w, &env->rect_h.h);
-    env->rect_h.x = (double)w/75;
-    env->rect_h.y = (double)h/3.75;
-    SDL_RenderCopy(ren, env->aide, NULL, &env->rect_h);
+  env->rect_h.x = (double)w / 75;
+  env->rect_h.y = (double)h / 3.75;
+  SDL_RenderCopy(ren, env->aide, NULL, &env->rect_h);
 
   return env;
 }
@@ -140,14 +140,14 @@ void aux(SDL_Window *win, SDL_Renderer *ren, Env *env, uint i, uint j,
     env->rect_l.y = h1 * i + h1 + h1 / 2 - env->rect_l.h / 2;
     SDL_RenderCopy(ren, env->losing, NULL, &env->rect_l);
   }
-  
-  if(game_get_square(env->g,i,j)!=GRASS){
-  SDL_QueryTexture(text, NULL, NULL, &rect.w, &rect.h);
-  rect.w = w1-1;
-  rect.h = h1-1;
-  rect.x = w1 * j + w1 + w1 / 2 - rect.w / 2;
-  rect.y = h1 * i + h1 + h1 / 2 - rect.h / 2;
-  SDL_RenderCopy(ren, text, NULL, &rect);
+
+  if (game_get_square(env->g, i, j) != GRASS) {
+    SDL_QueryTexture(text, NULL, NULL, &rect.w, &rect.h);
+    rect.w = w1 - 1;
+    rect.h = h1 - 1;
+    rect.x = w1 * j + w1 + w1 / 2 - rect.w / 2;
+    rect.y = h1 * i + h1 + h1 / 2 - rect.h / 2;
+    SDL_RenderCopy(ren, text, NULL, &rect);
   }
 }
 
@@ -277,7 +277,7 @@ void render(SDL_Window *win, SDL_Renderer *ren, Env *env) {
     SDL_RenderCopy(ren, env->text, NULL, &rect);
   }
   /* render aide texture */
-    SDL_RenderCopy(ren, env->aide, NULL, &env->rect_h);
+  SDL_RenderCopy(ren, env->aide, NULL, &env->rect_h);
 }
 
 /* **************************************************************** */
@@ -292,8 +292,8 @@ void aux2(SDL_Window *win, SDL_Renderer *ren, Env *env, square squares,
   if (mouse.x <= w - w1 && mouse.x >= w1 && mouse.y <= h - h1 &&
       mouse.y >= h1) {
     SDL_QueryTexture(text, NULL, NULL, &env->rect_t.w, &env->rect_t.h);
-    env->rect_t.w = w1-1;
-    env->rect_t.h = h1-1;
+    env->rect_t.w = w1 - 1;
+    env->rect_t.h = h1 - 1;
     uint i = (mouse.y + env->rect_t.h / 2 - h1 / 2 - h1) / h1;
     uint j = (mouse.x + env->rect_t.w / 2 - w1 / 2 - w1) / w1;
     if (game_check_move(env->g, i, j, squares) == LOSING) {
@@ -321,18 +321,17 @@ bool process(SDL_Window *win, SDL_Renderer *ren, Env *env, SDL_Event *e) {
   int w, h;
   SDL_GetWindowSize(win, &w, &h);
   if (e->type == SDL_QUIT) {
-    if(!game_is_over(env->g)){
+    if (!game_is_over(env->g)) {
       SDL_QueryTexture(env->quit, NULL, NULL, &env->rect_q.w, &env->rect_q.h);
-      env->rect_q.w = env->rect_q.w * (double)w/SCREEN_WIDTH;
-      env->rect_q.h = env->rect_q.h * (double)h/SCREEN_HEIGHT;
-      env->rect_q.x = (double)w*0.05;
-      env->rect_q.y = (double)h*0.3;
+      env->rect_q.w = env->rect_q.w * (double)w / SCREEN_WIDTH;
+      env->rect_q.h = env->rect_q.h * (double)h / SCREEN_HEIGHT;
+      env->rect_q.x = (double)w * 0.05;
+      env->rect_q.y = (double)h * 0.3;
       SDL_RenderCopy(ren, env->quit, NULL, &env->rect_q);
       SDL_RenderPresent(ren);
       SDL_Delay(2000);
       return true;
-    }
-    else{
+    } else {
       return true;
     }
   }
@@ -363,10 +362,10 @@ bool process(SDL_Window *win, SDL_Renderer *ren, Env *env, SDL_Event *e) {
         break;
       case SDLK_h:
         SDL_QueryTexture(env->aide, NULL, NULL, &env->rect_h.w, &env->rect_h.h);
-        env->rect_h.w = env->rect_h.w * (double)w/SCREEN_WIDTH;
-        env->rect_h.h = env->rect_h.h * (double)h/SCREEN_HEIGHT;
-        env->rect_h.x = (double)w/75;
-        env->rect_h.y = (double)h/3.75;
+        env->rect_h.w = env->rect_h.w * (double)w / SCREEN_WIDTH;
+        env->rect_h.h = env->rect_h.h * (double)h / SCREEN_HEIGHT;
+        env->rect_h.x = (double)w / 75;
+        env->rect_h.y = (double)h / 3.75;
         break;
       case SDLK_ESCAPE:
         SDL_QueryTexture(env->aide, NULL, NULL, &env->rect_h.w, &env->rect_h.h);
@@ -374,19 +373,19 @@ bool process(SDL_Window *win, SDL_Renderer *ren, Env *env, SDL_Event *e) {
         env->rect_h.h = 0;
         break;
       case SDLK_q:
-        if(!game_is_over(env->g)){
-          SDL_QueryTexture(env->quit, NULL, NULL, &env->rect_q.w, &env->rect_q.h);
-          env->rect_q.w = env->rect_q.w * (double)w/SCREEN_WIDTH;
-          env->rect_q.h = env->rect_q.h * (double)h/SCREEN_HEIGHT;
-          env->rect_q.x = (double)w*0.05;
-          env->rect_q.y = (double)h*0.3;
+        if (!game_is_over(env->g)) {
+          SDL_QueryTexture(env->quit, NULL, NULL, &env->rect_q.w,
+                           &env->rect_q.h);
+          env->rect_q.w = env->rect_q.w * (double)w / SCREEN_WIDTH;
+          env->rect_q.h = env->rect_q.h * (double)h / SCREEN_HEIGHT;
+          env->rect_q.x = (double)w * 0.05;
+          env->rect_q.y = (double)h * 0.3;
           SDL_RenderCopy(ren, env->quit, NULL, &env->rect_q);
           SDL_RenderPresent(ren);
           SDL_Delay(2000);
           return true;
-        }
-        else{
-        return true;
+        } else {
+          return true;
         }
     }
   }
