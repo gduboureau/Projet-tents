@@ -80,7 +80,9 @@ void usage(int argc, char *argv[]) {
 int main(int argc, char *argv[]) {
   if (argc < 7 || argc > 8) usage(argc, argv);
 
-  // TODO: implement this
+  if (argc == 7){
+    game g = game_random(atoi(argv[1]),atoi(argv[2]),atoi(argv[3]),atoi(argv[4]),atoi(argv[5]),atoi(argv[6]));
+  }
 
   return EXIT_SUCCESS;
 }
