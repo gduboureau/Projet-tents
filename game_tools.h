@@ -51,6 +51,8 @@ bool game_solve(game g);
  */
 uint game_nb_solutions(game g);
 
+game game_random(uint nb_rows, uint nb_cols, bool wrapping, bool diagadj, uint nb_trees, bool with_solution);
+
 /**
  * @}
  */
